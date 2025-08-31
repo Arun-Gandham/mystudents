@@ -1,4 +1,4 @@
-@extends('auth.auth-layout')
+@extends('tenant.layout.auth-layout')
 
 @section('content')
 <div style="max-width:420px;margin:60px auto;padding:24px;border:1px solid #eee;border-radius:12px;">

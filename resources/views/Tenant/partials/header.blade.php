@@ -6,7 +6,7 @@
         <span class="brand-icon d-inline-flex align-items-center justify-content-center rounded-3">
           <i class="bi bi-motherboard"></i>
         </span>
-        <span class="fw-bold d-none d-sm-inline brand-text">SMS Control</span>
+        <span class="fw-bold d-none d-sm-inline brand-text">Tenant</span>
       </a>
 
       <!-- Mobile menu -->

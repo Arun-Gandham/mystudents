@@ -1,0 +1,366 @@
+For each form I list: Purpose • When shown • Fields (R/O) • Validation • Actions/Side-effects.
+(R = required, O = optional)
+
+1) School Setup
+1.1 Create School
+
+Purpose: Add a tenant.
+
+When: Superadmin onboarding.
+
+Fields:
+
+Name (R)
+
+Is Active (O, default true)
+
+Validation: Name 3–120 chars, unique globally (or by ops policy).
+
+Actions: Create schools; redirect to School Profile.
+
+1.2 School Profile (Details)
+
+Purpose: Fill contact & address.
+
+When: After creating school, or edits.
+
+Fields:
+
+Phone (O, E.164) • Alt Phone (O) • Email (O, email)
+
+Website (O, URL) • Logo URL (O, URL)
+
+Address Line1 (O), Line2 (O), City (O), State (O), Postal Code (O), Country Code (O)
+
+Principal Name (O), Established Year (O, 4 digits), Affiliation No (O), Note (O)
+
+Validation: URLs, email, year format.
+
+Actions: Upsert school_details.
+
+1.3 Create User (Staff/Teacher)
+
+Purpose: Add staff/teacher.
+
+When: Hiring/onboarding.
+
+Fields:
+
+Full Name (R) • Email (O, unique if present)
+
+Role (R: admin/staff/teacher)
+
+Is Active (O)
+
+(If using Laravel auth) Password (R) • Confirm Password (R)
+
+Validation: Email unique, strong password.
+
+Actions: Insert users; optionally open Assign Role.
+
+2) Academic Structure
+2.1 Create Academic Year
+
+Purpose: Define session.
+
+Fields: Name (R), Start Date (R), End Date (R), Is Current (O)
+
+Validation: Start < End; Name unique within school.
+
+Actions: Insert academics; optionally mark current (ensure single current via service logic).
+
+2.2 Create Grade
+
+Fields: Name (R), Ordinal (O unique per school), Is Active (O)
+
+Validation: Name unique per school.
+
+Actions: Insert grades.
+
+2.3 Create Section
+
+Fields: Grade (R), Name (R), Teacher (O)
+
+Validation: (grade_id, name) unique.
+
+Actions: Insert sections.
+
+3) Admissions (Leads → Decision → Student)
+3.1 New Student Application (Lead Capture)
+
+Purpose: Capture visitor/lead.
+
+Fields:
+
+Academic Year (R) • Preferred Grade (O) • Preferred Section (O)
+
+Application No (O, unique per school)
+
+Child Full Name (R) • Child DOB (O) • Child Gender (O) • Previous School (O)
+
+Guardian Full Name (O) • Relation (O) • Email (O) • Phone (O) • Address (O)
+
+Visited On (O), Submitted On (O), Remarks (O)
+
+Default: Status = lead.
+
+Validation: Email/phone formats; Application No unique (if filled).
+
+Actions: Insert student_join_applications.
+
+3.2 Review & Decide Application
+
+Purpose: Offer/Accept/Reject.
+
+Fields: Status (R: reviewing/offered/accepted/rejected/no_response/withdrawn), Decided On (O), Remarks (O)
+
+Conditional: Offer fields → Offered Grade (O), Offered Section (O).
+
+Actions: Update student_join_applications.
+
+3.3 Convert to Student (Create Student from Application)
+
+Purpose: On accepted.
+
+Prefill from application.
+
+Fields:
+
+Full Name (R) • DOB (O) • Gender (O)
+
+Admission No (O, unique per school)
+
+Status (R, default accepted)
+
+Guardians (repeatable): Full Name (R), Relation (R), Email/Phone/Address (O), Is Primary (O)
+
+Validation: One primary guardian max; admission_no unique; if student already exists, allow linking.
+
+Actions:
+
+Create students (link source_application_id).
+
+Create student_guardians.
+
+Optionally open Year Enrollment.
+
+4) Enrollments & Movements
+4.1 Year Enrollment (Admit to Year/Section)
+
+Purpose: Place student in academic year.
+
+Fields: Student (R), Academic Year (R), Grade (R), Section (O), Roll No (O), Joined On (O)
+
+Validation: (student, academic) unique; joined_on within academic range if provided.
+
+Actions: Insert student_enrollments.
+
+4.2 Section Change / Transfer (Mid-Year)
+
+Purpose: Move section or exit.
+
+Fields: Current Enrollment (R, readonly context), Left On (O), New Section (O), New Roll No (O), Note (O)
+
+Validation: left_on >= joined_on; if New Section provided, create new enrollment record with same academic + joined_on = today.
+
+Actions: Update old student_enrollments.left_on; create new row if moved.
+
+4.3 Promotion (Bulk Wizard)
+
+Purpose: End-of-year promotion.
+
+Steps/Fields: From Academic (R) → To Academic (R) → Promotion Mapping by Grade (R) → Default Sections (O) → Carry Roll Nos (O)
+
+Actions: Batch create next-year student_enrollments.
+
+5) Subjects, Timetable, Calendar
+5.1 Create Subject
+
+Fields: Name (R), Code (O, unique per school), Is Active (O)
+
+Actions: Insert subjects.
+
+5.2 Add School Holiday
+
+Fields: Academic (R), Date (R), Name (R), Is Full Day (O default true), Starts At/Ends At (O if half-day), Repeats Annually (O)
+
+Validation: unique (school, academic, date); if not full-day → starts_at < ends_at.
+
+Actions: Insert school_holidays.
+
+5.3 Create Timetable Day (Header)
+
+Fields: Academic (R), Section (R), Day (R), Title (O), Effective From/To (O), Is Active (O)
+
+Validation: Unique (section, academic, day).
+
+Actions: Insert section_day_timetables.
+
+5.4 Add Period to Day
+
+Fields: Period No (R), Starts At (R), Ends At (R), Subject (R), Teacher (O), Room (O), Note (O)
+
+Validation: starts_at < ends_at; (day_timetable, period_no) unique; no time overlap (service rule).
+
+Actions: Insert section_day_periods.
+
+6) Attendance
+6.1 Create Student Attendance Sheet
+
+Fields: Academic (R), Section (R), Date (R), Session (R morning/afternoon), Taken By (O), Note (O)
+
+Validation: Unique (section, academic, date, session).
+
+Actions: Insert student_attendance_sheets; then open Mark Attendance.
+
+6.2 Mark Student Attendance
+
+Fields (per student row): Status (R), Remarks (O), Check-in/Check-out (O)
+
+Bulk helpers: Set all Present/Absent; copy previous session.
+
+Validation: one row per (sheet, student).
+
+Actions: Upsert student_attendance_entries.
+
+6.3 Staff Attendance
+
+Fields: User (R), Date (R), Session (R), Status (R), Check-in/Check-out (O), Remarks (O)
+
+Validation: Unique (user, date, session).
+
+Actions: Upsert staff_attendance.
+
+7) Fees
+7.1 Create Fee Head
+
+Fields: Name (R), Code (O unique), Is Active (O)
+
+Actions: Insert fee_heads.
+
+7.2 Configure Section Fees (Defaults)
+
+Context: Academic (R), Section (R)
+
+Rows: Fee Head (R), Base Amount (R, ≥ 0), Is Optional (O), Note (O)
+
+Validation: Unique (section, academic, fee_head).
+
+Actions: Upsert section_fees.
+
+7.3 Generate Student Fees (Bulk)
+
+Inputs: Academic (R), Section(s) (R), Include Optional Heads? (O), Prorate by Join Date? (O)
+
+Actions: Create/Update student_fee_items from section_fees.
+
+7.4 Edit Student Fee Item
+
+Fields: Base Amount (R), Discount Kind (O: none/percent/flat), Discount Value (O), Final Amount (auto, R)
+
+Validation: If percent → 0–100; final_amount ≥ 0.
+
+Actions: Update student_fee_items.
+
+7.5 Record Payment
+
+Fields: Student (R) → Fee Item (R), Paid Amount (R > 0), Paid On (R), Method (O), Reference No (O), Note (O)
+
+Actions: Insert student_fee_payments; optionally emit receipt.
+
+8) Exams & Results
+8.1 Create Exam
+
+Fields: Academic (R), Section (R), Name (R), Starts On/Ends On (O), Note (O), Is Published (O)
+
+Validation: Unique (section, academic, name).
+
+Actions: Insert exams.
+
+8.2 Add Exam Subjects
+
+Row Fields: Subject (R), Max Marks (R > 0), Pass Marks (O ≤ Max), Order No (O)
+
+Validation: Unique (exam, subject).
+
+Actions: Upsert exam_subjects.
+
+8.3 Enter Marks
+
+Modes: By Subject or By Student
+
+Row Fields: Student (R), Subject (R), Marks Obtained (R), Grade (O), Remarks (O)
+
+Validation: Marks ≤ exam_subjects.max_marks.
+
+Actions: Upsert exam_results.
+
+8.4 Publish Results
+
+Fields: Confirm (R), Publish Date (auto)
+
+Actions: Set exams.is_published = true; lock mark edits; notify guardians.
+
+9) Roles & Permissions
+9.1 Create Role
+
+Fields: Name (R), Description (O), Inherit from Template (O)
+
+Validation: Name unique per school.
+
+Actions: Insert roles.
+
+9.2 Set Role Permissions
+
+Rows: Permission Key (R), Scope (O: any/own/grade/section), Allow (O default true)
+
+Validation: Unique (role, permission).
+
+Actions: Upsert role_permissions.
+
+9.3 Assign Role to User
+
+Fields: User (R), Role (R), Starts On (O), Ends On (O), Is Primary (O)
+
+Validation: Unique (user, role, school); dates consistent.
+
+Actions: Insert user_roles.
+
+10) Quick mappings (forms ↔ tables touched)
+
+Create School → schools, School Profile → school_details
+
+Create User → users, Assign Role → user_roles, role_permissions
+
+Create Academic/Grade/Section → academics / grades / sections
+
+New Application → student_join_applications
+
+Decide Application → student_join_applications
+
+Convert to Student → students, student_guardians
+
+Year Enrollment / Promotion / Transfer → student_enrollments
+
+Holidays → school_holidays
+
+Timetable Day / Period → section_day_timetables, section_day_periods
+
+Student Attendance → student_attendance_sheets, student_attendance_entries
+
+Staff Attendance → staff_attendance
+
+Fee Heads / Section Fees / Student Fees / Payments → fee_heads, section_fees, student_fee_items, student_fee_payments
+
+Exams / Exam Subjects / Marks / Publish → exams, exam_subjects, exam_results
+
+INSERT INTO users (id, full_name, email, password, is_active, created_at, updated_at)
+VALUES (
+    UUID(),
+    'Super Admin',
+    'arun@admin.com',
+    '$2y$12$fZxOU1DnXULCDIntsqzzSu/qN4e/P0GQp8miGgiIvskdu1Oe7xoh2', -- Hash::make('password')
+    1,
+    NOW(),
+    NOW()
+);

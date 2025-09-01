@@ -71,7 +71,7 @@
   <form method="post" action="#" id="permissionRoles">
     @csrf
     {{-- When you wire backend, set action to route like:
-         action="{{ tenant_route('tenant.roles.permissions.store', $roleId) }}" --}}
+         action="{{ tenant_route('tenant.permissions.store', $roleId) }}" --}}
     <input type="hidden" name="permissions" id="permissions_payload" value="[]">
 
     <div class="row g-4">
@@ -272,5 +272,6 @@ document.getElementById('permissionRoles').addEventListener('submit', function(e
     assignedZone.querySelectorAll('.permission-item').forEach(moveBackToAvailable);
     cleanupEmptyAssignedGroups();
   });
+  
 </script>
 @endpush

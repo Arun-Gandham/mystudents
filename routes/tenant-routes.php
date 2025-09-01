@@ -6,6 +6,7 @@ use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\HomepageController;
 use App\Http\Controllers\Tenant\RolesPermissionsController;
 use App\Http\Controllers\Tenant\AcademicYearController;
+use App\Http\Controllers\Tenant\RoleController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -28,10 +29,19 @@ Route::domain('{school_sub}.'.$root)
 
         // Roles & Permissions
         Route::prefix('roles')->name('roles.')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('index');
+            Route::get('/create', [RoleController::class, 'create'])->name('create');
+            Route::post('/', [RoleController::class, 'store'])->name('store');
+            Route::get('/{role_id}/edit', [RoleController::class, 'edit'])->name('edit');
+            Route::put('/{role_id}', [RoleController::class, 'update'])->name('update');
+            Route::delete('/{role_id}', [RoleController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('permissions')->name('permissions.')->group(function () {
             Route::get('manage-permissions', [RolesPermissionsController::class, 'index'])
-            ->name('permissions.index');
+            ->name('index');
             Route::post('manage-permissions', [RolesPermissionsController::class, 'update'])
-            ->name('permissions.update');
+            ->name('update');
         });
 
         // Acadamics

@@ -53,7 +53,8 @@
       @endif
         <li class="nav-item"><a href="{{ route('superadmin.school.index') }}" class="nav-link {{ request()->routeIs('superadmin.school.index') ? 'active' : '' }}"><i class="bi bi-buildings"></i><span class="label">Schools</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people"></i><span class="label">Users</span></a></li>
-        <li class="nav-item"><a href="{{ tenant_route('tenant.roles.permissions.index') }}" class="nav-link {{ request()->routeIs('tenant.roles.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Roles & Permissions</span></a></li>
+        <li class="nav-item"><a href="{{ tenant_route('tenant.roles.index') }}" class="nav-link {{ request()->routeIs('tenant.roles.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Roles</span></a></li>
+                <li class="nav-item"><a href="{{ tenant_route('tenant.permissions.index') }}" class="nav-link {{ request()->routeIs('tenant.permissions.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Permissions</span></a></li>
         <li class="nav-item"><a href="{{ tenant_route('tenant.academic_years.index') }}" class="nav-link {{ request()->routeIs('tenant.academic_years.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Acadamic Years</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cash-stack"></i><span class="label">Billing</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i><span class="label">Reports</span></a></li>

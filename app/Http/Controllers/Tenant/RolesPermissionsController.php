@@ -32,7 +32,7 @@ class RolesPermissionsController extends Controller
             ->groupBy(function($perm) {
                 return explode(':', $perm->key)[0]; // prefix as group
             });
-        return view('tenant.pages.rolespermissions.list', compact('roles', 'assigned', 'roleId', 'allPermissions'));
+        return view('tenant.pages.rolespermissions.permissions', compact('roles', 'assigned', 'roleId', 'allPermissions'));
   }
 
     public function update(Request $request)

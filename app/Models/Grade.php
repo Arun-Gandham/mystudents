@@ -9,10 +9,13 @@ class Grade extends BaseUuidModel
     use BelongsToSchool, HasTimestampsImmutable;
 
     protected $table = 'grades';
+    protected $fillable = ['school_id', 'name', 'ordinal', 'is_active'];
+
     protected $casts = [
-        'ordinal'   => 'integer',
         'is_active' => 'boolean',
     ];
 
-    public function sections() { return $this->hasMany(Section::class); }
+    public function sections() {
+        return $this->hasMany(Section::class);
+    }
 }

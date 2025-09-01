@@ -5,6 +5,7 @@ use App\Http\Controllers\Tenant\TenantLoginController;
 use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\HomepageController;
 use App\Http\Controllers\Tenant\RolesPermissionsController;
+use App\Http\Controllers\Tenant\AcademicYearController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -32,5 +33,18 @@ Route::domain('{school_sub}.'.$root)
             Route::post('manage-permissions', [RolesPermissionsController::class, 'update'])
             ->name('permissions.update');
         });
+
+        // Acadamics
+        Route::prefix('academic_years')->name('academic_years.')->group(function () {
+                Route::get('/', [AcademicYearController::class, 'index'])->name('index');
+                Route::get('/create', [AcademicYearController::class, 'create'])->name('create');
+                Route::post('/', [AcademicYearController::class, 'store'])->name('store');
+                Route::get('/{academic_year}', [AcademicYearController::class, 'show'])->name('show');
+                Route::get('/{academic_year_id}/edit', [AcademicYearController::class, 'edit'])->name('edit');
+                Route::put('/{academic_year}', [AcademicYearController::class, 'update'])->name('update');
+                Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
+            Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
+            ->name('toggle');
+        });    
     });
     

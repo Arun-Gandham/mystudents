@@ -25,7 +25,7 @@ if (! function_exists('current_school_sub')) {
 if (! function_exists('tenant_route')) {
     function tenant_route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        $parameters = ['school_sub' => current_school_sub()] + $parameters;
+        $parameters = array_merge($parameters,['school_sub' => current_school_sub()]);
         return route($name, $parameters, $absolute);
     }
 }

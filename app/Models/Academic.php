@@ -9,6 +9,13 @@ class Academic extends BaseUuidModel
     use BelongsToSchool, HasTimestampsImmutable;
 
     protected $table = 'academics';
+    protected $fillable = [
+        'school_id',
+        'name',
+        'start_date',
+        'end_date',
+        'is_current',
+    ];
     protected $casts = [
         'start_date' => 'date',
         'end_date'   => 'date',

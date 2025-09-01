@@ -1,4 +1,4 @@
-@extends('tenant.layouts.layout1')
+@extends('superadmin.layouts.layout1')
 
 @section('title', $pageTitle ?? "Super Admin")
 @section('description', $pageDescription ?? "Super Admin")

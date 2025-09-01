@@ -6,10 +6,6 @@
     <h1>Academic Years</h1>
     <a href="{{ tenant_route('tenant.academic_years.create') }}" class="btn btn-primary mb-3">Add Academic Year</a>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     <table class="table table-bordered">
         <thead>
             <tr>

@@ -45,6 +45,9 @@ class TenantLoginController extends Controller
             // ✅ use tenant guard
             Auth::guard('tenant')->login($user, $request->boolean('remember'));
             $request->session()->regenerate();
+
+            $user->clearPermissionCache();
+            $user->getPermissions();
     
             // ✅ use tenant_route() so school_sub is auto-injected
             return redirect()->intended(tenant_route('tenant.dashboard'));
@@ -53,6 +56,9 @@ class TenantLoginController extends Controller
     public function logout(Request $request)
     {
         // ✅ tenant guard logout
+        if (Auth::guard('tenant')->check()) {
+            Auth::guard('tenant')->user()->clearPermissionCache(); // ✅ clear permissions cache
+        }
         Auth::guard('tenant')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

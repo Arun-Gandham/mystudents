@@ -15,4 +15,42 @@ class Role extends BaseUuidModel
 
     public function rolePermissions() { return $this->hasMany(RolePermission::class); }
     public function userRoles()       { return $this->hasMany(UserRole::class); }
+
+    // 🔗 Direct relation to permissions
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
+    }
+
+    // 🔗 Direct relation to users
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_roles');
+}
+
+    // ✅ Invalidate cache for all users of this role
+    protected static function booted()
+    {
+        static::saved(function ($role) {
+            foreach ($role->users as $user) {
+                Cache::forget("user_permissions_{$user->id}");
+            }
+        });
+
+        static::deleted(function ($role) {
+            foreach ($role->users as $user) {
+                Cache::forget("user_permissions_{$user->id}");
+            }
+        });
+    }
+    protected static function bootBelongsToSchool()
+    {
+        static::addGlobalScope('school', function ($query) {
+            if ($school = request()->attributes->get('school')) {
+                $query->where('school_id', $school->id)
+                    ->orWhere('is_system', true);
+            }
+        });
+    }
+
 }

@@ -8,6 +8,10 @@ class Permission extends BaseUuidModel
     use HasTimestampsImmutable;
 
     protected $table = 'permissions';
+    protected $fillable = ['name','group'];
 
-    public function rolePermissions() { return $this->hasMany(RolePermission::class); }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'permission_role', 'permission_id', 'role_id')->withTimestamps();
+    }
 }

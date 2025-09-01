@@ -43,7 +43,7 @@ return new class extends Migration {
             $table->date('end_date');
             $table->boolean('is_current')->default(false);
             $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
 
             $table->foreign('school_id', 'fk_acad_school')
                   ->references('id')->on('schools')->cascadeOnDelete();

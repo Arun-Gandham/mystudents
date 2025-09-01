@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Request;
+use App\Models\School;
+use Illuminate\Support\Facades\Cache;
 
 if (! function_exists('current_school_sub')) {
     function current_school_sub(): ?string
@@ -25,5 +27,28 @@ if (! function_exists('tenant_route')) {
     {
         $parameters = ['school_sub' => current_school_sub()] + $parameters;
         return route($name, $parameters, $absolute);
+    }
+}
+
+if (! function_exists('current_school')) {
+    function current_school(): ?School
+    {
+        $sub = current_school_sub();
+        if (! $sub) {
+            return null;
+        }
+
+        return Cache::remember(
+            "school_by_subdomain:{$sub}",   // cache key
+            now()->addMinutes(30),          // TTL
+            fn () => School::where('domain', $sub)->first()
+        );
+    }
+}
+
+if (! function_exists('current_school_id')) {
+    function current_school_id(): ?string
+    {
+        return optional(current_school())->id;
     }
 }

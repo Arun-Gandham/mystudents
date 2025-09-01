@@ -33,7 +33,6 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
 
         // ROLE PERMISSIONS
         Schema::create('role_permissions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->uuid('role_id');
             $table->uuid('permission_id');
             $table->enum('scope', ['any','own','grade','section'])->default('any');

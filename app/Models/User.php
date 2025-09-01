@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\Traits\BelongsToSchool;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -25,4 +26,28 @@ class User extends Authenticatable
         'password'          => 'hashed',
     ];
     public function primaryRoles() { return $this->hasMany(UserRole::class); }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function getPermissions()
+    {
+        return Cache::remember("user_permissions_{$this->id}", 3600, function () {
+            return ['school:view'];
+            return $this->roles()
+                ->with('permissions') // eager load
+                ->get()
+                ->pluck('permissions.*.key')
+                ->flatten()
+                ->unique()
+                ->values()
+                ->toArray();
+        });
+    }
+
+    public function clearPermissionCache()
+    {
+        Cache::forget("user_permissions_{$this->id}");
+    }
 }

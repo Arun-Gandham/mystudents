@@ -13,10 +13,6 @@
     </div>
   </div>
 
-  @if (session('success'))
-    <div class="alert alert-success"><i class="bi bi-check2-circle me-1"></i>{{ session('success') }}</div>
-  @endif
-
   @if ($errors->any())
     <div class="alert alert-danger">
       <div class="fw-semibold mb-1"><i class="bi bi-exclamation-octagon me-1"></i>There were some problems with your input:</div>

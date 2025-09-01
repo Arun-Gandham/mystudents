@@ -4,12 +4,6 @@
 @section('description', $pageDescription)
 
 @section('content')
-@if(session('success'))
-  <div class="alert alert-success">{{ session('success') }}</div>
-  @if(session('posted'))
-    <pre class="bg-light p-3 border rounded">{{ json_encode(session('posted'), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) }}</pre>
-  @endif
-@endif
 
 <div class="container-fluid">
   {{-- Header --}}

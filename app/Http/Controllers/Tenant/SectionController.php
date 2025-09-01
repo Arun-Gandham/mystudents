@@ -10,6 +10,10 @@ use App\Models\User;
 
 class SectionController extends Controller
 {
+        public function __construct()
+    {
+        $this->middleware('auth:tenant')->only(['index','create','store','edit','update','destroy']);
+    }
     public function index()
     {
         $sections = Section::with(['grade', 'teacher'])
@@ -22,7 +26,7 @@ class SectionController extends Controller
     public function create()
     {
         $grades = Grade::orderBy('ordinal')->get();
-        $teachers = User::where('role', 'teacher')->get(); // adjust as needed
+        $teachers = User::all(); // adjust as needed
         return view('tenant.pages.sections.create', compact('grades', 'teachers'));
     }
 
@@ -37,19 +41,19 @@ class SectionController extends Controller
         Section::create($data);
 
         return redirect()
-            ->route('tenant.sections.index', ['school_sub' => current_school_sub()])
+            ->intended(tenant_route('tenant.sections.index'))
             ->with('success', 'Section created successfully.');
     }
 
-    public function edit(string $id)
+    public function edit(string $school_sub, string $id)
     {
         $section = Section::findOrFail($id);
         $grades = Grade::orderBy('ordinal')->get();
-        $teachers = User::where('role', 'teacher')->get();
+        $teachers = User::all();
         return view('tenant.pages.sections.edit', compact('section', 'grades', 'teachers'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request,string $school_sub,  string $id)
     {
         $data = $request->validate([
             'grade_id'   => 'required|exists:grades,id',
@@ -65,7 +69,7 @@ class SectionController extends Controller
             ->with('success', 'Section updated successfully.');
     }
 
-    public function destroy(string $id)
+    public function destroy(string $school_sub, string $id)
     {
         $section = Section::findOrFail($id);
         $section->delete();

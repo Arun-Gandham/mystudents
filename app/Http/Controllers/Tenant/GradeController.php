@@ -8,6 +8,11 @@ use App\Models\Grade;
 
 class GradeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:tenant')->only(['index','create','store','edit','update','destroy']);
+    }
+
     public function index()
     {
         $grades = Grade::orderBy('ordinal')->get();
@@ -30,17 +35,17 @@ class GradeController extends Controller
         Grade::create($data);
 
         return redirect()
-            ->route('tenant.grades.index', ['school_sub' => current_school_sub()])
+            ->intended(tenant_route('tenant.grades.index'))
             ->with('success', 'Grade created successfully.');
     }
 
-    public function edit(string $id)
+    public function edit(string $school_sub, string $id)
     {
         $grade = Grade::findOrFail($id);
         return view('tenant.pages.grades.edit', compact('grade'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request,string $school_sub, string $id)
     {
         $data = $request->validate([
             'name'      => 'required|string|max:100',
@@ -52,11 +57,11 @@ class GradeController extends Controller
         $grade->update($data);
 
         return redirect()
-            ->route('tenant.grades.index', ['school_sub' => current_school_sub()])
+            ->intended(tenant_route('tenant.grades.index'))
             ->with('success', 'Grade updated successfully.');
     }
 
-    public function destroy(string $id)
+    public function destroy(string $school_sub, string $id)
     {
         $grade = Grade::findOrFail($id);
         $grade->delete();

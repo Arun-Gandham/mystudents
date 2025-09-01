@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Section extends BaseUuidModel
 {
-    use BelongsToSchool, BelongsToGrade;
+    use BelongsToGrade;
 
     protected $table = 'sections';
     protected $fillable = ['grade_id', 'name', 'teacher_id'];

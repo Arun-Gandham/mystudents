@@ -7,6 +7,8 @@ use App\Http\Controllers\Tenant\HomepageController;
 use App\Http\Controllers\Tenant\RolesPermissionsController;
 use App\Http\Controllers\Tenant\AcademicYearController;
 use App\Http\Controllers\Tenant\RoleController;
+use App\Http\Controllers\Tenant\GradeController;
+use App\Http\Controllers\Tenant\SectionController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -55,6 +57,26 @@ Route::domain('{school_sub}.'.$root)
                 Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
             Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
             ->name('toggle');
-        });    
-    });
+        });
+
+        // Grades CRUD
+        Route::prefix('grades')->name('grades.')->group(function () {
+            Route::get('', [GradeController::class, 'index'])->name('index');
+            Route::get('/create', [GradeController::class, 'create'])->name('create');
+            Route::post('', [GradeController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [GradeController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [GradeController::class, 'update'])->name('update');
+            Route::delete('/{id}', [GradeController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('sections')->name('sections.')->group(function () {
+        // Sections CRUD
+            Route::get('', [SectionController::class, 'index'])->name('index');
+            Route::get('/create', [SectionController::class, 'create'])->name('create');
+            Route::post('', [SectionController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SectionController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [SectionController::class, 'update'])->name('update');
+            Route::delete('/{id}', [SectionController::class, 'destroy'])->name('destroy');
+        });
+});
     

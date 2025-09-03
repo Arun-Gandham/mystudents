@@ -9,9 +9,17 @@ class SchoolHoliday extends BaseUuidModel
     use BelongsToSchool, BelongsToAcademic;
 
     protected $table = 'school_holidays';
+    protected $fillable = [
+        'school_id', 'academic_id', 'title', 'description',
+        'holiday_date', 'start_date', 'end_date',
+        'is_recurring', 'is_active'
+    ];
+
     protected $casts = [
-        'date'             => 'date',
-        'is_full_day'      => 'boolean',
-        'repeats_annually' => 'boolean',
+        'is_recurring' => 'boolean',
+        'is_active' => 'boolean',
+        'holiday_date' => 'date',
+        'start_date'   => 'date',
+        'end_date'     => 'date',
     ];
 }

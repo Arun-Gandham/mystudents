@@ -9,6 +9,9 @@ use App\Http\Controllers\Tenant\AcademicYearController;
 use App\Http\Controllers\Tenant\RoleController;
 use App\Http\Controllers\Tenant\GradeController;
 use App\Http\Controllers\Tenant\SectionController;
+use App\Http\Controllers\Tenant\TimetableController;
+use App\Http\Controllers\Tenant\PeriodController;
+
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -77,6 +80,32 @@ Route::domain('{school_sub}.'.$root)
             Route::get('/{id}/edit', [SectionController::class, 'edit'])->name('edit');
             Route::put('/{id}', [SectionController::class, 'update'])->name('update');
             Route::delete('/{id}', [SectionController::class, 'destroy'])->name('destroy');
+        });
+
+        // setperiods
+        Route::prefix('timetables')->name('timetables.')->group(function () {
+            Route::get('', [TimetableController::class, 'index'])->name('index');
+            Route::get('/create', [TimetableController::class, 'create'])->name('create');
+            Route::post('', [TimetableController::class, 'store'])->name('store');
+            Route::get('/{id}', [TimetableController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [TimetableController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [TimetableController::class, 'update'])->name('update');
+            Route::delete('/{id}', [TimetableController::class, 'destroy'])->name('destroy');
+            Route::post('{timetable}/periods', [TimetableController::class, 'storePeriod'])
+                ->name('periods.store');
+            Route::delete('{timetable}/periods/{period}', [TimetableController::class, 'destroyPeriod'])
+                ->name('periods.destroy');
+
+            //periods
+            Route::post('{timetable}/periods', [PeriodController::class, 'store'])->name('periods.store');
+            Route::delete('{timetable}/periods/{period}', [PeriodController::class, 'destroy'])->name('periods.destroy');
+
+            //copy 
+            // Copy form + save
+            Route::get('copy/form', [TimetableController::class, 'copyForm'])->name('copyForm');
+            Route::post('copy/save', [TimetableController::class, 'copySave'])->name('copySave');
+            // Periods API (for JS to load rows)
+            Route::get('api/{timetable}/periods', [PeriodController::class, 'apiList'])->name('periods.api');
         });
 });
     

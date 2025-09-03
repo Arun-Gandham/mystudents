@@ -58,6 +58,7 @@
         <li class="nav-item"><a href="{{ tenant_route('tenant.academic_years.index') }}" class="nav-link {{ request()->routeIs('tenant.academic_years.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Acadamic Years</span></a></li>
         <li class="nav-item"><a href="{{ tenant_route('tenant.grades.index') }}" class="nav-link {{ request()->routeIs('tenant.grades.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Grades</span></a></li>
         <li class="nav-item"><a href="{{ tenant_route('tenant.sections.index') }}" class="nav-link {{ request()->routeIs('tenant.sections.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Sections</span></a></li>
+        <li class="nav-item"><a href="{{ tenant_route('tenant.timetables.index') }}" class="nav-link {{ request()->routeIs('tenant.timetables.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Time Tables</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cash-stack"></i><span class="label">Billing</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i><span class="label">Reports</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i><span class="label">System Settings</span></a></li>

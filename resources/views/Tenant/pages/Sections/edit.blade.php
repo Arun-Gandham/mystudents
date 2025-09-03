@@ -5,7 +5,7 @@
 <div class="container py-3">
   <h4>Edit Section</h4>
 
-  <form action="{{ tenant_route('sections.update', $section->id) }}" method="POST" class="mt-3">
+  <form action="{{ tenant_route('tenant.sections.update',[ 'id' => $section->id]) }}" method="POST" class="mt-3">
     @csrf @method('PUT')
 
     <div class="mb-3">
@@ -35,7 +35,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Update</button>
-    <a href="{{ tenant_route('sections.index') }}" class="btn btn-secondary">Cancel</a>
+    <a href="{{ tenant_route('tenant.sections.index') }}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 @endsection

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Models\School;
+use App\Models\Academic;
 
 class ResolveSchoolFromHost
 {
@@ -45,10 +46,32 @@ class ResolveSchoolFromHost
             throw new NotFoundHttpException('School not found or inactive.');
         }
 
+        
+
         // attach lightweight object
         $schoolObj = (object) $schoolData;
         $request->attributes->set('school', $schoolObj);
         app()->instance('tenant.school', $schoolObj);
+
+        $academicCacheKey = "tenant:academic:{$schoolObj->id}";
+
+        $academicData = Cache::remember($academicCacheKey, now()->addMinutes(10), function () use ($schoolObj) {
+            $a = Academic::query()
+                ->select('id','name','start_date','end_date','is_current')
+                ->where('school_id', $schoolObj->id)
+                ->where('is_current', true)
+                ->first();
+
+            return $a ? $a->toArray() : null;
+        });
+        if (!$academicData) {
+            throw new NotFoundHttpException('No active academic year found for this school.');
+        }
+
+        $academicObj = (object) $academicData;
+        $request->attributes->set('academic', $academicObj);
+        app()->instance('tenant.academic', $academicObj);
+        
 
         return $next($request);
     }

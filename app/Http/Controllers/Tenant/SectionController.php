@@ -17,9 +17,12 @@ class SectionController extends Controller
     public function index()
     {
         $sections = Section::with(['grade', 'teacher'])
-            ->orderBy('name')
-            ->get();
-
+        ->join('grades', 'sections.grade_id', '=', 'grades.id')
+        ->orderBy('grades.ordinal')
+        ->orderBy('sections.name')
+        ->select('sections.*') // ensure only section columns returned
+        ->get();
+        
         return view('tenant.pages.sections.index', compact('sections'));
     }
 

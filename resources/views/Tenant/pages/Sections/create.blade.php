@@ -9,6 +9,12 @@
     @csrf
 
     <div class="mb-3">
+      <label class="form-label">Section Name</label>
+      <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+      @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+    </div>
+
+    <div class="mb-3">
       <label class="form-label">Grade</label>
       <select name="grade_id" class="form-select" required>
         <option value="">-- Select Grade --</option>

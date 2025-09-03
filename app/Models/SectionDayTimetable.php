@@ -16,5 +16,8 @@ class SectionDayTimetable extends BaseUuidModel
         'effective_to'   => 'date',
     ];
 
-    public function periods() { return $this->hasMany(SectionDayPeriod::class, 'day_timetable_id'); }
+    public function periods()
+    {
+        return $this->hasMany(SectionDayPeriod::class, 'day_timetable_id')->orderBy('period_no');
+    }
 }

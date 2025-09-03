@@ -52,3 +52,11 @@ if (! function_exists('current_school_id')) {
         return optional(current_school())->id;
     }
 }
+
+if (! function_exists('current_academic_id')) {
+    function current_academic_id(): ?string {
+        // Example: assume we store current academic in request attributes
+        return request()->attributes->get('academic')?->id;
+    }
+}
+

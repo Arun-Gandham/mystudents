@@ -11,6 +11,8 @@ use App\Http\Controllers\Tenant\GradeController;
 use App\Http\Controllers\Tenant\SectionController;
 use App\Http\Controllers\Tenant\TimetableController;
 use App\Http\Controllers\Tenant\PeriodController;
+use App\Http\Controllers\Tenant\SchoolHolidayController;
+use App\Http\Controllers\Tenant\CalendarController;
 
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
@@ -107,5 +109,20 @@ Route::domain('{school_sub}.'.$root)
             // Periods API (for JS to load rows)
             Route::get('api/{timetable}/periods', [PeriodController::class, 'apiList'])->name('periods.api');
         });
+
+    Route::prefix('school-holidays')->name('school_holidays.')->group(function () {
+        Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');          // ✅ Blade Calendar View
+        Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');        // JSON
+        Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
+        Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');  // JSON
+        Route::post('/store', [SchoolHolidayController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SchoolHolidayController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [SchoolHolidayController::class, 'update'])->name('update');
+        Route::delete('/{id}/delete', [SchoolHolidayController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('calendar')->name('calendar.')->group(function () {
+        Route::get('/', [CalendarController::class, 'index'])->name('index');          // ✅ Blade Calendar View
+    });
 });
     

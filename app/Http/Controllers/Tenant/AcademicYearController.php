@@ -62,14 +62,14 @@ class AcademicYearController extends Controller
     }
 
     // Toggle switch: set current academic year
-    public function toggle(string $academic_year_id)
+    public function toggle(string $school_sub, string $academic_year_id)
 {
     $academic_year = Academic::findOrFail($academic_year_id);
 
     Academic::forSchool(current_school_id())->update(['is_current' => false]);
     $academic_year->update(['is_current' => true]);
 
-    return redirect(tenant_route('academic_years.index'))
+    return redirect(tenant_route('tenant.academic_years.index'))
         ->with('success', 'Academic Year set as current.');
 }
 }

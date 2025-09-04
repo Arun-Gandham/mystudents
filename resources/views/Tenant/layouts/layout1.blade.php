@@ -9,8 +9,8 @@
 
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
   @vite([
-      'resources/css/superadmin-base.css',
-      'resources/js/superadmin-base.js'
+      'resources/css/tenant-base.css',
+      'resources/js/tenant-base.js'
   ])
   @stack('styles')
 </head>

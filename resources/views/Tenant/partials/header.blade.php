@@ -26,31 +26,14 @@
 
       <!-- Right cluster -->
       <div class="d-flex align-items-center gap-2">
-        <div class="dropdown">
-          <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-palette"></i></button>
-          <div class="dropdown-menu dropdown-menu-end p-3" style="width:260px;">
-            <div class="mb-2 small text-muted">Theme</div>
-            <div class="btn-group w-100 mb-3">
-              <button class="btn btn-light border" data-theme="light"><i class="bi bi-sun"></i> Light</button>
-              <button class="btn btn-dark" data-theme="dark"><i class="bi bi-moon"></i> Dark</button>
-            </div>
-            <div class="mb-2 small text-muted">Brand color</div>
-            <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-sm border" data-brand="#2563eb" style="background:#2563eb"></button>
-              <button class="btn btn-sm border" data-brand="#7c3aed" style="background:#7c3aed"></button>
-              <button class="btn btn-sm border" data-brand="#dc2626" style="background:#dc2626"></button>
-              <button class="btn btn-sm border" data-brand="#16a34a" style="background:#16a34a"></button>
-              <button class="btn btn-sm border" data-brand="#0ea5e9" style="background:#0ea5e9"></button>
-              <button class="btn btn-sm border" data-brand="#f59e0b" style="background:#f59e0b"></button>
-            </div>
-          </div>
-        </div>
 
+        <!-- Notifications -->
         <button class="btn position-relative" aria-label="Notifications">
           <i class="bi bi-bell"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">4</span>
         </button>
 
+        <!-- Profile -->
         <div class="dropdown">
           <button class="btn btn-outline-secondary d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown">
             <img class="rounded-circle" src="https://i.pravatar.cc/40?img=5" alt="avatar" width="28" height="28">
@@ -61,13 +44,13 @@
             <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
-            <form method="POST" action="{{ route('tenant.logout', ['school_sub' => request()->route('school_sub')]) }}">
-              @csrf
-              <button type="submit" class="dropdown-item text-danger">
-                <i class="bi bi-box-arrow-right me-2"></i>Logout
-              </button>
-            </form>
-          </li>
+              <form method="POST" action="{{ route('tenant.logout', ['school_sub' => request()->route('school_sub')]) }}">
+                @csrf
+                <button type="submit" class="dropdown-item text-danger">
+                  <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </button>
+              </form>
+            </li>
           </ul>
         </div>
       </div>

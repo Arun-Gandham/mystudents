@@ -61,7 +61,7 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('/{academic_year_id}/edit', [AcademicYearController::class, 'edit'])->name('edit');
                 Route::put('/{academic_year}', [AcademicYearController::class, 'update'])->name('update');
                 Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
-            Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
+                Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
             ->name('toggle');
         });
 

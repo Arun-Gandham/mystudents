@@ -2,7 +2,7 @@
 @section('title','Edit Grade')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <h4>Edit Grade</h4>
 
   <form action="{{ tenant_route('tenant.grades.update', ['id' => $grade->id]) }}" method="POST" class="mt-3">

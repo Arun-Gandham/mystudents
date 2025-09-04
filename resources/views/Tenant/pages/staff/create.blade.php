@@ -3,7 +3,7 @@
 @section('title','Add Staff')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Add Staff</h2>
 
     @if ($errors->any())

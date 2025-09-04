@@ -3,7 +3,7 @@
 @section('title', 'Timetable')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>{{ $timetable->title }} ({{ $timetable->day_name }})</h2>
     <h4>Section: {{ $timetable->section->name }}</h4>
 

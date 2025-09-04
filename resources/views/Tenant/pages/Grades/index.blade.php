@@ -2,7 +2,7 @@
 @section('title', 'Grades')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4>Grades</h4>
     <a href="{{ tenant_route('tenant.grades.create') }}" class="btn btn-primary">

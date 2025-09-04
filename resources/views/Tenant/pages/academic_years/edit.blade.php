@@ -2,7 +2,7 @@
 @extends('tenant.baselayout')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h1>Edit Academic Year</h1>
     <form action="{{ tenant_route('tenant.academic_years.update', ['academic_year' => $academic_year]) }}" method="POST">
         @csrf

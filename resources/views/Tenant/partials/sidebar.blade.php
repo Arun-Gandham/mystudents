@@ -8,7 +8,7 @@
         {{-- Dashboard --}}
         <li class="nav-item">
           <a href="{{ tenant_route('tenant.dashboard') }}" 
-             class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+             class="nav-link {{ request()->routeIs('tenant.dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2 me-2"></i>
             <span class="label">Dashboard</span>
           </a>

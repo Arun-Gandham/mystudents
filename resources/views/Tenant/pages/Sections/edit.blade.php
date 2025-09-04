@@ -2,11 +2,25 @@
 @section('title','Edit Section')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <h4>Edit Section</h4>
-
+  @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
   <form action="{{ tenant_route('tenant.sections.update',[ 'id' => $section->id]) }}" method="POST" class="mt-3">
     @csrf @method('PUT')
+
+    <div class="mb-3">
+      <label class="form-label">Section Name</label>
+      <input type="text" name="name" class="form-control" value="{{ $section->name }}" required>
+      @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+    </div>
 
     <div class="mb-3">
       <label class="form-label">Grade</label>
@@ -27,7 +41,7 @@
         <option value="">-- Select Teacher --</option>
         @foreach($teachers as $teacher)
           <option value="{{ $teacher->id }}" {{ old('teacher_id', $section->teacher_id) == $teacher->id ? 'selected' : '' }}>
-            {{ $teacher->name }}
+            {{ $teacher->full_name }}
           </option>
         @endforeach
       </select>

@@ -3,7 +3,7 @@
 @section('title', 'Holiday List')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Holiday List</h2>
 
     {{-- Academic Year Selector --}}

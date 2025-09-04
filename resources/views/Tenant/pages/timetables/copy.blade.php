@@ -3,7 +3,7 @@
 @section('title', 'Copy Timetable From Previous')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Copy Timetable From Previous</h2>
 
     {{-- Show validation errors --}}

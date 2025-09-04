@@ -2,7 +2,7 @@
 @section('title', 'Sections')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4>Sections</h4>
     <a href="{{ tenant_route('tenant.sections.create') }}" class="btn btn-primary">
@@ -26,7 +26,7 @@
           <td>{{ $loop->iteration }}</td>
           <td>{{ $section->name }}</td>
           <td>{{ $section->grade?->name }}</td>
-          <td>{{ $section->teacher?->name ?? '-' }}</td>
+          <td>{{ $section->teacher?->full_name ?? '-' }}</td>
           <td>
             <a href="{{ tenant_route('tenant.sections.edit', ['id' => $section->id]) }}" class="btn btn-sm btn-warning">
               <i class="bi bi-pencil"></i> Edit

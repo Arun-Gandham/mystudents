@@ -3,7 +3,7 @@
 @section('title', 'Create Timetable')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Create Timetable</h2>
 
     @if ($errors->any())

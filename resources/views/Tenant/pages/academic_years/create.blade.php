@@ -2,7 +2,7 @@
 @extends('tenant.baselayout')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h1>Add Academic Year</h1>
     <form action="{{ tenant_route('tenant.academic_years.store') }}" method="POST">
         @csrf

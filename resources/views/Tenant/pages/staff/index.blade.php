@@ -3,7 +3,7 @@
 @section('title','Staff')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Staff</h2>
     <a href="{{ tenant_route('tenant.staff.create') }}" class="btn btn-primary mb-3">+ Add Staff</a>
 

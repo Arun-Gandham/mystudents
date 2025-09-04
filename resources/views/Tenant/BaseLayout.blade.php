@@ -1,7 +1,7 @@
 @extends('tenant.layouts.layout1')
 
-@section('title', $pageTitle ?? "Super Admin")
-@section('description', $pageDescription ?? "Super Admin")
+@section('title', $pageTitle ?? "School")
+@section('description', $pageDescription ?? "School")
 
 {{-- Main page content --}}
 @section('content')

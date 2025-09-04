@@ -3,7 +3,7 @@
 @section('title', 'Edit Role')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
     <h3>Edit Role</h3>
 
     <form action="{{ tenant_route('tenant.roles.update', ['role_id' => $role->id]) }}" method="POST">

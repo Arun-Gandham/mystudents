@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>School Holiday Calendar</h2>
     <div id="calendar"></div>
 </div>

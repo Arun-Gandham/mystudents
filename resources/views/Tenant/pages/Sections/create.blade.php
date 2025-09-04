@@ -2,9 +2,17 @@
 @section('title','Create Section')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <h4>Create Section</h4>
-
+  @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
   <form action="{{ tenant_route('tenant.sections.store') }}" method="POST" class="mt-3">
     @csrf
 
@@ -33,7 +41,7 @@
         <option value="">-- Select Teacher --</option>
         @foreach($teachers as $teacher)
           <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
-            {{ $teacher->name }}
+            {{ $teacher->full_name }}
           </option>
         @endforeach
       </select>

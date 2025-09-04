@@ -3,7 +3,7 @@
 @section('title', 'Roles')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
     <div class="d-flex justify-content-between mb-3">
         <h3>Roles</h3>
         <a href="{{ tenant_route('tenant.roles.create') }}" class="btn btn-primary">

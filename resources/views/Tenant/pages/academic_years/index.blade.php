@@ -2,7 +2,7 @@
 @extends('tenant.baselayout')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h1>Academic Years</h1>
     <a href="{{ tenant_route('tenant.academic_years.create') }}" class="btn btn-primary mb-3">Add Academic Year</a>
 

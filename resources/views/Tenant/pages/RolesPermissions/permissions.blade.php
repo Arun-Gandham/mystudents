@@ -50,7 +50,7 @@
 @endpush
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <div class="d-flex align-items-center justify-content-between mb-3">
     {{-- 🔹 Role dropdown added --}}
     <form method="GET" id="roleSelectForm" class="ms-3">

@@ -2,7 +2,7 @@
 @section('title','Create Grade')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
   <h4>Create Grade</h4>
 
   <form action="{{ tenant_route('tenant.grades.store') }}" method="POST" class="mt-3">

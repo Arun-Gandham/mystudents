@@ -68,7 +68,7 @@ class SectionController extends Controller
         $section->update($data);
 
         return redirect()
-            ->route('tenant.sections.index', ['school_sub' => current_school_sub()])
+            ->intended(tenant_route('tenant.sections.index'))
             ->with('success', 'Section updated successfully.');
     }
 

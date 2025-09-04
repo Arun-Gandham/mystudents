@@ -3,7 +3,7 @@
 @section('title','Staff Details')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     {{-- Top Profile Section --}}
     <div class="card mb-3">
         <div class="card-body d-flex align-items-center gap-3">

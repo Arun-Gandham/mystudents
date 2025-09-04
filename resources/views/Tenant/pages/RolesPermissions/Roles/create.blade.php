@@ -3,7 +3,7 @@
 @section('title', 'Create Role')
 
 @section('content')
-<div class="container py-3">
+<div class="container-fluid py-3">
     <h3>Add New Role</h3>
 
     <form action="{{ tenant_route('tenant.roles.store') }}" method="POST">

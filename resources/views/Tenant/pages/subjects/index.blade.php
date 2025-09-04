@@ -3,7 +3,7 @@
 @section('title', 'Subjects')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Subjects</h2>
 
     <a href="{{ tenant_route('tenant.subjects.create') }}" class="btn btn-primary mb-3">+ Add Subject</a>

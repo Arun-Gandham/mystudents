@@ -62,6 +62,7 @@
         <li class="nav-item"><a href="{{ tenant_route('tenant.school_holidays.index') }}" class="nav-link {{ request()->routeIs('tenant.school_holidays.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Holidays</span></a></li>
         <li class="nav-item"><a href="{{ tenant_route('tenant.calendar.index') }}" class="nav-link {{ request()->routeIs('tenant.calendar.index') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Calender</span></a></li>
         <li class="nav-item"><a href="{{ tenant_route('tenant.subjects.index') }}" class="nav-link {{ request()->routeIs('tenant.subjects.index') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Subjects</span></a></li>
+        <li class="nav-item"><a href="{{ tenant_route('tenant.staff.index') }}" class="nav-link {{ request()->routeIs('tenant.staff.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="label">Staff</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cash-stack"></i><span class="label">Billing</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i><span class="label">Reports</span></a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i><span class="label">System Settings</span></a></li>

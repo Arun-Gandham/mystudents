@@ -25,18 +25,32 @@ class User extends Authenticatable
         'email_verified_at' => 'immutable_datetime',
         'password'          => 'hashed',
     ];
-    public function primaryRoles() { return $this->hasMany(UserRole::class); }
+    /**
+     * Primary role (single record from user_roles)
+     */
+    public function primaryRole()
+    {
+        return $this->roles()->wherePivot('is_primary', true)->first();
+    }
+    /**
+     * Roles via pivot, with pivot data
+     */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withPivot(['is_primary', 'starts_on', 'ends_on'])
+            ->withTimestamps();
     }
 
+
+    /**
+     * Permissions from roles
+     */
     public function getPermissions()
     {
         return Cache::remember("user_permissions_{$this->id}", 3600, function () {
-            return ['school:view'];
             return $this->roles()
-                ->with('permissions') // eager load
+                ->with('permissions') // eager load role permissions
                 ->get()
                 ->pluck('permissions.*.key')
                 ->flatten()
@@ -49,5 +63,10 @@ class User extends Authenticatable
     public function clearPermissionCache()
     {
         Cache::forget("user_permissions_{$this->id}");
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
     }
 }

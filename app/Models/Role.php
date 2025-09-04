@@ -43,14 +43,5 @@ class Role extends BaseUuidModel
             }
         });
     }
-    protected static function bootBelongsToSchool()
-    {
-        static::addGlobalScope('school', function ($query) {
-            if ($school = request()->attributes->get('school')) {
-                $query->where('school_id', $school->id)
-                    ->orWhere('is_system', true);
-            }
-        });
-    }
 
 }

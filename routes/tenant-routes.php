@@ -14,7 +14,7 @@ use App\Http\Controllers\Tenant\PeriodController;
 use App\Http\Controllers\Tenant\SchoolHolidayController;
 use App\Http\Controllers\Tenant\CalendarController;
 use App\Http\Controllers\Tenant\SubjectController;
-
+use App\Http\Controllers\Tenant\StaffController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -136,5 +136,17 @@ Route::domain('{school_sub}.'.$root)
         Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
         Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
     });
+
+
+    Route::prefix('staff')->name('staff.')->group(function () {
+        Route::get('/', [StaffController::class, 'index'])->name('index');
+        Route::get('/create', [StaffController::class, 'create'])->name('create');
+        Route::post('/store', [StaffController::class, 'store'])->name('store');
+        Route::get('/{id}', [StaffController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [StaffController::class, 'update'])->name('update');
+        Route::delete('/{id}/delete', [StaffController::class, 'destroy'])->name('destroy');
+    });
+
 });
     

@@ -13,6 +13,7 @@ class ResolveSchoolFromHost
 {
     public function handle(Request $request, Closure $next)
     {
+        
         $host = $request->getHost();                   // e.g. school11.myschool.com
         $root = config('app.tenant_root_domain');      // myschool.com
 
@@ -20,7 +21,7 @@ class ResolveSchoolFromHost
         if ($host === $root) {
             return $next($request);
         }
-
+        
         if (!str_ends_with($host, '.' . $root)) {
             throw new NotFoundHttpException('Invalid domain.');
         }
@@ -64,9 +65,9 @@ class ResolveSchoolFromHost
 
             return $a ? $a->toArray() : null;
         });
-        if (!$academicData) {
-            throw new NotFoundHttpException('No active academic year found for this school.');
-        }
+        // if (!$academicData) {
+        //     throw new NotFoundHttpException('No active academic year found for this school.');
+        // }
 
         $academicObj = (object) $academicData;
         $request->attributes->set('academic', $academicObj);

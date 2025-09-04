@@ -34,6 +34,37 @@ return new class extends Migration {
                   ->references('id')->on('schools')->cascadeOnDelete();
         });
 
+        Schema::create('staff', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('school_id');
+            $table->uuid('user_id'); // FK to users table
+
+            // Basic Info
+            $table->string('first_name');
+            $table->string('last_name')->nullable();
+            $table->string('surname')->nullable();
+
+            // Profile
+            $table->string('photo')->nullable(); // store path to image
+
+            // Employment
+            $table->integer('experience_years')->default(0);
+            $table->date('joining_date')->nullable();
+            $table->string('designation')->nullable();
+
+            // Mandatory details
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+
+            $table->boolean('is_active')->default(true);
+
+            $table->timestampsTz();
+
+            // Relations
+            $table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+        });
+
         // ACADEMICS
         Schema::create('academics', function (Blueprint $table) {
             $table->uuid('id')->primary();

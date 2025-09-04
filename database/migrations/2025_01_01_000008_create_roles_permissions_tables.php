@@ -65,7 +65,7 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->date('starts_on')->nullable();
             $table->date('ends_on')->nullable();
             $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('user_id', 'fk_ur_user')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('role_id', 'fk_ur_role')->references('id')->on('roles')->cascadeOnDelete();

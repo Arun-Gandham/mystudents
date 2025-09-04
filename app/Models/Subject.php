@@ -11,6 +11,11 @@ class Subject extends BaseUuidModel
     protected $casts = [
         'is_active' => 'boolean',
     ];
+    public $incrementing = false;
+    protected $keyType = 'string';
 
+    protected $fillable = [
+        'school_id', 'name', 'code', 'is_active'
+    ];
     public function examSubjects() { return $this->hasMany(ExamSubject::class); }
 }

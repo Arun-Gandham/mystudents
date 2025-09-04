@@ -13,6 +13,7 @@ use App\Http\Controllers\Tenant\TimetableController;
 use App\Http\Controllers\Tenant\PeriodController;
 use App\Http\Controllers\Tenant\SchoolHolidayController;
 use App\Http\Controllers\Tenant\CalendarController;
+use App\Http\Controllers\Tenant\SubjectController;
 
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
@@ -121,8 +122,19 @@ Route::domain('{school_sub}.'.$root)
         Route::delete('/{id}/delete', [SchoolHolidayController::class, 'destroy'])->name('destroy');
     });
 
+    // calender
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');          // ✅ Blade Calendar View
+    });
+
+    // subjects
+    Route::prefix('subjects')->name('subjects.')->group(function () {
+        Route::get('/', [SubjectController::class, 'index'])->name('index');
+        Route::get('/create', [SubjectController::class, 'create'])->name('create');
+        Route::post('/store', [SubjectController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SubjectController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
+        Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
     });
 });
     

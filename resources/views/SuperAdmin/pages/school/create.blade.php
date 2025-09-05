@@ -1,226 +1,217 @@
 @extends('superadmin.baselayout')
 
-@section('title', $pageTitle)
-@section('description', $pageDescription)
-
+@section('title', 'Create School')
 @section('content')
-<div class="container py-4">
+<div class="container-fluid py-4">
+  <form method="POST" action="{{ route('superadmin.school.store') }}" enctype="multipart/form-data">
+    @csrf
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <!-- ================= School Details ================= -->
+    <h4 class="mb-3">🏫 School Details</h4>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label class="form-label">School Name *</label>
+        <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Domain *</label>
+        <input type="text" name="domain" class="form-control" required value="{{ old('domain') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Alt Phone</label>
+        <input type="text" name="alt_phone" class="form-control" value="{{ old('alt_phone') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">landline</label>
+        <input type="text" name="landline" class="form-control" value="{{ old('landline') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+      </div>
+      
+      <div class="col-md-6">
+        <label class="form-label">Logo</label>
+        <input type="file" name="logo" class="form-control" accept="image/*" onchange="previewImage(event,'logoPreview')">
+        <div class="mt-2">
+          <img id="logoPreview" width="80" height="80" class="border rounded d-none">
+        </div>
+      </div>
 
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <div>
-      <h4 class="mb-0">Add New School</h4>
-      <small class="text-muted">Provide the required details below</small>
+      <div class="col-md-6">
+        <label class="form-label">Favicon</label>
+        <input type="file" name="favicon" class="form-control" accept="image/*" onchange="previewImage(event,'faviconPreview')">
+        <div class="mt-2">
+          <img id="faviconPreview" width="40" height="40" class="border rounded d-none">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Website</label>
+        <input type="text" name="website" class="form-control" value="{{ old('website') }}">
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">Address Line 1</label>
+        <input type="text" name="address_line1" class="form-control" value="{{ old('address_line1') }}">
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">Address Line 2</label>
+        <input type="text" name="address_line2" class="form-control" value="{{ old('address_line2') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">City</label>
+        <input type="text" name="city" class="form-control" value="{{ old('city') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">State</label>
+        <input type="text" name="state" class="form-control" value="{{ old('state') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Postal Code</label>
+        <input type="text" name="postal_code" class="form-control" value="{{ old('postal_code') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Country Code</label>
+        <input type="text" name="country_code" class="form-control" value="{{ old('country_code') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Established Year</label>
+        <input type="number" name="established_year" class="form-control" value="{{ old('established_year') }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Affiliation No</label>
+        <input type="text" name="affiliation_no" class="form-control" value="{{ old('affiliation_no') }}">
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">Notes</label>
+        <textarea name="note" class="form-control">{{ old('note') }}</textarea>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Active</label><br>
+        <input type="hidden" name="is_active" value="0">
+        <input type="checkbox" name="is_active" value="1" checked> School is active
+      </div>
+    </div>
+
+    <!-- ================= Admin Details ================= -->
+    <h4 class="mb-3">👨‍💼 Admin Details</h4>
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label class="form-label">First Name *</label>
+    <input type="text" name="first_name" class="form-control" required value="{{ old('first_name') }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Last Name</label>
+    <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Surname</label>
+    <input type="text" name="surname" class="form-control" value="{{ old('surname') }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Admin Email *</label>
+    <input type="email" name="admin_email" class="form-control" required value="{{ old('admin_email') }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Password *</label>
+    <div class="input-group">
+      <input type="password" name="password" id="password" class="form-control" required>
+      <button class="btn btn-outline-secondary" type="button" id="togglePwd"><i class="bi bi-eye"></i></button>
+      <button class="btn btn-outline-primary" type="button" id="genPwd">Generate</button>
     </div>
   </div>
 
-  @if ($errors->any())
-    <div class="alert alert-danger">
-      <div class="fw-semibold mb-1"><i class="bi bi-exclamation-octagon me-1"></i>There were some problems with your input:</div>
-      <ul class="mb-0 ps-3">
-        @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach
-      </ul>
-    </div>
-  @endif
+  <div class="col-md-6">
+    <label class="form-label">Phone</label>
+    <input type="text" name="admin_phone" class="form-control" value="{{ old('admin_phone') }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Alt Phone</label>
+    <input type="text" name="alt_admin_phone" class="form-control" value="{{ old('alt_admin_phone') }}">
+  </div>
 
-  <div class="card border-0 shadow-sm">
-    <div class="card-body">
-      <form method="POST" action="{{ route('superadmin.school.store') }}" novalidate>
-        @csrf
+  <div class="col-md-12">
+    <label class="form-label">Address</label>
+    <textarea name="admin_address" class="form-control">{{ old('admin_address') }}</textarea>
+  </div>
 
-        <div class="row g-3">
-          {{-- School name --}}
-          <div class="col-md-6">
-            <label for="name" class="form-label">School Name <span class="text-danger">*</span></label>
-            <input
-              type="text" id="name" name="name" autocomplete="off"
-              class="form-control @error('name') is-invalid @enderror"
-              value="{{ old('name') }}" maxlength="150" required
-              placeholder="Green Valley High School">
-            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-          </div>
+  <div class="col-md-4">
+    <label class="form-label">Experience Years</label>
+    <input type="number" name="admin_experience" class="form-control" value="{{ old('admin_experience') }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Joining Date</label>
+    <input type="date" name="admin_joining" class="form-control" value="{{ old('admin_joining') }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Designation</label>
+    <input type="text" name="admin_designation" class="form-control" value="{{ old('admin_designation','Administrator') }}">
+  </div>
 
-          {{-- Domain --}}
-          <div class="col-md-6">
-            <label for="domain" class="form-label">Domain <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <input
-                type="text" id="domain" name="domain" autocomplete="off"
-                class="form-control @error('domain') is-invalid @enderror"
-                value="{{ old('domain') }}" required maxlength="255"
-                placeholder="domain.pocketdomain.com">
-              @error('domain') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-            </div>
-            <div class="form-text">Enter only the domain (no “http://” or path).</div>
-          </div>
-
-          {{-- Admin Email --}}
-          <div class="col-md-6">
-            <label for="admin_email" class="form-label">Admin Email <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text bg-transparent"><i class="bi bi-envelope"></i></span>
-              <input
-                type="email" id="admin_email" name="admin_email" autocomplete="off"
-                class="form-control @error('admin_email') is-invalid @enderror"
-                value="{{ old('admin_email') }}" required maxlength="255"
-                placeholder="admin@example.com">
-              @error('admin_email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-          </div>
-
-          {{-- Admin Email --}}
-          <div class="col-md-6">
-            <label for="admin_email" class="form-label">Admin Name <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text bg-transparent"><i class="bi bi-envelope"></i></span>
-              <input
-                type="text" id="admin_name" name="admin_name" autocomplete="off"
-                class="form-control @error('admin_name') is-invalid @enderror"
-                value="{{ old('admin_name') }}" required maxlength="255"
-                placeholder="Admin Name">
-              @error('admin_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-          </div>
-
-          {{-- Password --}}
-          <div class="col-md-6">
-            <label for="password" class="form-label">Admin Password <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text bg-transparent"><i class="bi bi-lock"></i></span>
-              <input
-                type="password" id="password" name="password" autocomplete="off"
-                class="form-control @error('password') is-invalid @enderror"
-                required minlength="8" maxlength="72"
-                placeholder="At least 8 characters">
-              <button class="btn btn-outline-secondary" type="button" id="togglePwd" aria-label="Show/Hide password">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-outline-success" type="button" id="genPwd" aria-label="Generate strong password" data-len="20">
-                <i class="bi bi-magic"></i><span class="d-none d-md-inline ms-1">Generate (20)</span>
-              </button>
-              <button class="btn btn-outline-primary" type="button" id="copyPwd" aria-label="Copy password">
-                <i class="bi bi-clipboard"></i>
-              </button>
-              @error('password') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-            </div>
-            <div class="form-text">Short & strong: includes A–Z, a–z, 0–9 & symbols.</div>
-          </div>
-
-          {{-- Active switch --}}
-          <div class="col-md-6">
-            <label class="form-label d-block">Active</label>
-            {{-- ensure a value is always submitted --}}
-            <input type="hidden" name="is_active" value="0">
-            <div class="form-check form-switch">
-              <input class="form-check-input @error('is_active') is-invalid @enderror"
-                     type="checkbox" role="switch" id="is_active" name="is_active" value="1"
-                     {{ old('is_active', true) ? 'checked' : '' }}>
-              <label class="form-check-label" for="is_active">School is active</label>
-              @error('is_active') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex justify-content-end gap-2 mt-4">
-          <a href="javascript:history.back()" class="btn btn-light">Cancel</a>
-          <button type="submit" class="btn btn-primary">Create School</button>
-        </div>
-      </form>
+  <div class="col-md-6">
+    <label class="form-label">Admin Profile Photo</label>
+    <input type="file" name="admin_photo" class="form-control" accept="image/*" onchange="previewImage(event,'adminPhotoPreview')">
+    <div class="mt-2">
+      <img id="adminPhotoPreview" src="{{ asset('images/no-image.png') }}" width="80" height="80" class="border rounded d-none">
     </div>
   </div>
 </div>
-@endsection
 
+    <div class="mt-4 text-end">
+      <a href="{{ route('superadmin.school.index') }}" class="btn btn-light">Cancel</a>
+      <button type="submit" class="btn btn-primary">Create School</button>
+    </div>
+  </form>
+</div>
 @push('scripts')
 <script>
-(function(){
-  const input  = document.getElementById('password');
-  const btnGen = document.getElementById('genPwd');
-  const btnCpy = document.getElementById('copyPwd');
-  const btnTgl = document.getElementById('togglePwd');
-
-  // Character sets (exclude ambiguous I/l/1/O/0)
-  const U = 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('');   // no I/O
-  const L = 'abcdefghijkmnopqrstuvwxyz'.split('');  // no l
-  const D = '23456789'.split('');                   // no 0/1
-  const S = '!@#$%^&*()-_=+[]{}:,.?/~'.split('');   // symbols
-  const POOL = U.concat(L, D, S);
-
-  function rint(max){
-    const a = new Uint32Array(1);
-    crypto.getRandomValues(a);
-    return a[0] % max;
-  }
-  function pick(set){ return set[rint(set.length)]; }
-  function shuffle(arr){
-    for (let i = arr.length - 1; i > 0; i--){
-      const j = rint(i + 1);
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+function previewImage(event, previewId) {
+    const file = event.target.files[0];
+    const img = document.getElementById(previewId);
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            img.src = e.target.result;
+            img.classList.remove('d-none'); // show only if uploaded
+        }
+        reader.readAsDataURL(file);
+    } else {
+        img.classList.add('d-none'); // hide if no file
     }
-    return arr;
-  }
+}
 
-  function generateStrongPassword(len){
-    // Ensure 4-class complexity
-    const req = [pick(U), pick(L), pick(D), pick(S)];
-    while (req.length < len) req.push(pick(POOL));
-    return shuffle(req.slice(0, len)).join('');
-  }
+document.getElementById('genPwd').addEventListener('click', function(){
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*";
+    let pwd = "";
+    for(let i=0; i<12; i++){ pwd += chars.charAt(Math.floor(Math.random() * chars.length)); }
+    document.getElementById('password').value = pwd;
+});
 
-  // Generate (default length from data-len, fallback to 10)
-  btnGen?.addEventListener('click', ()=>{
-    const len = parseInt(btnGen.dataset.len || '10', 10);
-    const pwd = generateStrongPassword(Math.max(8, len)); // enforce >= 8 to satisfy validation
-    input.value = pwd;
-
-    // reveal so user can see/copy
-    if (input.type === 'password') {
-      input.type = 'text';
-      const eye = btnTgl?.querySelector('i'); if (eye) eye.className = 'bi bi-eye-slash';
+document.getElementById('togglePwd').addEventListener('click', function(){
+    const input = document.getElementById('password');
+    const icon = this.querySelector('i');
+    if(input.type === "password"){
+        input.type = "text";
+        icon.className = "bi bi-eye-slash";
+    } else {
+        input.type = "password";
+        icon.className = "bi bi-eye";
     }
-    input.focus(); input.select();
-  });
-
-  // Copy
-  btnCpy?.addEventListener('click', async ()=>{
-    if (!input.value) return;
-    try {
-      await navigator.clipboard.writeText(input.value);
-      const icon = btnCpy.querySelector('i'); const old = icon.className;
-      icon.className = 'bi bi-clipboard-check';
-      setTimeout(()=> icon.className = old, 1200);
-    } catch {
-      input.select(); document.execCommand('copy');
-    }
-  });
-
-  // Show/Hide
-  btnTgl?.addEventListener('click', ()=>{
-    const eye = btnTgl.querySelector('i');
-    if (input.type === 'password'){ input.type = 'text'; eye.className='bi bi-eye-slash'; }
-    else { input.type = 'password'; eye.className='bi bi-eye'; }
-  });
-})();
-
-
-
-(function(){
-  const form = document.querySelector('form[action="{{ route('superadmin.school.store') }}"]');
-  if (!form) return;
-
-  form.addEventListener('submit', function(e){
-    // normalize: trim key fields
-    ['name','domain','admin_email'].forEach(id=>{
-      const el = document.getElementById(id);
-      if (el) el.value = el.value.trim();
-    });
-
-    // programmatic HTML5 validation even with novalidate present
-    if (!form.checkValidity()){
-      e.preventDefault();
-      form.reportValidity();
-      return;
-    }
-  });
-})();
+});
 </script>
 @endpush
+
+@endsection

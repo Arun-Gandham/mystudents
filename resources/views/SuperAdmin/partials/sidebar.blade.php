@@ -9,12 +9,7 @@
           </a>
         </li>
         <li class="nav-item"><a href="{{ route('superadmin.school.index') }}" class="nav-link {{ request()->routeIs('superadmin.school.index') ? 'active' : '' }}"><i class="bi bi-buildings"></i><span class="label">Schools</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people"></i><span class="label">Users</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-shield-lock"></i><span class="label">Roles & Permissions</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cash-stack"></i><span class="label">Billing</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clipboard-data"></i><span class="label">Reports</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i><span class="label">System Settings</span></a></li>
-      </ul>
+       </ul>
     </div>
 
     <!-- Collapse at bottom -->

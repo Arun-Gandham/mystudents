@@ -4,4 +4,5 @@ use App\Http\Controllers\TestFormController;
 
 Route::get('/test-form', [TestFormController::class, 'create'])->name('test.create');
 Route::post('/test-form', [TestFormController::class, 'store'])->name('test.store');
+Route::post('/', [TestFormController::class, 'store'])->name('test.store');
 

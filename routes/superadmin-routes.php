@@ -21,10 +21,11 @@ Route::domain($root)
             
             Route::prefix('schools')->name('school.')->group(function () {
                 Route::resource('', SASchoolController::class); // avoid '/' inside resource
-                Route::prefix('{schoolId}')->group(function () {
+                Route::prefix('{school}')->group(function () {
                     Route::get('/', [SASchoolController::class, 'dashboard'])->name('dashboard');
                     Route::get('/students', [SASchoolController::class, 'students'])->name('students');
-                    Route::get('/settings', [SASchoolController::class, 'settings'])->name('settings');
+                    Route::get('settings', [SASchoolController::class, 'settings'])->name('settings');
+                    Route::PUT('settings', [SASchoolController::class, 'updateSettings'])->name('updateSettings');
                 });
             });
         });

@@ -46,7 +46,8 @@ return new class extends Migration {
 
             // Profile
             $table->string('photo')->nullable(); // store path to image
-
+            
+            
             // Employment
             $table->integer('experience_years')->default(0);
             $table->date('joining_date')->nullable();
@@ -152,26 +153,29 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
         Schema::create('school_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->unique();
-            $table->string('phone_e164')->nullable();
+            $table->string('phone')->nullable();
             $table->string('alt_phone')->nullable();
+            $table->string('landline')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
             $table->string('logo_url')->nullable();
+            $table->string('favicon_url')->nullable();
             $table->string('address_line1')->nullable();
             $table->string('address_line2')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country_code')->nullable();
-            $table->string('principal_name')->nullable();
+            $table->uuid('principal_id')->nullable();
             $table->integer('established_year')->nullable();
             $table->string('affiliation_no')->nullable();
             $table->text('note')->nullable();
             $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
 
             $table->foreign('school_id', 'fk_school_details_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
+            $table->foreign('principal_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

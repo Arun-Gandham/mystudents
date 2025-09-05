@@ -25,11 +25,7 @@ class Authenticate extends Middleware
         if ($request->route() && $request->route()->named('tenant.*')) {
             return route('tenant.login', ['school_sub' => $request->route('school_sub')]);
         }
-
-        // If we're inside superadmin routes
-        if ($request->route() && $request->route()->named('superadmin.*')) {
-            return route('superadmin.login');
-        }
+        
         return route('global.homepage');
     }
 }

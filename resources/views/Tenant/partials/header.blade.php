@@ -44,7 +44,7 @@
             <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
-              <form method="POST" action="{{ route('tenant.logout', ['school_sub' => request()->route('school_sub')]) }}">
+              <form method="POST" action="{{ tenant_route('tenant.logout') }}">
                 @csrf
                 <button type="submit" class="dropdown-item text-danger">
                   <i class="bi bi-box-arrow-right me-2"></i>Logout

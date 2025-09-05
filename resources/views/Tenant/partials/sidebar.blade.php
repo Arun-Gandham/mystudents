@@ -1,4 +1,4 @@
-@php $perms = auth()->user()->getPermissions(); @endphp
+@php $perms = auth()->check() ? auth()->user()->getPermissions() : []; @endphp
 <aside class="sidebar d-none d-lg-flex p-3" aria-label="Sidebar">
   <div class="sidebar-inner">
     <!-- Menu (icons + labels; no section headers) -->

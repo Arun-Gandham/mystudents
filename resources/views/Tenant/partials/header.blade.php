@@ -19,7 +19,7 @@
         <div class="input-group">
           <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
           <input id="globalSearch" class="form-control border-start-0" type="search"
-                 placeholder="Search schools, teachers, students…" aria-label="Search">
+                 placeholder="Search teachers, students…" aria-label="Search">
         </div>
         <div id="searchResults" class="search-results"></div>
       </form>
@@ -36,8 +36,10 @@
         <!-- Profile -->
         <div class="dropdown">
           <button class="btn btn-outline-secondary d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown">
-            <img class="rounded-circle" src="https://i.pravatar.cc/40?img=5" alt="avatar" width="28" height="28">
-            <span class="d-none d-sm-inline">Profile</span>
+              <img class="rounded-circle" src="https://i.pravatar.cc/40?img=5" alt="avatar" width="28" height="28">
+              <span class="d-none d-sm-inline">
+                  {{ auth()->user() ? \Illuminate\Support\Str::limit(auth()->user()->full_name, 20, '...') : '' }}
+              </span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>

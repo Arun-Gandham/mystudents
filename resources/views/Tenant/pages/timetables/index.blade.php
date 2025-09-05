@@ -8,12 +8,12 @@
 
     {{-- Action buttons --}}
     <div class="mb-3 d-flex gap-2">
-        <a href="{{ tenant_route('tenant.timetables.create', ['school_sub' => current_school_sub()]) }}" 
+        <a href="{{ tenant_route('tenant.timetables.create') }}" 
            class="btn btn-primary">
             Create New
         </a>
 
-        <a href="{{ tenant_route('tenant.timetables.copyForm', ['school_sub' => current_school_sub()]) }}" 
+        <a href="{{ tenant_route('tenant.timetables.copyForm') }}" 
            class="btn btn-warning">
             Copy From Previous
         </a>
@@ -22,8 +22,12 @@
     {{-- Check if any timetables exist --}}
     @if($timetables->isEmpty())
         <div class="alert alert-info">
-            <p class="mb-2">No sections found. Please add a section first to create timetables.</p>
-            <a href="{{ tenant_route('tenant.sections.create', ['school_sub' => current_school_sub()]) }}" 
+            <p class="mb-2">No Timetable found. Please add a section first to create timetables.</p>
+            <a href="{{ tenant_route('tenant.timetables.create') }}" 
+               class="btn btn-success">
+                + Add Time Table
+            </a>
+            <a href="{{ tenant_route('tenant.sections.create') }}" 
                class="btn btn-success">
                 + Add Section
             </a>

@@ -15,7 +15,7 @@ use App\Http\Controllers\Tenant\SchoolHolidayController;
 use App\Http\Controllers\Tenant\CalendarController;
 use App\Http\Controllers\Tenant\SubjectController;
 use App\Http\Controllers\Tenant\StaffController;
-
+use App\Http\Controllers\Tenant\SearchController;
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */
@@ -33,7 +33,7 @@ Route::domain('{school_sub}.'.$root)
         // Protected tenant routes (enforce school match)
         Route::middleware(['auth:tenant', 'user.school.guard'])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-        
+            Route::get('/search', [SearchController::class, 'index'])->name('search');
 
             // Roles & Permissions
             Route::prefix('roles')->name('roles.')->group(function () {
@@ -54,15 +54,15 @@ Route::domain('{school_sub}.'.$root)
 
             // Acadamics
             Route::prefix('academic_years')->name('academic_years.')->group(function () {
-                    Route::get('/', [AcademicYearController::class, 'index'])->name('index');
-                    Route::get('/create', [AcademicYearController::class, 'create'])->name('create');
-                    Route::post('/', [AcademicYearController::class, 'store'])->name('store');
-                    Route::get('/{academic_year}', [AcademicYearController::class, 'show'])->name('show');
-                    Route::get('/{academic_year_id}/edit', [AcademicYearController::class, 'edit'])->name('edit');
-                    Route::put('/{academic_year}', [AcademicYearController::class, 'update'])->name('update');
-                    Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
-                    Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
-                ->name('toggle');
+                Route::get('/', [AcademicYearController::class, 'index'])->name('index');
+                Route::get('/create', [AcademicYearController::class, 'create'])->name('create');
+                Route::post('/', [AcademicYearController::class, 'store'])->name('store');
+                Route::get('/{academic_year}', [AcademicYearController::class, 'show'])->name('show');
+                Route::get('/{academic_year_id}/edit', [AcademicYearController::class, 'edit'])->name('edit');
+                Route::put('/{academic_year}', [AcademicYearController::class, 'update'])->name('update');
+                Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
+                Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
+                    ->name('toggle');
             });
 
             // Grades CRUD
@@ -111,42 +111,42 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('api/{timetable}/periods', [PeriodController::class, 'apiList'])->name('periods.api');
             });
 
-        Route::prefix('school-holidays')->name('school_holidays.')->group(function () {
-            Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');          // ✅ Blade Calendar View
-            Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');        // JSON
-            Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
-            Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');  // JSON
-            Route::post('/store', [SchoolHolidayController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [SchoolHolidayController::class, 'edit'])->name('edit');
-            Route::put('/{id}/update', [SchoolHolidayController::class, 'update'])->name('update');
-            Route::delete('/{id}/delete', [SchoolHolidayController::class, 'destroy'])->name('destroy');
-        });
+            Route::prefix('school-holidays')->name('school_holidays.')->group(function () {
+                Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');          // ✅ Blade Calendar View
+                Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');        // JSON
+                Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
+                Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');  // JSON
+                Route::post('/store', [SchoolHolidayController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [SchoolHolidayController::class, 'edit'])->name('edit');
+                Route::put('/{id}/update', [SchoolHolidayController::class, 'update'])->name('update');
+                Route::delete('/{id}/delete', [SchoolHolidayController::class, 'destroy'])->name('destroy');
+            });
 
-        // calender
-        Route::prefix('calendar')->name('calendar.')->group(function () {
-            Route::get('/', [CalendarController::class, 'index'])->name('index');          // ✅ Blade Calendar View
-        });
+            // calender
+            Route::prefix('calendar')->name('calendar.')->group(function () {
+                Route::get('/', [CalendarController::class, 'index'])->name('index');          // ✅ Blade Calendar View
+            });
 
-        // subjects
-        Route::prefix('subjects')->name('subjects.')->group(function () {
-            Route::get('/', [SubjectController::class, 'index'])->name('index');
-            Route::get('/create', [SubjectController::class, 'create'])->name('create');
-            Route::post('/store', [SubjectController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [SubjectController::class, 'edit'])->name('edit');
-            Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
-            Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
-        });
+            // subjects
+            Route::prefix('subjects')->name('subjects.')->group(function () {
+                Route::get('/', [SubjectController::class, 'index'])->name('index');
+                Route::get('/create', [SubjectController::class, 'create'])->name('create');
+                Route::post('/store', [SubjectController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [SubjectController::class, 'edit'])->name('edit');
+                Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
+                Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
+            });
 
 
-        Route::prefix('staff')->name('staff.')->group(function () {
-            Route::get('/', [StaffController::class, 'index'])->name('index');
-            Route::get('/create', [StaffController::class, 'create'])->name('create');
-            Route::post('/store', [StaffController::class, 'store'])->name('store');
-            Route::get('/{id}', [StaffController::class, 'show'])->name('show');
-            Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('edit');
-            Route::put('/{id}/update', [StaffController::class, 'update'])->name('update');
-            Route::delete('/{id}/delete', [StaffController::class, 'destroy'])->name('destroy');
-        });
+            Route::prefix('staff')->name('staff.')->group(function () {
+                Route::get('/', [StaffController::class, 'index'])->name('index');
+                Route::get('/create', [StaffController::class, 'create'])->name('create');
+                Route::post('/store', [StaffController::class, 'store'])->name('store');
+                Route::get('/{id}', [StaffController::class, 'show'])->name('show');
+                Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('edit');
+                Route::put('/{id}/update', [StaffController::class, 'update'])->name('update');
+                Route::delete('/{id}/delete', [StaffController::class, 'destroy'])->name('destroy');
+            });
     });
 });
     

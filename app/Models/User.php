@@ -5,6 +5,7 @@ use App\Models\Traits\BelongsToSchool;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Staff;
 
 class User extends Authenticatable
 {
@@ -67,6 +68,6 @@ class User extends Authenticatable
 
     public function staff()
     {
-        return $this->hasOne(Staff::class);
+        return $this->hasOne(Staff::class,'user_id');
     }
 }

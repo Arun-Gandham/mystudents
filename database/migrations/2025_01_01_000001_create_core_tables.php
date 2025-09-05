@@ -54,6 +54,7 @@ return new class extends Migration {
 
             // Mandatory details
             $table->string('phone')->nullable();
+            $table->string('alt_phone')->nullable();
             $table->string('address')->nullable();
 
             $table->boolean('is_active')->default(true);

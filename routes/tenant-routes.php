@@ -16,6 +16,9 @@ use App\Http\Controllers\Tenant\CalendarController;
 use App\Http\Controllers\Tenant\SubjectController;
 use App\Http\Controllers\Tenant\StaffController;
 use App\Http\Controllers\Tenant\SearchController;
+use App\Http\Controllers\Tenant\StaffProfileController;
+
+
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */
@@ -146,6 +149,15 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('edit');
                 Route::put('/{id}/update', [StaffController::class, 'update'])->name('update');
                 Route::delete('/{id}/delete', [StaffController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('profile')->name('profile.')->group(function () {
+                Route::get('', [StaffProfileController::class, 'show'])
+                    ->name('show');
+                Route::get('edit', [StaffProfileController::class, 'edit'])
+                    ->name('edit');
+                Route::put('', [StaffProfileController::class, 'update'])
+                    ->name('update');
             });
     });
 });

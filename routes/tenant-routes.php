@@ -169,6 +169,11 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit'); // edit form
                 Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
                 Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
+
+                Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
+                    ->name('admit.form');
+                Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
+                    ->name('admit.store');
             });
     });
 });

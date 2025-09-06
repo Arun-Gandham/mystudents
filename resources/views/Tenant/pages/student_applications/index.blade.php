@@ -57,6 +57,10 @@
             @csrf @method('DELETE')
             <button onclick="return confirm('Delete this?')" class="btn btn-sm btn-danger">Delete</button>
           </form>
+          <a href="{{ tenant_route('tenant.applications.admit.form',['application'=>$app->id]) }}" 
+          class="btn btn-sm btn-success">
+          Admit
+        </a>
         </td>
       </tr>
       @empty

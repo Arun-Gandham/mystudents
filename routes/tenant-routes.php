@@ -18,7 +18,7 @@ use App\Http\Controllers\Tenant\StaffController;
 use App\Http\Controllers\Tenant\SearchController;
 use App\Http\Controllers\Tenant\StaffProfileController;
 use App\Http\Controllers\Tenant\Student\StudentApplicationController;
-
+use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */

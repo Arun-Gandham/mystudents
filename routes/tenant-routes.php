@@ -17,7 +17,7 @@ use App\Http\Controllers\Tenant\SubjectController;
 use App\Http\Controllers\Tenant\StaffController;
 use App\Http\Controllers\Tenant\SearchController;
 use App\Http\Controllers\Tenant\StaffProfileController;
-
+use App\Http\Controllers\Tenant\Student\StudentApplicationController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -158,6 +158,17 @@ Route::domain('{school_sub}.'.$root)
                     ->name('edit');
                 Route::put('', [StaffProfileController::class, 'update'])
                     ->name('update');
+            });
+
+            Route::prefix('applications')->name('applications.')->group(function () {
+                Route::get('/', [StudentApplicationController::class, 'index'])->name('index');          // list
+                Route::get('/create', [StudentApplicationController::class, 'create'])->name('create'); // add form
+                Route::post('/', [StudentApplicationController::class, 'store'])->name('store');        // save new
+
+                Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');     // view one
+                Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit'); // edit form
+                Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
+                Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
             });
     });
 });

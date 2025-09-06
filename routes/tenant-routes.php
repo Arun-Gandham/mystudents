@@ -19,6 +19,7 @@ use App\Http\Controllers\Tenant\SearchController;
 use App\Http\Controllers\Tenant\StaffProfileController;
 use App\Http\Controllers\Tenant\Student\StudentApplicationController;
 use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
+use App\Http\Controllers\Tenant\Student\StudentController;
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */
@@ -188,6 +189,25 @@ Route::domain('{school_sub}.'.$root)
                 // from application
                 Route::get('/from-application/{application}', [StudentAdmissionController::class,'createFromApplication'])->name('fromApp.create');
                 Route::post('/from-application/{application}', [StudentAdmissionController::class,'storeFromApplication'])->name('fromApp.store');
+            });
+
+            Route::prefix('students')->name('students.')->group(function () {
+                // List + filters + ajax pagination
+                Route::get('/', [StudentController::class, 'index'])->name('index');
+
+                // Create new student admission directly
+                Route::get('/create', [StudentController::class, 'create'])->name('create');
+                Route::post('/', [StudentController::class, 'store'])->name('store');
+
+                // View a student profile
+                Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+
+                // Edit existing student
+                Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+                Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+
+                // Delete student
+                Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
             });
     });
 });

@@ -134,6 +134,13 @@
             <i class="bi bi-person-badge me-2"></i><span class="label">Student Applications</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a href="{{ tenant_route('tenant.admissions.index') }}" 
+             class="nav-link {{ request()->routeIs('tenant.admissions.*') ? 'active' : '' }}">
+            <i class="bi bi-person-badge me-2"></i><span class="label">Student Admissions</span>
+          </a>
+        </li>
         
 
         <li class="nav-item">

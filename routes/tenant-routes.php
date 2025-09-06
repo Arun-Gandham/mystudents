@@ -170,10 +170,24 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
                 Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
 
-                Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
-                    ->name('admit.form');
-                Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
-                    ->name('admit.store');
+                // Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
+                //     ->name('admit.form');
+                // Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
+                //     ->name('admit.store');
+            });
+
+            Route::prefix('admissions')->name('admissions.')->middleware('auth:tenant')->group(function () {
+                Route::get('/', [StudentAdmissionController::class,'index'])->name('index');
+                Route::get('/create', [StudentAdmissionController::class,'create'])->name('create');
+                Route::post('/', [StudentAdmissionController::class,'store'])->name('store');
+
+                Route::get('/{admission}/edit', [StudentAdmissionController::class,'edit'])->name('edit');
+                Route::put('/{admission}', [StudentAdmissionController::class,'update'])->name('update');
+                Route::delete('/{admission}', [StudentAdmissionController::class,'destroy'])->name('destroy');
+
+                // from application
+                Route::get('/from-application/{application}', [StudentAdmissionController::class,'createFromApplication'])->name('fromApp.create');
+                Route::post('/from-application/{application}', [StudentAdmissionController::class,'storeFromApplication'])->name('fromApp.store');
             });
     });
 });

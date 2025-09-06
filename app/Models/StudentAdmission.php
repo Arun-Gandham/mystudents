@@ -16,6 +16,22 @@ class StudentAdmission extends BaseUuidModel
         'offered_on'  => 'date',
         'admitted_on' => 'date',
     ];
+    protected $guarded = [];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'offered_grade_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'offered_section_id');
+    }
 
     public function offeredGrade()   { return $this->belongsTo(Grade::class, 'offered_grade_id'); }
     public function offeredSection() { return $this->belongsTo(Section::class, 'offered_section_id'); }

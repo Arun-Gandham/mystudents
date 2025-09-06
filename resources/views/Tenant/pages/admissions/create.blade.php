@@ -11,6 +11,7 @@
   <form method="POST" action="{{ $application 
       ? tenant_route('tenant.admissions.fromApp.store',['application'=>$application->id]) 
       : tenant_route('tenant.admissions.store') }}">
+      @csrf
     @include('tenant.pages.admissions.form')
   </form>
 </div>

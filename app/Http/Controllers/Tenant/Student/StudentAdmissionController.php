@@ -180,6 +180,6 @@ class StudentAdmissionController extends Controller
             ]);
         }
 
-        return redirect()->route('tenant.admissions.index')->with('success','Student admitted successfully.');
+        return redirect()->to(tenant_route('tenant.admissions.index'))->with('success','Student admitted successfully.');
     }
 }

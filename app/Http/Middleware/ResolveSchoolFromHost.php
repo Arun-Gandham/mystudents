@@ -34,26 +34,36 @@ class ResolveSchoolFromHost
         $cacheKey = "tenant:domain:$subdomain";
 
         $schoolData = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($subdomain) {
-            $s = School::query()
+           $s = School::query()
                 ->select('id','name','domain','is_active')
+                ->with(['details:id,school_id,logo_url,favicon_url']) // eager load details but only branding fields
                 ->where('domain', $subdomain)
                 ->where('is_active', true)
                 ->first();
 
-            return $s ? $s->toArray() : null;
+            if (!$s) {
+                return null;
+            }
+
+            return [
+                'id'        => $s->id,
+                'name'      => $s->name,
+                'domain'    => $s->domain,
+                'is_active' => $s->is_active,
+                'logo_url'  => optional($s->details)->logo_url,
+                'favicon_url' => optional($s->details)->favicon_url,
+            ];
         });
 
         if (!$schoolData) {
             throw new NotFoundHttpException('School not found or inactive.');
         }
 
-        
-
         // attach lightweight object
         $schoolObj = (object) $schoolData;
         $request->attributes->set('school', $schoolObj);
         app()->instance('tenant.school', $schoolObj);
-
+        view()->share('school', $schoolObj);
         $academicCacheKey = "tenant:academic:{$schoolObj->id}";
 
         $academicData = Cache::remember($academicCacheKey, now()->addMinutes(10), function () use ($schoolObj) {

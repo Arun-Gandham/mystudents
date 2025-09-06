@@ -2,11 +2,19 @@
   <nav class="navbar navbar-expand-lg h-100">
     <div class="container-fluid">
       <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('superadmin.dashboard') }}">
-        <span class="brand-icon d-inline-flex align-items-center justify-content-center rounded-3">
-          <i class="bi bi-motherboard"></i>
-        </span>
-        <span class="fw-bold d-none d-sm-inline brand-text">Tenant</span>
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ tenant_route('tenant.dashboard') }}">
+        @if(!empty($school->logo_url))
+          <img src="{{ asset('storage/'.$school->logo_url) }}" 
+               alt="{{ $school->name }} Logo" 
+               class="img-fluid"
+               style="max-height:40px; width:auto;">
+        @else
+          <img src="{{ asset('images/default-logo.png') }}" 
+               alt="Default Logo" 
+               class="img-fluid"
+               style="max-height:40px; width:auto;">
+        @endif
+        <span class="fw-bold d-none d-sm-inline brand-text ms-2">{{ $school->name ?? 'Tenant' }}</span>
       </a>
 
       <!-- Mobile menu -->
@@ -36,7 +44,13 @@
         <!-- Profile -->
         <div class="dropdown">
           <button class="btn btn-outline-secondary d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown">
-              <img class="rounded-circle" src="https://i.pravatar.cc/40?img=5" alt="avatar" width="28" height="28">
+              @php
+                $profilePhoto = auth()->user()?->staff?->photo 
+                      ? asset('storage/' . auth()->user()->staff->photo) 
+                      : asset('storage/images/default-avatar.svg'); 
+              @endphp
+
+              <img class="rounded-circle" src="{{ $profilePhoto }}" alt="avatar" width="28" height="28">
               <span class="d-none d-sm-inline">
                   {{ auth()->user() ? \Illuminate\Support\Str::limit(auth()->user()->full_name, 20, '...') : '' }}
               </span>

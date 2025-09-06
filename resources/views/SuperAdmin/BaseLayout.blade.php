@@ -2,12 +2,14 @@
 
 @section('title', $pageTitle ?? "Super Admin")
 @section('description', $pageDescription ?? "Super Admin")
-@section('content')
-  @yield('content')
-  @stack('scripts')
-  @stack('modals')
-  <x-toast-container />
 
+@section('content')
+    @yield('content')
+@endsection
+
+<x-toast-container />
+
+@push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toasts = document.querySelectorAll('.toast');
@@ -17,7 +19,9 @@
             });
         });
     </script>
+@endpush
 
+@push('styles')
     <style>
         .custom-toast {
             opacity: 0.95; /* transparent */
@@ -28,5 +32,6 @@
             transform: translateX(100%); /* slide out to right */
         }
     </style>
-@endsection
+@endpush
+
 

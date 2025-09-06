@@ -9,7 +9,7 @@
     <form class="row g-3" method="POST" action="{{ route('superadmin.school.updateSettings', $school->id) }}" enctype="multipart/form-data">
       @csrf
       @method('PUT')
-
+      <x-alert-errors />
       <div class="col-md-6">
         <label class="form-label">School Name *</label>
         <input type="text" name="name" class="form-control" value="{{ old('name', $school->name) }}" required>
@@ -20,20 +20,14 @@
         <input type="text" name="domain" class="form-control" value="{{ old('domain', $school->domain) }}" required>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label class="form-label">Status</label>
         <select class="form-select" name="is_active">
           <option value="1" {{ $school->is_active ? 'selected' : '' }}>Active</option>
           <option value="0" {{ !$school->is_active ? 'selected' : '' }}>Inactive</option>
         </select>
       </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Principal</label>
-        <input type="text" name="principal_name" class="form-control" value="{{ old('principal_name', optional($school->details)->principal_name) }}">
-      </div>
-
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label class="form-label">Established Year</label>
         <input type="number" name="established_year" class="form-control" value="{{ old('established_year', optional($school->details)->established_year) }}">
       </div>
@@ -130,6 +124,7 @@
   </div>
 </div>
 
+@endsection
 @push('scripts')
 <script>
 function previewImage(event, previewId) {
@@ -146,4 +141,3 @@ function previewImage(event, previewId) {
 }
 </script>
 @endpush
-@endsection

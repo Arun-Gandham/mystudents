@@ -26,6 +26,8 @@ Route::domain($root)
                     Route::get('/students', [SASchoolController::class, 'students'])->name('students');
                     Route::get('settings', [SASchoolController::class, 'settings'])->name('settings');
                     Route::PUT('settings', [SASchoolController::class, 'updateSettings'])->name('updateSettings');
+                    Route::get('reset-password', [SASchoolController::class, 'resetPasswordForm'])->name('resetPassword');
+                    Route::put('reset-password', [SASchoolController::class, 'resetPasswordUpdate'])->name('resetPasswordUpdate');
                 });
             });
         });

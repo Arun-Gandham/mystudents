@@ -6,15 +6,7 @@
 <div class="container-fluid">
     <h2>Edit Staff</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-alert-errors />
 
     <form method="POST" action="{{ tenant_route('tenant.staff.update',['id' => $staff->id]) }}" enctype="multipart/form-data">
         @csrf

@@ -7,10 +7,6 @@
     <h2>Staff</h2>
     <a href="{{ tenant_route('tenant.staff.create') }}" class="btn btn-primary mb-3">+ Add Staff</a>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     <table class="table table-bordered">
         <thead>
             <tr>

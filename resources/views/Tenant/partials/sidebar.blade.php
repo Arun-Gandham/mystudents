@@ -148,7 +148,12 @@
             <i class="bi bi-person-badge me-2"></i><span class="label">Students</span>
           </a>
         </li>
-        
+        <li class="nav-item">
+          <a href="{{ tenant_route('tenant.staffAttendance.list') }}" 
+             class="nav-link {{ request()->routeIs('tenant.staffAttendance.*') ? 'active' : '' }}">
+            <i class="bi bi-person-badge me-2"></i><span class="label">Staff Attendance</span>
+          </a>
+        </li>
 
         <li class="nav-item">
           <a href="#" class="nav-link">

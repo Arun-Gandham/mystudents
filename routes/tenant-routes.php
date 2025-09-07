@@ -20,6 +20,10 @@ use App\Http\Controllers\Tenant\StaffProfileController;
 use App\Http\Controllers\Tenant\Student\StudentApplicationController;
 use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
 use App\Http\Controllers\Tenant\Student\StudentController;
+use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
+
+
+
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */
@@ -208,6 +212,16 @@ Route::domain('{school_sub}.'.$root)
 
                 // Delete student
                 Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
+            });
+
+            // routes/tenant.php
+            Route::prefix('staff-attendance')->name('staffAttendance.')->group(function () {
+                Route::get('create', [StaffAttendanceController::class, 'create'])->name('create');
+                Route::post('store', [StaffAttendanceController::class, 'store'])->name('store');
+                Route::get('/{attendance}/edit', [StaffAttendanceController::class, 'edit'])->name('edit'); // edit attendance
+                Route::put('/{attendance}', [StaffAttendanceController::class, 'update'])->name('update'); // update attendance
+                
+                Route::get('/list', [StaffAttendanceController::class, 'list'])->name('list');
             });
     });
 });

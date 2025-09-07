@@ -20,6 +20,7 @@ use App\Http\Controllers\Tenant\StaffProfileController;
 use App\Http\Controllers\Tenant\Student\StudentApplicationController;
 use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
 use App\Http\Controllers\Tenant\Student\StudentController;
+use App\Http\Controllers\Tenant\Student\StudentAttendanceController;
 use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
 
 
@@ -91,6 +92,8 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('/{id}/edit', [SectionController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [SectionController::class, 'update'])->name('update');
                 Route::delete('/{id}', [SectionController::class, 'destroy'])->name('destroy');
+
+                Route::get('by-grade', [SectionController::class,'byGrade'])->name('byGrade');
             });
 
             // setperiods
@@ -222,6 +225,17 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{attendance}', [StaffAttendanceController::class, 'update'])->name('update'); // update attendance
                 
                 Route::get('/list', [StaffAttendanceController::class, 'list'])->name('list');
+            });
+            
+            // Student atttdance
+            Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
+                Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
+                Route::get('/create', [StudentAttendanceController::class, 'create'])->name('create');
+                Route::post('/store', [StudentAttendanceController::class, 'store'])->name('store');
+                Route::get('/{sheet}/edit', [StudentAttendanceController::class, 'edit'])->name('edit');
+                Route::put('/{sheet}', [StudentAttendanceController::class, 'update'])->name('update');
+                Route::get('/{sheet}/view', [StudentAttendanceController::class, 'view'])->name('view');
+                Route::post('/copy-morning', [StudentAttendanceController::class, 'copyMorning'])->name('copyMorning');
             });
     });
 });

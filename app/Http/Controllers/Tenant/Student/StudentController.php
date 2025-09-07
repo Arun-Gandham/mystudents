@@ -66,8 +66,8 @@ class StudentController extends Controller
      * ========================= */
     public function create()
     {
-        $grades = Grade::forSchool(current_school_id())->get();
-        $sections = Section::forSchool(current_school_id())->get();
+        $grades = Grade::get();
+        $sections = Section::get();
         return view('tenant.pages.students.create', compact('grades','sections'));
     }
 
@@ -117,8 +117,8 @@ class StudentController extends Controller
      * ========================= */
     public function edit($school_sub, Student $student)
     {
-        $grades = Grade::forSchool(current_school_id())->get();
-        $sections = Section::forSchool(current_school_id())->get();
+        $grades = Grade::get();
+        $sections = Section::get();
         return view('tenant.pages.students.edit', compact('student','grades','sections'));
     }
 

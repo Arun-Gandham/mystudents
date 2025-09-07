@@ -39,7 +39,7 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
             $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('sheet_id', 'fk_sae_sheet')->references('id')->on('student_attendance_sheets')->cascadeOnDelete();
             $table->foreign('student_id', 'fk_sae_student')->references('id')->on('students')->cascadeOnDelete();

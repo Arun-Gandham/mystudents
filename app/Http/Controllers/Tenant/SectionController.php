@@ -79,4 +79,11 @@ class SectionController extends Controller
 
         return back()->with('success', 'Section deleted.');
     }
+
+    public function byGrade(Request $request)
+    {
+        $gradeId = $request->input('grade_id');
+        $sections = \App\Models\Section::where('grade_id',$gradeId)->get(['id','name']);
+        return response()->json($sections);
+    }
 }

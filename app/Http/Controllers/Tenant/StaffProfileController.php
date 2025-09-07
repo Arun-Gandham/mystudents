@@ -44,7 +44,7 @@ class StaffProfileController extends Controller
         $staff->update($validated);
 
         return redirect()
-            ->to(tenant_route('tenant.staff.profile.show'))
+            ->to(tenant_route('tenant.profile.show'))
             ->with('success', 'Profile updated successfully.');
     }
 }

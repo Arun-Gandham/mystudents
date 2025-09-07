@@ -26,7 +26,7 @@
             <p class="mb-1"><strong>Designation:</strong> {{ $staff->designation }}</p>
             <p class="mb-1"><strong>Address:</strong> {{ $staff->address }}</p>
 
-            <a href="{{ tenant_route('tenant.staff.profile.edit') }}" 
+            <a href="{{ tenant_route('tenant.profile.edit') }}" 
                class="btn btn-primary mt-3">Edit Profile {{ auth()->user()?->staff?->id }}</a>
         </div>
     </div>

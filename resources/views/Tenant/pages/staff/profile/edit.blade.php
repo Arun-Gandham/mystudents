@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ tenant_route('tenant.staff.profile.update', [$staff->id]) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ tenant_route('tenant.profile.update', [$staff->id]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -56,7 +56,7 @@
         </div>
 
         <button class="btn btn-success">Update Profile</button>
-        <a href="{{ tenant_route('tenant.staff.profile.show', ['staff' => $staff->id]) }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ tenant_route('tenant.profile.show', ['staff' => $staff->id]) }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

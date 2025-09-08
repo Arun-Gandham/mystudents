@@ -19,4 +19,8 @@ class Exam extends BaseUuidModel
 
     public function subjects() { return $this->hasMany(ExamSubject::class, 'exam_id'); }
     public function results()  { return $this->hasMany(ExamResult::class, 'exam_id'); }
+    public function grades()
+    {
+        return $this->hasMany(ExamGrade::class);
+    }
 }

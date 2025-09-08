@@ -9,7 +9,6 @@ if (! function_exists('current_school_sub')) {
     {
         $param = optional(Request::route())->parameter('school_sub');
         if ($param) return $param;
-
         $host = Request::getHost();
         $root = config('app.tenant_root_domain');
         if ($root && str_ends_with($host, '.'.$root)) {

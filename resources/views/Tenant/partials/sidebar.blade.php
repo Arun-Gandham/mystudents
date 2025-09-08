@@ -156,6 +156,13 @@
         </li>
 
         <li class="nav-item">
+          <a href="{{ tenant_route('tenant.exams.index') }}" 
+             class="nav-link {{ request()->routeIs('tenant.exams.*') ? 'active' : '' }}">
+            <i class="bi bi-clipboard-check me-2"></i> Exams
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="bi bi-gear me-2"></i> System Settings
           </a>

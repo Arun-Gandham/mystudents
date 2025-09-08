@@ -30,6 +30,7 @@ class AcademicYearController extends Controller
             'start_date' => 'required|date',
             'end_date'   => 'required|date|after:start_date',
         ]);
+        $data['school_id'] = current_school_id();
 
         Academic::create($data);
 

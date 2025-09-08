@@ -1,0 +1,270 @@
+/////////////////////////////////////////////////////
+// CORE TABLES
+/////////////////////////////////////////////////////
+
+Table schools {
+  id uuid [pk]
+  domain varchar
+  name varchar
+  is_active boolean
+}
+
+Table users {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  full_name varchar
+  email varchar
+  password varchar
+  is_active boolean
+}
+
+Table staff {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  user_id uuid [ref: > users.id]
+  first_name varchar
+  last_name varchar
+}
+
+Table academics {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  name varchar
+  start_date date
+  end_date date
+  is_current boolean
+}
+
+Table grades {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  name varchar
+  ordinal int
+  is_active boolean
+}
+
+Table sections {
+  id uuid [pk]
+  grade_id uuid [ref: > grades.id]
+  name varchar
+  teacher_id uuid [ref: > users.id]
+}
+
+Table subjects {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  name varchar
+  code varchar
+  is_active boolean
+}
+
+Table students {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  full_name varchar
+  dob date
+  admission_no varchar
+  gender varchar
+  status enum
+  source_application_id uuid
+}
+
+/////////////////////////////////////////////////////
+// ENROLLMENT & GUARDIANS
+/////////////////////////////////////////////////////
+
+Table student_enrollments {
+  id uuid [pk]
+  student_id uuid [ref: > students.id]
+  academic_id uuid [ref: > academics.id]
+  grade_id uuid [ref: > grades.id]
+  section_id uuid [ref: > sections.id]
+  roll_no varchar
+}
+
+Table student_guardians {
+  id uuid [pk]
+  student_id uuid [ref: > students.id]
+  full_name varchar
+  relation enum
+  email varchar
+}
+
+/////////////////////////////////////////////////////
+// APPLICATIONS & ADMISSIONS
+/////////////////////////////////////////////////////
+
+Table student_join_applications {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  preferred_grade_id uuid [ref: > grades.id]
+  preferred_section_id uuid [ref: > sections.id]
+  student_id uuid [ref: > students.id]
+  application_no varchar
+  status enum
+}
+
+Table student_admissions {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  student_id uuid [ref: > students.id]
+  offered_grade_id uuid [ref: > grades.id]
+  offered_section_id uuid [ref: > sections.id]
+}
+
+/////////////////////////////////////////////////////
+// ATTENDANCE
+/////////////////////////////////////////////////////
+
+Table student_attendance_sheets {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  section_id uuid [ref: > sections.id]
+  attendance_date date
+  session enum
+  taken_by uuid [ref: > users.id]
+}
+
+Table student_attendance_entries {
+  id uuid [pk]
+  sheet_id uuid [ref: > student_attendance_sheets.id]
+  student_id uuid [ref: > students.id]
+  status enum
+}
+
+Table staff_attendance {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  user_id uuid [ref: > users.id]
+  attendance_date date
+  session enum
+  status enum
+}
+
+/////////////////////////////////////////////////////
+// FEES
+/////////////////////////////////////////////////////
+
+Table fee_heads {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  name varchar
+  code varchar
+}
+
+Table section_fees {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  section_id uuid [ref: > sections.id]
+  fee_head_id uuid [ref: > fee_heads.id]
+  base_amount decimal
+}
+
+Table student_fee_items {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  student_id uuid [ref: > students.id]
+  fee_head_id uuid [ref: > fee_heads.id]
+  base_amount decimal
+}
+
+Table student_fee_payments {
+  id uuid [pk]
+  student_fee_item_id uuid [ref: > student_fee_items.id]
+  paid_amount decimal
+}
+
+/////////////////////////////////////////////////////
+// TIMETABLE & CALENDAR
+/////////////////////////////////////////////////////
+
+Table school_holidays {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  date date
+  name varchar
+}
+
+Table section_day_timetables {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  section_id uuid [ref: > sections.id]
+  day enum
+}
+
+Table section_day_periods {
+  id uuid [pk]
+  day_timetable_id uuid [ref: > section_day_timetables.id]
+  subject_id uuid [ref: > subjects.id]
+  teacher_id uuid [ref: > users.id]
+  period_no int
+}
+
+/////////////////////////////////////////////////////
+// EXAMS & RESULTS
+/////////////////////////////////////////////////////
+
+Table exams {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  academic_id uuid [ref: > academics.id]
+  section_id uuid [ref: > sections.id]
+  name varchar
+}
+
+Table exam_subjects {
+  id uuid [pk]
+  exam_id uuid [ref: > exams.id]
+  subject_id uuid [ref: > subjects.id]
+  max_marks decimal
+  pass_marks decimal
+}
+
+Table exam_results {
+  id uuid [pk]
+  exam_id uuid [ref: > exams.id]
+  student_id uuid [ref: > students.id]
+  subject_id uuid [ref: > subjects.id]
+  marks_obtained decimal
+  entered_by uuid [ref: > users.id]
+}
+
+/////////////////////////////////////////////////////
+// ROLES & PERMISSIONS
+/////////////////////////////////////////////////////
+
+Table permissions {
+  id uuid [pk]
+  key varchar
+  description text
+}
+
+Table roles {
+  id uuid [pk]
+  school_id uuid [ref: > schools.id]
+  name varchar
+  description text
+  is_system boolean
+}
+
+Table role_permissions {
+  role_id uuid [ref: > roles.id]
+  permission_id uuid [ref: > permissions.id]
+  scope enum
+  allow boolean
+}
+
+Table user_roles {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  role_id uuid [ref: > roles.id]
+  school_id uuid [ref: > schools.id]
+  is_primary boolean
+}

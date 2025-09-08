@@ -22,7 +22,8 @@ use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
 use App\Http\Controllers\Tenant\Student\StudentController;
 use App\Http\Controllers\Tenant\Student\StudentAttendanceController;
 use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
-
+use App\Http\Controllers\Tenant\Exam\ExamController;
+use App\Http\Controllers\Tenant\Exam\ExamResultController;
 
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
@@ -236,6 +237,21 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{sheet}', [StudentAttendanceController::class, 'update'])->name('update');
                 Route::get('/{sheet}/view', [StudentAttendanceController::class, 'view'])->name('view');
                 Route::post('/copy-morning', [StudentAttendanceController::class, 'copyMorning'])->name('copyMorning');
+            });
+
+            Route::prefix('exams')->name('exams.')->group(function () {
+                // Exams CRUD
+                Route::get('/', [ExamController::class, 'index'])->name('index');
+                Route::get('/create', [ExamController::class, 'create'])->name('create');
+                Route::post('/', [ExamController::class, 'store'])->name('store');
+                Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
+                Route::get('/{exam}/edit', [ExamController::class, 'edit'])->name('edit');
+                Route::put('/{exam}', [ExamController::class, 'update'])->name('update');
+                Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
+
+                // Results entry
+                Route::get('/{exam}/results', [ExamResultController::class, 'edit'])->name('results.edit');
+                Route::put('/{exam}/results', [ExamResultController::class, 'update'])->name('results.update');
             });
     });
 });

@@ -252,6 +252,11 @@ Route::domain('{school_sub}.'.$root)
                 // Results entry
                 Route::get('/{exam}/results', [ExamResultController::class, 'edit'])->name('results.edit');
                 Route::put('/{exam}/results', [ExamResultController::class, 'update'])->name('results.update');
+
+                //Tabs
+                Route::get('{exam}/tab/{tab}', [ExamController::class, 'tabContent'])->name('tab');
+
+                Route::put('{exam}/toggle-publish', [ExamController::class, 'togglePublish'])->name('toggle-publish');
             });
     });
 });

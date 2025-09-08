@@ -62,8 +62,9 @@ class ExamController extends Controller
                         ExamSubject::create([
                             'exam_id'    => $exam->id,
                             'subject_id' => $sub['id'],
-                            'max_marks'  => $sub['max_marks'] ?? 100,
-                            'pass_marks' => $sub['pass_marks'] ?? null,
+                            'max_marks'  => $sub['max_marks'],
+                            'pass_marks' => $sub['pass_marks'],
+                            'exam_date'  => $sub['exam_date'] ?? null,
                         ]);
                     }
                 }
@@ -85,12 +86,12 @@ class ExamController extends Controller
             }
         });
 
-        return redirect()->to(tenant_route('tenant.exams.index'))->with('success','Exam created.');
+        return redirect()->to(tenant_route('tenant.exams.show', ['exam' => $exam]))->with('success','Exam created.');
     }
 
     public function show($school_sub, Exam $exam)
     {
-        $exam->load(['subjects.subject','results.student','grades']);
+        $exam->load(['subjects.subject','results','overallResults','grades','section.enrollments.student']);
         return view('tenant.pages.exams.show', compact('exam'));
     }
 
@@ -122,8 +123,9 @@ class ExamController extends Controller
                         ExamSubject::create([
                             'exam_id'    => $exam->id,
                             'subject_id' => $sub['id'],
-                            'max_marks'  => $sub['max_marks'] ?? 100,
-                            'pass_marks' => $sub['pass_marks'] ?? null,
+                            'max_marks'  => $sub['max_marks'],
+                            'pass_marks' => $sub['pass_marks'],
+                            'exam_date'  => $sub['exam_date'] ?? null,
                         ]);
                     }
                 }
@@ -153,5 +155,58 @@ class ExamController extends Controller
     {
         $exam->delete();
         return back()->with('success','Exam deleted.');
+    }
+
+    public function tabContent($school_sub, Exam $exam, $tab)
+    {
+        switch ($tab) {
+            case 'dashboard':
+                $exam->load(['subjects.subject','overallResults.student','results.student','section.enrollments.student']);
+
+                // Overall topper
+                $overallTopper = $exam->overallResults->sortByDesc('total_obtained')->first();
+
+                // Subject toppers
+                $subjectToppers = [];
+                foreach ($exam->subjects as $sub) {
+                    $topResult = $exam->results
+                        ->where('subject_id', $sub->subject_id)
+                        ->sortByDesc('marks_obtained')
+                        ->first();
+                    if ($topResult) {
+                        $subjectToppers[] = [
+                            'subject' => $sub->subject->name,
+                            'student' => $topResult->student,
+                            'marks'   => $topResult->marks_obtained,
+                            'max'     => $sub->max_marks,
+                        ];
+                    }
+                }
+
+                return view('tenant.pages.exams.tabs.dashboard', compact('exam','overallTopper','subjectToppers'));
+
+            case 'grades':
+                $exam->load(['grades']);
+                return view('tenant.pages.exams.tabs.grades', compact('exam'));
+
+            case 'results':
+                $exam->load(['subjects.subject','results','overallResults','grades','section.enrollments.student']);
+
+                // ✅ Sort enrollments by percentage
+                $sortedEnrollments = $exam->section->enrollments->sortByDesc(function($enroll) use ($exam) {
+                    $overall = $exam->overallResults->firstWhere('student_id', $enroll->student->id);
+                    return $overall ? ($overall->total_obtained / max($overall->total_max,1)) : 0;
+                });
+
+                return view('tenant.pages.exams.tabs.results', compact('exam','sortedEnrollments'));
+
+        }
+
+        abort(404);
+    }
+    public function togglePublish($school_sub, Exam $exam)
+    {
+        $exam->update(['is_published' => !$exam->is_published]);
+        return back()->with('success', $exam->is_published ? 'Exam published successfully.' : 'Exam unpublished.');
     }
 }

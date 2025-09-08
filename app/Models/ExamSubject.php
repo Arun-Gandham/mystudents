@@ -12,6 +12,7 @@ class ExamSubject extends BaseUuidModel
         'max_marks'  => 'decimal:2',
         'pass_marks' => 'decimal:2',
         'order_no'   => 'integer',
+        'exam_date' => 'date'
     ];
 
     public function exam() { return $this->belongsTo(Exam::class); }

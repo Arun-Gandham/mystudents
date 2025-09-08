@@ -66,6 +66,7 @@
                     <th>Subject</th>
                     <th>Max Marks</th>
                     <th>Pass Marks</th>
+                    <th>Exam Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,6 +79,13 @@
                         <td>{{ $subject->name }}</td>
                         <td><input type="number" name="subjects[{{ $subject->id }}][max_marks]" value="{{ $assigned->max_marks ?? '' }}" class="form-control" {{ $assigned ? '' : 'disabled' }}></td>
                         <td><input type="number" name="subjects[{{ $subject->id }}][pass_marks]" value="{{ $assigned->pass_marks ?? '' }}" class="form-control" {{ $assigned ? '' : 'disabled' }}></td>
+                        <td>
+                            <input type="date" 
+                                name="subjects[{{ $subject->id }}][exam_date]"
+                                class="form-control"
+                                value="{{ optional(optional($assigned)->exam_date)->format('Y-m-d') }}"
+                                {{ $assigned ? '' : 'disabled' }}>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

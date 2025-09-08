@@ -36,6 +36,7 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->decimal('max_marks', 8, 2);
             $table->decimal('pass_marks', 8, 2)->nullable();
             $table->integer('order_no')->nullable();
+            $table->date('exam_date')->nullable();
             $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
 
@@ -88,6 +89,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->decimal('total_obtained', 8, 2);
             $table->decimal('total_max', 8, 2);
             $table->string('overall_grade')->nullable();
+            $table->decimal('percentage', 5, 2)->nullable();
+            $table->integer('rank')->nullable();
             $table->timestamps();
 
             $table->foreign('exam_id')->references('id')->on('exams')->cascadeOnDelete();

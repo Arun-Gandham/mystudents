@@ -23,4 +23,8 @@ class Exam extends BaseUuidModel
     {
         return $this->hasMany(ExamGrade::class);
     }
+    public function overallResults()
+    {
+        return $this->hasMany(ExamOverallResult::class);
+    }
 }

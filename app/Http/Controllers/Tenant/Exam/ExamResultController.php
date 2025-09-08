@@ -9,6 +9,7 @@ use App\Models\Exam;
 use App\Models\ExamResult;
 use App\Models\ExamGrade;
 use App\Models\Student;
+use App\Models\ExamOverallResult;
 
 class ExamResultController extends Controller
 {
@@ -35,9 +36,8 @@ class ExamResultController extends Controller
         $grading = $exam->grades;
 
         DB::transaction(function () use ($request, $exam, $grading) {
+            // ✅ Save subject results
             foreach ($request->results as $row) {
-                $marks = $row['marks_obtained'];
-
                 ExamResult::updateOrCreate(
                     [
                         'exam_id'    => $exam->id,
@@ -45,33 +45,62 @@ class ExamResultController extends Controller
                         'subject_id' => $row['subject_id'],
                     ],
                     [
-                        'marks_obtained' => $marks,
+                        'marks_obtained' => $row['marks_obtained'],
                         'entered_by'     => auth()->id(),
                         'entered_at'     => now(),
                     ]
                 );
             }
 
-            // Compute overall totals
-            $students = Student::whereHas('enrollments', fn($q)=>$q->where('section_id',$exam->section_id))->get();
+            // ✅ Recalculate overall results
+            $students = Student::whereHas('enrollments', fn($q) => 
+                $q->where('section_id', $exam->section_id)
+            )->get();
 
+            // Step 1: build array of totals
+            $overallData = [];
             foreach ($students as $student) {
-                $results = ExamResult::where('exam_id',$exam->id)->where('student_id',$student->id)->get();
+                $results = ExamResult::where('exam_id',$exam->id)
+                            ->where('student_id',$student->id)->get();
+
                 $totalObtained = $results->sum('marks_obtained');
                 $totalMax      = $exam->subjects->sum('max_marks');
 
                 $grade = null;
                 if ($grading->count()) {
-                    $rule = $grading->first(fn($g)=>$totalObtained >= $g->min_mark && $totalObtained <= $g->max_mark);
+                    $rule = $grading->first(fn($g) => $totalObtained >= $g->min_mark && $totalObtained <= $g->max_mark);
                     $grade = $rule?->grade;
                 }
 
-                // Save overall as a "virtual" record, or separate table if you created exam_overall_results
-                $student->overall_result = [
-                    'total_obtained'=>$totalObtained,
-                    'total_max'=>$totalMax,
-                    'overall_grade'=>$grade
+                $percentage = $totalMax > 0 ? round(($totalObtained / $totalMax) * 100, 2) : 0;
+
+                $overallData[] = [
+                    'student_id' => $student->id,
+                    'total'      => $totalObtained,
+                    'max'        => $totalMax,
+                    'grade'      => $grade,
+                    'percentage' => $percentage,
                 ];
+            }
+
+            // Step 2: sort and assign ranks
+            usort($overallData, fn($a, $b) => $b['percentage'] <=> $a['percentage']);
+            $rank = 1;
+            foreach ($overallData as $data) {
+                ExamOverallResult::updateOrCreate(
+                    [
+                        'exam_id'    => $exam->id,
+                        'student_id' => $data['student_id'],
+                    ],
+                    [
+                        'total_obtained' => $data['total'],
+                        'total_max'      => $data['max'],
+                        'overall_grade'  => $data['grade'],
+                        'percentage'     => $data['percentage'],
+                        'rank'           => $rank,
+                    ]
+                );
+                $rank++;
             }
         });
 

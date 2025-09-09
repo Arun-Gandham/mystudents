@@ -6,6 +6,7 @@
     <h1>Add Academic Year</h1>
     <form action="{{ tenant_route('tenant.academic_years.store') }}" method="POST">
         @csrf
+        <x-alert-errors />
         <div class="mb-3">
             <label>Name</label>
             <input type="text" name="name" class="form-control" placeholder="e.g. 2024-2025" required>

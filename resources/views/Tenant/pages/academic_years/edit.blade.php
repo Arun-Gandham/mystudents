@@ -7,6 +7,7 @@
     <form action="{{ tenant_route('tenant.academic_years.update', ['academic_year' => $academic_year]) }}" method="POST">
         @csrf
         @method('PUT')
+        <x-alert-errors />
         <div class="mb-3">
             <label>Name</label>
             <input type="text" name="name" value="{{ old('name', $academic_year->name) }}" class="form-control" required>

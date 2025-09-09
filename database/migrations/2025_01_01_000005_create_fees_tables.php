@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('code')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_feehead_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->unique(['school_id','name'], 'feehead_school_name_uq');
@@ -33,8 +33,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->boolean('is_optional')->default(false);
             $table->text('note')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_secfee_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_secfee_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -57,8 +57,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->decimal('discount_value', 12, 2)->default(0);
             $table->decimal('final_amount', 12, 2);
 
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_stufee_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_stufee_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -78,9 +78,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->string('method')->nullable();
             $table->string('reference_no')->nullable();
             $table->text('note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('student_fee_item_id', 'fk_sfp_item')
                   ->references('id')->on('student_fee_items')->cascadeOnDelete();
             $table->index(['student_fee_item_id'], 'sfp_item_idx');

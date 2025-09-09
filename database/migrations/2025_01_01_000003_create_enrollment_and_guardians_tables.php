@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->date('joined_on')->nullable();
             $table->date('left_on')->nullable();
             $table->text('promotion_note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('student_id', 'fk_enrl_student')->references('id')->on('students')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_enrl_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -41,9 +41,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->string('alt_phone')->nullable();
             $table->text('address')->nullable();
             $table->boolean('is_primary')->default(false);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('student_id', 'fk_guard_student')->references('id')->on('students')->cascadeOnDelete();
             $table->index(['student_id','is_primary'], 'guard_student_primary_idx');
         });

@@ -13,8 +13,8 @@ return new class extends Migration {
             $table->string('domain');
             $table->string('name');
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
         });
 
         // USERS
@@ -27,8 +27,8 @@ return new class extends Migration {
             $table->string('password');
             $table->rememberToken();
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_users_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
@@ -40,8 +40,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('code')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_subjects_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
@@ -74,7 +74,7 @@ return new class extends Migration {
             $table->string('address')->nullable();
 
             $table->boolean('is_active')->default(true);
-
+            $table->softDeletes();
             $table->timestampsTz();
 
             // Relations
@@ -86,7 +86,8 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->uuid('staff_id');
             $table->uuid('subject_id');
-            $table->timestamps();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('staff_id')->references('id')->on('staff')->cascadeOnDelete();
             $table->foreign('subject_id')->references('id')->on('subjects')->cascadeOnDelete();
@@ -102,8 +103,8 @@ return new class extends Migration {
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('is_current')->default(false);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_acad_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
@@ -117,8 +118,8 @@ return new class extends Migration {
             $table->string('name');
             $table->integer('ordinal')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_grades_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
@@ -131,9 +132,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->uuid('id')->primary();
             $table->uuid('grade_id');
             $table->string('name');
-            $table->uuid('teacher_id')->nullable(); // users.id
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->uuid('teacher_id')->nullable();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('grade_id', 'fk_sections_grade')
                   ->references('id')->on('grades')->cascadeOnDelete();
@@ -154,9 +155,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->string('admission_no')->nullable();
             $table->string('gender')->nullable();
             $table->enum('status', ['accepted','rejected','no_response','withdrawn'])->default('accepted');
-            $table->uuid('source_application_id')->nullable(); // FK later
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->uuid('source_application_id')->nullable();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_students_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
@@ -184,9 +185,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->integer('established_year')->nullable();
             $table->string('affiliation_no')->nullable();
             $table->text('note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('school_id', 'fk_school_details_school')
                   ->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('principal_id')->references('id')->on('users')->cascadeOnDelete();

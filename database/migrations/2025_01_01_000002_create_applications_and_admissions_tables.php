@@ -41,9 +41,8 @@ return new class extends Migration {
 
             // link to student on acceptance
             $table->uuid('student_id')->nullable();
-
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_sja_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_sja_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -74,10 +73,9 @@ return new class extends Migration {
 
             $table->string('previous_school')->nullable();
             $table->text('remarks')->nullable();
-
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('school_id', 'fk_stuadm_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_stuadm_acad')->references('id')->on('academics')->cascadeOnDelete();
             $table->foreign('student_id', 'fk_stuadm_student')->references('id')->on('students')->cascadeOnDelete();

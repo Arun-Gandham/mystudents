@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->date('ends_on')->nullable();
             $table->boolean('is_published')->default(false);
             $table->text('note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_exams_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_exams_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -37,8 +37,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->decimal('pass_marks', 8, 2)->nullable();
             $table->integer('order_no')->nullable();
             $table->date('exam_date')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('exam_id', 'fk_exsub_exam')->references('id')->on('exams')->cascadeOnDelete();
             $table->foreign('subject_id', 'fk_exsub_subject')->references('id')->on('subjects')->cascadeOnDelete();
@@ -56,8 +56,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->text('remarks')->nullable();
             $table->uuid('entered_by')->nullable();
             $table->timestampTz('entered_at')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('exam_id', 'fk_exres_exam')->references('id')->on('exams')->cascadeOnDelete();
             $table->foreign('student_id', 'fk_exres_student')->references('id')->on('students')->cascadeOnDelete();
@@ -76,7 +76,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->integer('min_mark');        // Inclusive lower bound
             $table->integer('max_mark');        // Inclusive upper bound
             $table->string('remark')->nullable(); // Optional default remark
-            $table->timestamps();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('exam_id')->references('id')->on('exams')->cascadeOnDelete();
             $table->unique(['exam_id','grade']); // avoid duplicate grade names
@@ -91,7 +92,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->string('overall_grade')->nullable();
             $table->decimal('percentage', 5, 2)->nullable();
             $table->integer('rank')->nullable();
-            $table->timestamps();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('exam_id')->references('id')->on('exams')->cascadeOnDelete();
             $table->foreign('student_id')->references('id')->on('students')->cascadeOnDelete();

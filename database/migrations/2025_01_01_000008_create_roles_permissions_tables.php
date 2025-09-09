@@ -13,8 +13,8 @@ return new class extends Migration {
             $table->string('key')->unique();
             $table->text('description')->nullable();
             $table->string('group_name')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
         });
 
         // ROLES
@@ -24,8 +24,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('is_system')->default(false);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_roles_school')->references('id')->on('schools')->nullOnDelete();
             $table->unique(['school_id','name'], 'role_school_name_uq');
@@ -37,8 +37,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->uuid('permission_id');
             $table->enum('scope', ['any','own','grade','section'])->default('any');
             $table->boolean('allow')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('role_id', 'fk_rp_role')->references('id')->on('roles')->cascadeOnDelete();
             $table->foreign('permission_id', 'fk_rp_perm')->references('id')->on('permissions')->cascadeOnDelete();
@@ -51,6 +51,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->uuid('permission_id');
             $table->boolean('is_active')->default(true);
             $table->unique(['name','permission_id'], 'rolename_perm_uq');
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('permission_id', 'fk_rnp_perm')->references('id')->on('permissions')->cascadeOnDelete();
         });
@@ -64,8 +66,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->boolean('is_primary')->default(false);
             $table->date('starts_on')->nullable();
             $table->date('ends_on')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('user_id', 'fk_ur_user')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('role_id', 'fk_ur_role')->references('id')->on('roles')->cascadeOnDelete();

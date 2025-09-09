@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->time('starts_at')->nullable();
             $table->time('ends_at')->nullable();
             $table->boolean('repeats_annually')->default(false);
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_holiday_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_holiday_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -37,8 +37,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->boolean('is_active')->default(true);
             $table->date('effective_from')->nullable();
             $table->date('effective_to')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_sdt_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_sdt_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -58,9 +58,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->uuid('teacher_id')->nullable();
             $table->string('room')->nullable();
             $table->text('note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('day_timetable_id', 'fk_sdp_daytt')->references('id')->on('section_day_timetables')->cascadeOnDelete();
             $table->foreign('subject_id', 'fk_sdp_subject')->references('id')->on('subjects')->cascadeOnDelete();
             $table->foreign('teacher_id', 'fk_sdp_teacher')->references('id')->on('users')->nullOnDelete();

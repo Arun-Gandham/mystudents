@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->uuid('taken_by')->nullable();
             $table->timestampTz('taken_at')->nullable();
             $table->text('note')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_sas_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('academic_id', 'fk_sas_acad')->references('id')->on('academics')->cascadeOnDelete();
@@ -38,8 +38,8 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->text('remarks')->nullable();
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
+            $table->timestampsTz();
 
             $table->foreign('sheet_id', 'fk_sae_sheet')->references('id')->on('student_attendance_sheets')->cascadeOnDelete();
             $table->foreign('student_id', 'fk_sae_student')->references('id')->on('students')->cascadeOnDelete();
@@ -57,9 +57,9 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
             $table->text('remarks')->nullable();
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
+            $table->softDeletes();
+            $table->timestampsTz();
+            
             $table->foreign('school_id', 'fk_staffatt_school')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('user_id', 'fk_staffatt_user')->references('id')->on('users')->cascadeOnDelete();
             $table->unique(['user_id','attendance_date','session'], 'staff_att_uq');

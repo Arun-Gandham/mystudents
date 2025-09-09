@@ -104,6 +104,17 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="subjects">Subjects Taught</label>
+            <select name="subjects[]" id="subjects" class="form-control" multiple>
+                @foreach($subjects as $subject)
+                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                @endforeach
+            </select>
+            <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple</small>
+        </div>
+
+
         <button type="submit" class="btn btn-success">Save</button>
         <a href="{{ tenant_route('tenant.staff.index') }}" class="btn btn-secondary">Cancel</a>
     </form>

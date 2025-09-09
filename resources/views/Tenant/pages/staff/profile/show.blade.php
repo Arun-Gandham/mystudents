@@ -1,15 +1,10 @@
 @extends('tenant.baselayout')
 
-@section('title', 'Staff Profile')
+@section('title', 'Profile')
 
 @section('content')
 <div class="container">
-    <h2>Staff Profile</h2>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
+    <h2>Profile</h2>
     <div class="card mb-3" style="max-width: 600px;">
         <div class="card-body text-center">
             @if($staff->photo)

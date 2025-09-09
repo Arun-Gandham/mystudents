@@ -34,6 +34,21 @@ return new class extends Migration {
                   ->references('id')->on('schools')->cascadeOnDelete();
         });
 
+          Schema::create('subjects', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('school_id');
+            $table->string('name');
+            $table->string('code')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestampTz('created_at')->useCurrent();
+            $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
+
+            $table->foreign('school_id', 'fk_subjects_school')
+                  ->references('id')->on('schools')->cascadeOnDelete();
+            $table->unique(['school_id','name'], 'subject_school_name_uq');
+            $table->unique(['school_id','code'], 'subject_school_code_uq');
+        });
+
         Schema::create('staff', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('school_id');
@@ -66,6 +81,18 @@ return new class extends Migration {
             $table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
+
+        Schema::create('staff_subject', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('staff_id');
+            $table->uuid('subject_id');
+            $table->timestamps();
+
+            $table->foreign('staff_id')->references('id')->on('staff')->cascadeOnDelete();
+            $table->foreign('subject_id')->references('id')->on('subjects')->cascadeOnDelete();
+            $table->unique(['staff_id','subject_id']);
+        });
+
 
         // ACADEMICS
         Schema::create('academics', function (Blueprint $table) {
@@ -116,20 +143,7 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
         });
 
         // SUBJECTS
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('school_id');
-            $table->string('name');
-            $table->string('code')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestampTz('created_at')->useCurrent();
-$table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
-
-            $table->foreign('school_id', 'fk_subjects_school')
-                  ->references('id')->on('schools')->cascadeOnDelete();
-            $table->unique(['school_id','name'], 'subject_school_name_uq');
-            $table->unique(['school_id','code'], 'subject_school_code_uq');
-        });
+      
 
         // STUDENTS
         Schema::create('students', function (Blueprint $table) {
@@ -188,6 +202,7 @@ $table->timestampTz('updated_at')->useCurrent()->useCurrentOnUpdate();;
         Schema::dropIfExists('grades');
         Schema::dropIfExists('academics');
         Schema::dropIfExists('users');
+        Schema::dropIfExists('staff_subject');
         Schema::dropIfExists('schools');
     }
 };

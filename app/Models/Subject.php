@@ -18,4 +18,8 @@ class Subject extends BaseUuidModel
         'school_id', 'name', 'code', 'is_active'
     ];
     public function examSubjects() { return $this->hasMany(ExamSubject::class); }
+    public function staff()
+    {
+        return $this->belongsToMany(Staff::class, 'staff_subject');
+    }
 }

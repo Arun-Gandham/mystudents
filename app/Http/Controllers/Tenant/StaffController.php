@@ -41,7 +41,8 @@ class StaffController extends Controller
     public function create()
     {
         $roles = Role::forSchool(current_school_id())->orderBy('name')->get();
-        return view('tenant.pages.staff.create', compact('roles'));
+        $subjects = Subject::orderBy('name')->get();
+        return view('tenant.pages.staff.create', compact('roles','subjects'));
     }
 
     public function store(Request $request)
@@ -94,6 +95,7 @@ class StaffController extends Controller
                 'starts_on' => now(),
             ]);
         }
+        $staff->subjects()->sync($request->input('subjects', []));
 
         return redirect()->intended(tenant_route('tenant.staff.index'))
             ->with('success','Staff created successfully');
@@ -103,8 +105,9 @@ class StaffController extends Controller
     {
         $staff = Staff::forSchool(current_school_id())->with('user.roles')->findOrFail($id);
         $roles = Role::forSchool(current_school_id())->orderBy('name')->get();
-
-        return view('tenant.pages.staff.edit', compact('staff','roles'));
+        $subjects = Subject::orderBy('name')->get();
+        $staff->load('subjects');
+        return view('tenant.pages.staff.edit', compact('staff','roles','subjects'));
     }
 
     public function update(Request $request, $school_sub, $id)
@@ -131,6 +134,7 @@ class StaffController extends Controller
             'experience_years','joining_date','designation',
             'phone','address','is_active'
         ]));
+        $staff->subjects()->sync($request->input('subjects', []));
 
         // clear old roles
         UserRole::where('user_id',$user->id)->where('school_id',current_school_id())->delete();

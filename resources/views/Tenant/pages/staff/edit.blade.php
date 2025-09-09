@@ -99,6 +99,18 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="subjects">Subjects Taught</label>
+            <select name="subjects[]" id="subjects" class="form-control" multiple>
+                @foreach($subjects as $subject)
+                    <option value="{{ $subject->id }}"
+                        {{ $staff->subjects->contains($subject->id) ? 'selected' : '' }}>
+                        {{ $subject->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-success">Update</button>
         <a href="{{ tenant_route('tenant.staff.index') }}" class="btn btn-secondary">Cancel</a>
     </form>

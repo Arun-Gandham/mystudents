@@ -40,7 +40,7 @@ class TimetableController extends Controller
 {
     $request->validate([
         'section_id'      => 'required|uuid',
-        'day'             => ['required', 'integer', Rule::in(array_keys(WeekDays::LIST))],
+        'day'             => ['required', 'string', Rule::in(array_keys(WeekDays::LIST))],
         'title'           => 'required|string|max:255',
         'effective_from'  => 'required|date|after_or_equal:today',
         'effective_to'    => 'nullable|date|after_or_equal:effective_from',

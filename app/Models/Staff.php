@@ -24,4 +24,9 @@ class Staff extends BaseUuidModel
     {
         return $this->belongsTo(User::class);
     }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'staff_subject');
+    }
 }

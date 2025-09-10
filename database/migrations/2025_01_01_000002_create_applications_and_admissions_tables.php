@@ -54,6 +54,8 @@ return new class extends Migration {
             $table->index(['school_id','academic_id','status'], 'sja_school_acad_status_idx');
         });
 
+        
+
         // STUDENT ADMISSIONS (per-academic record)
         Schema::create('student_admissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -91,6 +93,17 @@ return new class extends Migration {
             $table->foreign('source_application_id', 'fk_students_sourceapp')
                   ->references('id')->on('student_join_applications')->nullOnDelete();
         });
+
+        Schema::create('student_join_applications_logs', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('application_id');
+            $table->uuid('user_id')->nullable(); // which staff updated
+            $table->string('action');            // e.g. "called guardian", "fees discussed"
+            $table->text('comment')->nullable();
+            $table->timestamps();
+
+            $table->foreign('application_id')->references('id')->on('student_join_applications')->cascadeOnDelete();
+        });
     }
 
     public function down(): void
@@ -100,5 +113,6 @@ return new class extends Migration {
         });
         Schema::dropIfExists('student_admissions');
         Schema::dropIfExists('student_join_applications');
+        Schema::dropIfExists('student_join_applications_logs');
     }
 };

@@ -14,6 +14,19 @@ class ExamSubject extends BaseUuidModel
         'order_no'   => 'integer',
         'exam_date' => 'date'
     ];
+    protected $fillable = [
+        'exam_id',
+        'subject_id',
+        'max_marks',
+        'pass_marks',
+        'order_no',
+        'exam_date',
+    ];
 
     public function exam() { return $this->belongsTo(Exam::class); }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }

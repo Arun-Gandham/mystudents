@@ -15,7 +15,12 @@ class StudentAttendanceEntry extends BaseUuidModel
         'check_out' => 'datetime:H:i:s',
     ];
     protected $fillable = [
-        'sheet_id','student_id','status','remarks','check_in','check_out'
+        'sheet_id',
+        'student_id',
+        'status',
+        'remarks',
+        'check_in',
+        'check_out',
     ];
 
     public function student() {

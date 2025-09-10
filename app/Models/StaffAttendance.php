@@ -15,4 +15,19 @@ class StaffAttendance extends BaseUuidModel
         'check_in'  => 'datetime:H:i:s',
         'check_out' => 'datetime:H:i:s',
     ];
+    protected $fillable = [
+        'school_id',
+        'attendance_date',
+        'session',
+        'user_id',
+        'status',
+        'remarks',
+        'check_in',
+        'check_out',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

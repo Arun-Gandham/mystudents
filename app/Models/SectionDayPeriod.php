@@ -11,6 +11,17 @@ class SectionDayPeriod extends BaseUuidModel
     protected $casts = [
         'period_no' => 'integer'
     ];
+    protected $fillable = [
+        'day_timetable_id',
+        'period_no',
+        'starts_at',
+        'ends_at',
+        'subject_id',
+        'teacher_id',
+        'room',
+        'note',
+    ];
+
 
     public function dayTimetable() { return $this->belongsTo(SectionDayTimetable::class, 'day_timetable_id'); }
     public function teacher()      { return $this->belongsTo(User::class, 'teacher_id'); }

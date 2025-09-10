@@ -14,9 +14,14 @@ class SchoolHoliday extends BaseUuidModel
     protected $keyType = 'string';
 
     protected $fillable = [
-        'school_id', 'academic_id',
-        'date', 'name', 'is_full_day',
-        'starts_at', 'ends_at', 'repeats_annually'
+        'school_id',
+        'academic_id',
+        'date',
+        'name',
+        'is_full_day',
+        'starts_at',
+        'ends_at',
+        'repeats_annually',
     ];
 
     protected $casts = [

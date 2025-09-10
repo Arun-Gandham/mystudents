@@ -9,6 +9,14 @@ class StudentFeePayment extends BaseUuidModel
         'paid_on'     => 'date',
         'created_at'  => 'immutable_datetime',
     ];
+    protected $fillable = [
+        'student_fee_item_id',
+        'paid_amount',
+        'paid_on',
+        'method',
+        'reference_no',
+        'note',
+    ];
 
     public function feeItem() { return $this->belongsTo(StudentFeeItem::class, 'student_fee_item_id'); }
 }

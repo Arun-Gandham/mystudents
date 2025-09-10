@@ -11,6 +11,20 @@ class StudentAdmission extends BaseUuidModel
     use BelongsToSchool, BelongsToAcademic, BelongsToStudent, HasTimestampsImmutable;
 
     protected $table = 'student_admissions';
+    protected $fillable = [
+        'school_id',
+        'academic_id',
+        'student_id',
+        'application_no',
+        'status',
+        'applied_on',
+        'offered_on',
+        'admitted_on',
+        'offered_grade_id',
+        'offered_section_id',
+        'previous_school',
+        'remarks',
+    ];
     protected $casts = [
         'applied_on'  => 'date',
         'offered_on'  => 'date',

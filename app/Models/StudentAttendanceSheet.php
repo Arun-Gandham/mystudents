@@ -11,9 +11,15 @@ class StudentAttendanceSheet extends BaseUuidModel
     use BelongsToSchool, BelongsToAcademic, BelongsToSection, HasTimestampsImmutable;
 
     protected $table = 'student_attendance_sheets';
-    protected $fillable = [
-        'school_id','academic_id','section_id',
-        'attendance_date','session','taken_by','taken_at','note'
+     protected $fillable = [
+        'school_id',
+        'academic_id',
+        'section_id',
+        'attendance_date',
+        'session',
+        'taken_by',
+        'taken_at',
+        'note',
     ];
     protected $casts = [
         'attendance_date' => 'date',

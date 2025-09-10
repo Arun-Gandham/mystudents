@@ -15,6 +15,16 @@ class SectionDayTimetable extends BaseUuidModel
         'effective_from' => 'date',
         'effective_to'   => 'date',
     ];
+    protected $fillable = [
+        'school_id',
+        'academic_id',
+        'section_id',
+        'day',
+        'title',
+        'is_active',
+        'effective_from',
+        'effective_to',
+    ];
 
     public function periods()
     {

@@ -16,6 +16,16 @@ class Exam extends BaseUuidModel
         'ends_on'      => 'date',
         'is_published' => 'boolean',
     ];
+    protected $fillable = [
+        'school_id',
+        'academic_id',
+        'section_id',
+        'name',
+        'starts_on',
+        'ends_on',
+        'is_published',
+        'note',
+    ];
 
     public function subjects() { return $this->hasMany(ExamSubject::class, 'exam_id'); }
     public function results()  { return $this->hasMany(ExamResult::class, 'exam_id'); }

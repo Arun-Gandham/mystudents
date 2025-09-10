@@ -16,6 +16,16 @@ class StudentFeeItem extends BaseUuidModel
         'discount_value' => 'decimal:2',
         'final_amount'   => 'decimal:2',
     ];
+    protected $fillable = [
+        'school_id',
+        'academic_id',
+        'student_id',
+        'fee_head_id',
+        'base_amount',
+        'discount_kind',
+        'discount_value',
+        'final_amount',
+    ];
 
     public function feeHead()  { return $this->belongsTo(FeeHead::class, 'fee_head_id'); }
     public function payments() { return $this->hasMany(StudentFeePayment::class, 'student_fee_item_id'); }

@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Tenant\Student;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\StudentJoinApplication;
 use App\Models\StudentAdmission;
 use App\Models\Student;
 use App\Models\StudentEnrollment;
+use App\Models\StudentJoinApplicationLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -49,7 +51,7 @@ class StudentAdmissionController extends Controller
     /** Direct store */
     public function store(Request $request)
     {
-        return $this->saveAdmission($request);
+        $this->saveAdmission($request);
     }
 
     /** Create from Application */
@@ -166,6 +168,14 @@ class StudentAdmissionController extends Controller
             'grade_id'=>$data['grade_id'],
             'section_id'=>$data['section_id'],
             'joined_on'=>now(),
+        ]);
+
+        StudentJoinApplicationLog::create([
+            'id'            => Str::uuid(),
+            'application_id'=> $application->id,
+            'user_id'       => Auth::id(),
+            'action'        => "Admited",
+            'comment'       => "Student Admited",
         ]);
 
         if ($application) {

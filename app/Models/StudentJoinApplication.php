@@ -38,7 +38,18 @@ class StudentJoinApplication extends BaseUuidModel
         'decided_on'   => 'date',
     ];
 
-    public function preferredGrade()  { return $this->belongsTo(Grade::class, 'preferred_grade_id'); }
-    public function preferredSection(){ return $this->belongsTo(Section::class, 'preferred_section_id'); }
+    public function preferredGrade()
+    {
+        return $this->belongsTo(Grade::class, 'preferred_grade_id');
+    }
+    
+    public function preferredSection()
+    {
+        return $this->belongsTo(Section::class, 'preferred_section_id');
+    }
     public function student()         { return $this->belongsTo(Student::class); }
+    public function logs()
+    {
+        return $this->hasMany(StudentJoinApplicationLog::class, 'application_id');
+    }
 }

@@ -179,6 +179,8 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
                 Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
 
+                Route::post('{application}/logs', [StudentApplicationController::class, 'addLog'])
+                    ->name('addLog');
                 // Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
                 //     ->name('admit.form');
                 // Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])

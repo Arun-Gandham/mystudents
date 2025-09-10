@@ -22,4 +22,9 @@ class StudentJoinApplicationLog extends BaseUuidModel
     {
         return $this->belongsTo(StudentJoinApplication::class, 'application_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

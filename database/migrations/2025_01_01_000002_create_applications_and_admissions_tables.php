@@ -100,6 +100,7 @@ return new class extends Migration {
             $table->uuid('user_id')->nullable(); // which staff updated
             $table->string('action');            // e.g. "called guardian", "fees discussed"
             $table->text('comment')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('application_id')->references('id')->on('student_join_applications')->cascadeOnDelete();

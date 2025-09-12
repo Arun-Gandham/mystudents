@@ -24,7 +24,10 @@ use App\Http\Controllers\Tenant\Student\StudentAttendanceController;
 use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
 use App\Http\Controllers\Tenant\Exam\ExamController;
 use App\Http\Controllers\Tenant\Exam\ExamResultController;
-
+use App\Http\Controllers\Tenant\Fee\FeeHeadController;
+use App\Http\Controllers\Tenant\Fee\SectionFeeController;
+use App\Http\Controllers\Tenant\Fee\StudentFeeItemController;
+use App\Http\Controllers\Tenant\Fee\FeeReceiptController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -259,6 +262,56 @@ Route::domain('{school_sub}.'.$root)
                 Route::get('{exam}/tab/{tab}', [ExamController::class, 'tabContent'])->name('tab');
 
                 Route::put('{exam}/toggle-publish', [ExamController::class, 'togglePublish'])->name('toggle-publish');
+            });
+
+            Route::prefix('fees')->name('fees.')->group(function () {
+                Route::prefix('fee-heads')->name('fee-heads.')->group(function () {
+                    Route::get('', [FeeHeadController::class, 'index'])
+                        ->name('index');
+
+                    Route::get('/create', [FeeHeadController::class, 'create'])
+                        ->name('create');
+
+                    Route::post('fee-heads', [FeeHeadController::class, 'store'])
+                        ->name('store');
+
+                    Route::get('/{feeHead}/edit', [FeeHeadController::class, 'edit'])
+                        ->name('edit');
+
+                    Route::put('/{feeHead}', [FeeHeadController::class, 'update'])
+                        ->name('update');
+
+                    Route::delete('/{feeHead}', [FeeHeadController::class, 'destroy'])
+                        ->name('destroy');
+                });
+                Route::prefix('section-fees')->name('section-fees.')->group(function () {
+                    Route::get('', [SectionFeeController::class, 'index'])->name('index');
+                    Route::get('/create', [SectionFeeController::class, 'create'])->name('create');
+                    Route::post('', [SectionFeeController::class, 'store'])->name('store');
+                });
+                // bulk assign fees
+                Route::post('sections/{sectionId}/academics/{academicId}/assign', [StudentFeeItemController::class,'bulkAssign'])
+                    ->name('fees.bulkAssign');
+                Route::prefix('student-fee-items')->name('student-fee-items.')->group(function () {
+                    // List all fee items for a student
+                    Route::get('students/{student}', [StudentFeeItemController::class, 'index'])
+                        ->name('index');
+
+                    // Optional: edit one fee item (apply discount, etc.)
+                    Route::get('/{item}/edit', [StudentFeeItemController::class, 'edit'])
+                        ->name('edit');
+                    Route::put('/{item}', [StudentFeeItemController::class, 'update'])
+                        ->name('update');
+
+                    // Optional: delete/reset
+                    Route::delete('/{item}', [StudentFeeItemController::class, 'destroy'])
+                        ->name('destroy');
+                });
+
+                // receipts
+                Route::get('students/{student}/receipts/create', [FeeReceiptController::class,'create'])->name('fee-receipts.create');
+                Route::post('students/{student}/receipts', [FeeReceiptController::class,'store'])->name('fee-receipts.store');
+                Route::get('students/{student}/receipts/{receipt}', [FeeReceiptController::class,'show'])->name('fee-receipts.show');
             });
     });
 });

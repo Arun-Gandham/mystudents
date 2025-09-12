@@ -17,14 +17,8 @@ class SectionFee extends BaseUuidModel
         'is_active'   => 'boolean',
     ];
     protected $fillable = [
-        'school_id',
-        'academic_id',
-        'section_id',
-        'fee_head_id',
-        'base_amount',
-        'is_optional',
-        'note',
-        'is_active',
+        'school_id','academic_id','section_id','fee_head_id',
+        'base_amount','is_optional','note','is_active'
     ];
 
     public function feeHead() { return $this->belongsTo(FeeHead::class, 'fee_head_id'); }

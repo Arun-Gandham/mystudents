@@ -12,12 +12,7 @@ class FeeHead extends BaseUuidModel
     protected $casts = [
         'is_active' => 'boolean',
     ];
-    protected $fillable = [
-        'school_id',
-        'name',
-        'code',
-        'is_active',
-    ];
+    protected $fillable = ['school_id','name','code','is_active'];
 
     public function sectionFees()     { return $this->hasMany(SectionFee::class); }
     public function studentFeeItems() { return $this->hasMany(StudentFeeItem::class); }

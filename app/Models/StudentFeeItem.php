@@ -17,14 +17,8 @@ class StudentFeeItem extends BaseUuidModel
         'final_amount'   => 'decimal:2',
     ];
     protected $fillable = [
-        'school_id',
-        'academic_id',
-        'student_id',
-        'fee_head_id',
-        'base_amount',
-        'discount_kind',
-        'discount_value',
-        'final_amount',
+        'school_id','academic_id','student_id','fee_head_id',
+        'base_amount','discount_kind','discount_value','final_amount'
     ];
 
     public function feeHead()  { return $this->belongsTo(FeeHead::class, 'fee_head_id'); }

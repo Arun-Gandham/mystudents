@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'resolve.school'    => \App\Http\Middleware\ResolveSchoolFromHost::class,
         'user.school.guard' => \App\Http\Middleware\EnsureUserMatchesSchool::class,
         'ensure.superadmin'  => \App\Http\Middleware\EnsureUserIsSuperAdmin::class,
+        'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+        'role'       => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }

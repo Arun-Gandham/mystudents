@@ -59,7 +59,7 @@ return new class extends Migration {
 
         // USER ROLES
         Schema::create('user_roles', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->default(DB::raw('(UUID())'));
             $table->uuid('user_id');
             $table->uuid('role_id');
             $table->uuid('school_id');

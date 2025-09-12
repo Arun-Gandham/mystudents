@@ -45,7 +45,7 @@ Route::domain('{school_sub}.'.$root)
 
         // Protected tenant routes (enforce school match)
         Route::middleware(['auth:tenant', 'user.school.guard'])->group(function () {
-            Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+            Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'permission:fees:collect'])->name('dashboard');
             Route::get('/search', [SearchController::class, 'index'])->name('search');
 
             // Roles & Permissions

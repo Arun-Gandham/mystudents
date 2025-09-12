@@ -6,7 +6,7 @@
   <div class="sidebar-inner">
     <div class="menu-scroll">
       <ul class="nav nav-pills flex-column gap-1">
-
+        @can('fees:collect')
         {{-- Dashboard --}}
         <li class="nav-item">
           <a href="{{ tenant_route('tenant.dashboard') }}"
@@ -15,6 +15,7 @@
             Dashboard
           </a>
         </li>
+        @endcan
 
         {{-- Roles --}}
         <li class="nav-item">

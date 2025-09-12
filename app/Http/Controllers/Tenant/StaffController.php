@@ -9,6 +9,7 @@ use App\Models\UserRole;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Subject;
 
 class StaffController extends Controller
 {
@@ -19,8 +20,7 @@ class StaffController extends Controller
 
     public function index()
     {
-        $staff = Staff::forSchool(current_school_id())
-            ->with(['user.roles'])
+        $staff = Staff::with(['user.roles'])
             ->orderBy('first_name')
             ->get();
 
@@ -29,18 +29,17 @@ class StaffController extends Controller
 
     public function show($school_sub, $id)
     {
-        $staff = Staff::forSchool(current_school_id())
-            ->with(['user.roles'])
+        $staff = Staff::with(['user.roles'])
             ->findOrFail($id);
 
-        $roles = Role::forSchool(current_school_id())->get();
+        $roles = Role::get();
 
         return view('tenant.pages.staff.show', compact('staff','roles'));
     }
 
     public function create()
     {
-        $roles = Role::forSchool(current_school_id())->orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
         $subjects = Subject::orderBy('name')->get();
         return view('tenant.pages.staff.create', compact('roles','subjects'));
     }
@@ -103,8 +102,8 @@ class StaffController extends Controller
 
     public function edit($school_sub, $id)
     {
-        $staff = Staff::forSchool(current_school_id())->with('user.roles')->findOrFail($id);
-        $roles = Role::forSchool(current_school_id())->orderBy('name')->get();
+        $staff = Staff::with('user.roles')->findOrFail($id);
+        $roles = Role::orderBy('name')->get();
         $subjects = Subject::orderBy('name')->get();
         $staff->load('subjects');
         return view('tenant.pages.staff.edit', compact('staff','roles','subjects'));
@@ -112,7 +111,7 @@ class StaffController extends Controller
 
     public function update(Request $request, $school_sub, $id)
     {
-        $staff = Staff::forSchool(current_school_id())->with('user')->findOrFail($id);
+        $staff = Staff::with('user')->findOrFail($id);
         $user = $staff->user;
 
         $request->validate([
@@ -137,19 +136,20 @@ class StaffController extends Controller
         $staff->subjects()->sync($request->input('subjects', []));
 
         // clear old roles
-        UserRole::where('user_id',$user->id)->where('school_id',current_school_id())->delete();
+        UserRole::where('user_id',$user->id)->delete();
 
         // re-assign roles
+         $syncData = [];
+
         foreach ($request->roles as $roleId) {
-            UserRole::create([
-                'id'        => Str::uuid(),
-                'user_id'   => $user->id,
-                'role_id'   => $roleId,
-                'school_id' => current_school_id(),
-                'is_primary'=> $request->primary_role == $roleId,
-                'starts_on' => now(),
-            ]);
+            $syncData[$roleId] = [
+                'school_id'  => current_school_id(),
+                'is_primary' => $request->primary_role == $roleId,
+                'starts_on'  => now(),
+            ];
         }
+
+        $user->roles()->sync($syncData);
 
         return redirect()->intended(tenant_route('tenant.staff.show', ['id' => $staff->id]))
             ->with('success','Staff updated successfully');
@@ -157,7 +157,7 @@ class StaffController extends Controller
 
     public function destroy($school_sub, $id)
     {
-        $staff = Staff::forSchool(current_school_id())->with('user')->findOrFail($id);
+        $staff = Staff::with('user')->findOrFail($id);
 
         // cascade delete
         UserRole::where('user_id',$staff->user->id)->delete();

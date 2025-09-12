@@ -119,5 +119,5 @@ return [
     */
 
     'password_timeout' => 10800,
-
+    'school_admin_role' => env('SCHOOL_ADMIN_ROLE', 'SchoolAdmin'),
 ];

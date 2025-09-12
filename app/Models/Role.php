@@ -9,6 +9,8 @@ class Role extends BaseUuidModel
     use BelongsToSchool, HasTimestampsImmutable;
 
     protected $table = 'roles';
+    protected $keyType = 'string';
+    protected $fillable = ['school_id', 'name', 'description', 'is_system'];
     protected $casts = [
         'is_system' => 'boolean',
     ];
@@ -16,17 +18,19 @@ class Role extends BaseUuidModel
     public function rolePermissions() { return $this->hasMany(RolePermission::class); }
     public function userRoles()       { return $this->hasMany(UserRole::class); }
 
-    // 🔗 Direct relation to permissions
-    public function permissions()
+      public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions');
+        return $this->belongsToMany(Permission::class, 'role_permissions')
+            ->withPivot(['scope', 'allow'])
+            ->withTimestamps();
     }
 
-    // 🔗 Direct relation to users
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_roles');
-}
+        return $this->belongsToMany(User::class, 'user_roles')
+            ->withPivot(['school_id', 'is_primary', 'starts_on', 'ends_on'])
+            ->withTimestamps();
+    }
 
     // ✅ Invalidate cache for all users of this role
     protected static function booted()

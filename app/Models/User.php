@@ -6,10 +6,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Staff;
+use App\Models\Traits\HasRolesAndPermissions; 
 
 class User extends Authenticatable
 {
-    use BelongsToSchool, HasUuids;
+    use BelongsToSchool, HasUuids, HasRolesAndPermissions;
 
     protected $table = 'users';
     protected $hidden = ['password', 'remember_token'];

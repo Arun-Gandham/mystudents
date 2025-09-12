@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 
 class TenantLoginController extends Controller
 {
@@ -45,9 +46,9 @@ class TenantLoginController extends Controller
             // ✅ use tenant guard
             Auth::guard('tenant')->login($user, $request->boolean('remember'));
             $request->session()->regenerate();
-
-            $user->clearPermissionCache();
-            $user->getPermissions();
+            $user->refreshPermissions();
+            // $user->clearPermissionCache();
+            // $user->getPermissions();
     
             // ✅ use tenant_route() so school_sub is auto-injected
             return redirect()->intended(tenant_route('tenant.dashboard'));
@@ -55,15 +56,31 @@ class TenantLoginController extends Controller
 
     public function logout(Request $request)
     {
-        // ✅ tenant guard logout
         if (Auth::guard('tenant')->check()) {
-            Auth::guard('tenant')->user()->clearPermissionCache(); // ✅ clear permissions cache
+            $user = Auth::guard('tenant')->user();
+
+            // ✅ clear user-specific cache
+            $user->clearPermissionCache();
+            session()->forget('auth_permissions');
+
+            // ✅ clear cached school by subdomain
+            if ($sub = current_school_sub()) {
+                Cache::forget("school_by_subdomain:{$sub}");
+            }
         }
+
+        // ✅ tenant guard logout
         Auth::guard('tenant')->logout();
+
+        // ✅ clear request attributes
+        $request->attributes->remove('school');
+        $request->attributes->remove('academic');
+
+        // ✅ session reset
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // ✅ back to this subdomain’s login
         return redirect()->to(tenant_route('tenant.login'));
     }
+
 }

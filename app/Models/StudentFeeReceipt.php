@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudentFeeReceipt extends Model
+class StudentFeeReceipt extends BaseUuidModel
 {
     protected $fillable = [
         'school_id','academic_id','student_id','total_amount','paid_on',

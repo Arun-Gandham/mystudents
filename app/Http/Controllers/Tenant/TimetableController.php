@@ -37,25 +37,25 @@ class TimetableController extends Controller
     }
 
     public function store(string $school_sub, Request $request)
-{
-    $request->validate([
-        'section_id'      => 'required|uuid',
-        'day'             => ['required', 'string', Rule::in(array_keys(WeekDays::LIST))],
-        'title'           => 'required|string|max:255',
-        'effective_from'  => 'required|date|after_or_equal:today',
-        'effective_to'    => 'nullable|date|after_or_equal:effective_from',
-    ]);
+    {
+        $request->validate([
+            'section_id'      => 'required|uuid',
+            'day'             => ['required', 'string', Rule::in(array_keys(WeekDays::LIST))],
+            'title'           => 'required|string|max:255',
+            'effective_from'  => 'required|date|after_or_equal:today',
+            'effective_to'    => 'nullable|date|after_or_equal:effective_from',
+        ]);
 
-    SectionDayTimetable::create([
-        'school_id'       => current_school_id(),
-        'academic_id'     => current_academic_id(),
-        'section_id'      => $request->section_id,
-        'day'             => $request->day,
-        'title'           => $request->title,
-        'effective_from'  => $request->effective_from,
-        'effective_to'    => $request->effective_to,
-        'is_active'       => true,
-    ]);
+        SectionDayTimetable::create([
+            'school_id'       => current_school_id(),
+            'academic_id'     => current_academic_id(),
+            'section_id'      => $request->section_id,
+            'day'             => $request->day,
+            'title'           => $request->title,
+            'effective_from'  => $request->effective_from,
+            'effective_to'    => $request->effective_to,
+            'is_active'       => true,
+        ]);
         return redirect()->intended(tenant_route('tenant.timetables.index'))
             ->with('success', 'Timetable created successfully.');
     }

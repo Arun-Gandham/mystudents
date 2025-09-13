@@ -85,7 +85,7 @@
                                         <tr>
                                             <td>{{ $t->title }}</td>
                                             <td>{{ \App\Constants\WeekDays::LIST[$t->day] ?? $t->day }}</td>
-                                            <td>{{ $t->effective_from->format('d-M-Y') }}</td>
+                                            <td>{{ $t->effective_from ? $t->effective_from->format('d-M-Y') : "-" }}</td>
                                             <td>{{ $t->effective_to ? $t->effective_to->format('d-M-Y') : '-' }}</td>
                                             <td>{{ $t->is_active ? 'Yes' : 'No' }}</td>
                                             <td class="d-flex gap-1">

@@ -2,7 +2,7 @@
 @section('title','Edit Student')
 
 @section('content')
-<div class="container py-4">
+<div class="container-fluid py-4">
   <h4>Edit Student</h4>
   @include('components.alert-errors')
 

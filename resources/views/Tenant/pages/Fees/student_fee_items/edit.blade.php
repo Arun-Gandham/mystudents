@@ -2,7 +2,7 @@
 @section('title', 'Edit Fee Item')
 
 @section('content')
-<div class="container py-4">
+<div class="container-fluid py-4">
   <h4>Edit Fee Item - {{ $item->feeHead->name }}</h4>
 
   <div class="card shadow-sm p-4">

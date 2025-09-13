@@ -4,7 +4,6 @@
     $currentRoute = request()->route() ? request()->route()->getName() : '';
 @endphp
 
-<aside class="sidebar d-none d-lg-flex p-3" aria-label="Sidebar">
   <div class="sidebar-inner">
     <div class="menu-scroll">
       <!-- Logo -->
@@ -61,4 +60,3 @@
       </ul>
     </div>
   </div>
-</aside>

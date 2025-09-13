@@ -1,10 +1,6 @@
 <header class="app-header">
   <nav class="navbar navbar-expand-lg h-100">
     <div class="container-fluid">
-      <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ tenant_route('tenant.dashboard') }}">
-        <span class="fw-bold d-none d-sm-inline brand-text ms-2">{{ $school->name ?? 'Tenant' }}</span>
-      </a>
 
       <!-- Mobile menu -->
       <button class="btn d-lg-none ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-label="Open menu">
@@ -12,7 +8,7 @@
       </button>
 
       <!-- Center search -->
-      <form class="mx-auto d-none d-lg-block header-search" role="search" autocomplete="off">
+      <form class="d-none d-lg-block header-search" role="search" autocomplete="off">
         <div class="input-group">
           <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
           <input id="globalSearch" class="form-control border-start-0" type="search"

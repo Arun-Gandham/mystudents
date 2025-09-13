@@ -5,15 +5,16 @@
 @endphp
 
   <div class="sidebar-inner">
-    <div class="menu-scroll">
-      <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ tenant_route('tenant.dashboard') }}">
+    <a class="navbar-brand d-flex align-items-center gap-2 justify-content-center" href="{{ tenant_route('tenant.dashboard') }}">
         @if(!empty($school->logo_url))
-          <img src="{{ asset('storage/'.$school->logo_url) }}" alt="{{ $school->name }} Logo" class="img-fluid">
+          <img src="{{ asset('storage/'.$school->logo_url) }}" alt="{{ $school->name }} Logo" class="img-fluid w-50">
         @else
-          <img src="{{ asset('images/default-logo.png') }}" alt="Default Logo" class="img-fluid">
+          <img src="{{ asset('images/default-logo.png') }}" alt="Default Logo" class="img-fluid w-50">
         @endif
       </a>
+    <div class="menu-scroll">
+      <!-- Logo -->
+      
 
       <ul class="nav nav-pills flex-column gap-1">
         @forelse ($menus as $menu)

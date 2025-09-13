@@ -3,17 +3,6 @@
     <div class="container-fluid">
       <!-- Logo -->
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ tenant_route('tenant.dashboard') }}">
-        @if(!empty($school->logo_url))
-          <img src="{{ asset('storage/'.$school->logo_url) }}" 
-               alt="{{ $school->name }} Logo" 
-               class="img-fluid"
-               style="max-height:40px; width:auto;">
-        @else
-          <img src="{{ asset('images/default-logo.png') }}" 
-               alt="Default Logo" 
-               class="img-fluid"
-               style="max-height:40px; width:auto;">
-        @endif
         <span class="fw-bold d-none d-sm-inline brand-text ms-2">{{ $school->name ?? 'Tenant' }}</span>
       </a>
 

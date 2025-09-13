@@ -9,7 +9,7 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:tenant')->only(['dashboard']);
+        $this->middleware('auth:tenant');
     }
 
     public function dashboard()

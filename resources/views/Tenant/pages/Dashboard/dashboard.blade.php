@@ -1,4 +1,5 @@
-@extends('tenant.baselayout')
+@extends('tenant.layouts.layout1')
+@section('title', 'Dashboard')
 
 @section('content')
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">

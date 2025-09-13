@@ -4,15 +4,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', $pageTitle ?? 'School')</title>
-  <meta name="description" content="@yield('description', $pageDescription ?? '')">
-
-  {{-- Favicon --}}
-  @if($school?->favicon_url)
-    <link rel="icon" href="{{ asset('storage/'.$school->favicon_url) }}?v={{ time() }}" type="image/x-icon">
-  @else
-    <link rel="icon" href="{{ asset('images/default-favicon.png') }}?v={{ time() }}" type="image/png">
-  @endif
+  <link rel="icon" href="{{ !empty($school?->favicon_url) ? asset('storage/'.$school->favicon_url) : asset('images/default-favicon.png') }}">
+  <title>@yield('title' ?? 'School')</title>
+  <meta name="description" content="{{ $pageDescription ?? 'Description' }}">
 
   {{-- Assets --}}
   @vite([
@@ -20,6 +14,16 @@
       'resources/js/tenant-base.js'
   ])
   @stack('styles')
+  <style>
+    .custom-toast {
+        opacity: 0.95;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .toast.hide {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+  </style>
 </head>
 <body>
   <div class="app-layout">
@@ -37,7 +41,16 @@
       </main>
     </div>
   </div>
-
+  <x-toast-container />
   @stack('scripts')
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const toasts = document.querySelectorAll('.toast');
+          toasts.forEach(toastEl => {
+              const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+              toast.show();
+          });
+      });
+  </script>
 </body>
 </html>

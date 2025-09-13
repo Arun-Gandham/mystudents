@@ -1,4 +1,4 @@
-@extends('tenant.baselayout')
+@extends('tenant.layouts.layout1')
 @section('title', 'Grades')
 
 @section('content')

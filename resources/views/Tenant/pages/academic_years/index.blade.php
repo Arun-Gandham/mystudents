@@ -1,5 +1,5 @@
 {{-- resources/views/tenant/academic_years/index.blade.php --}}
-@extends('tenant.baselayout')
+@extends('tenant.layouts.layout1')
 
 @section('content')
 <div class="container-fluid">

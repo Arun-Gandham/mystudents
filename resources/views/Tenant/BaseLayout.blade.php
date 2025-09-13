@@ -1,5 +1,11 @@
 @extends('tenant.layouts.layout1')
-
+@section('favicon')
+  @if(!empty($school?->favicon_url))
+    <link rel="icon" href="{{ asset('storage/'.$school->favicon_url) }}?v={{ time() }}" type="image/png">
+  @else
+    <link rel="icon" href="{{ asset('images/default-favicon.png') }}?v={{ time() }}" type="image/png">
+  @endif
+@endsection
 @section('title', $pageTitle ?? "School")
 @section('description', $pageDescription ?? "School")
 

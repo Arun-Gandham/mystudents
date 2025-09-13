@@ -1,4 +1,4 @@
-@extends('tenant.baselayout') {{-- or superadmin.baselayout --}}
+@extends('tenant.layouts.layout1') {{-- or superadmin.baselayout --}}
 
 @section('title', 'Roles & Permissions')
 

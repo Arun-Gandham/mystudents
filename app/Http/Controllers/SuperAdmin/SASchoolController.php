@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password as PasswordRule;
+use App\Support\FileHelper;
 
 class SASchoolController extends Controller
 {
@@ -293,10 +294,21 @@ class SASchoolController extends Controller
 
         // ✅ Handle uploads
         if ($request->hasFile('logo')) {
-            $details->logo_url = $request->file('logo')->store("schools/{$school->id}/details", 'public');
+            $details->logo_url = FileHelper::replace(
+                $details->logo_url,                         // old logo path
+                $request->file('logo'),                     // new logo file
+                "schools/{$school->id}/details",            // folder
+                'public'                                    // disk
+            );
         }
+
         if ($request->hasFile('favicon')) {
-            $details->favicon_url = $request->file('favicon')->store("schools/{$school->id}/details", 'public');
+            $details->favicon_url = FileHelper::replace(
+                $details->favicon_url,                      // old favicon path
+                $request->file('favicon'),                  // new favicon file
+                "schools/{$school->id}/details",            // folder
+                'public'                                    // disk
+            );
         }
 
         // ✅ Update school_details

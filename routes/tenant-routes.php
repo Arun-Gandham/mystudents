@@ -16,7 +16,7 @@ use App\Http\Controllers\Tenant\CalendarController;
 use App\Http\Controllers\Tenant\SubjectController;
 use App\Http\Controllers\Tenant\StaffController;
 use App\Http\Controllers\Tenant\SearchController;
-use App\Http\Controllers\Tenant\StaffProfileController;
+use App\Http\Controllers\Tenant\ProfileController;
 use App\Http\Controllers\Tenant\Student\StudentApplicationController;
 use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
 use App\Http\Controllers\Tenant\Student\StudentController;
@@ -164,11 +164,11 @@ Route::domain('{school_sub}.'.$root)
             });
 
             Route::prefix('profile')->name('profile.')->group(function () {
-                Route::get('', [StaffProfileController::class, 'show'])
+                Route::get('', [ProfileController::class, 'show'])
                     ->name('show');
-                Route::get('edit', [StaffProfileController::class, 'edit'])
+                Route::get('edit', [ProfileController::class, 'edit'])
                     ->name('edit');
-                Route::put('', [StaffProfileController::class, 'update'])
+                Route::put('', [ProfileController::class, 'update'])
                     ->name('update');
             });
 

@@ -309,9 +309,13 @@ Route::domain('{school_sub}.'.$root)
                 });
 
                 // receipts
+                Route::get('receipts', [FeeReceiptController::class, 'allReceipts'])->name('fee-receipts.all');
+                Route::get('students/{student}/receipts', [FeeReceiptController::class,'index'])->name('fee-receipts.index');
                 Route::get('students/{student}/receipts/create', [FeeReceiptController::class,'create'])->name('fee-receipts.create');
                 Route::post('students/{student}/receipts', [FeeReceiptController::class,'store'])->name('fee-receipts.store');
                 Route::get('students/{student}/receipts/{receipt}', [FeeReceiptController::class,'show'])->name('fee-receipts.show');
+                Route::get('students/{student}/receipts/{receipt}/edit', [FeeReceiptController::class,'edit'])->name('fee-receipts.edit');
+                Route::put('students/{student}/receipts/{receipt}', [FeeReceiptController::class,'update'])->name('fee-receipts.update');
             });
     });
 });

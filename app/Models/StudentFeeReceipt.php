@@ -10,6 +10,9 @@ class StudentFeeReceipt extends BaseUuidModel
         'school_id','academic_id','student_id','total_amount','paid_on',
         'method','reference_no','payer_name','payer_phone','payer_relation','note'
     ];
+    protected $casts = [
+        'paid_on' => 'date', // or 'datetime' if includes time
+    ];
 
     public function payments()
     {
@@ -18,6 +21,6 @@ class StudentFeeReceipt extends BaseUuidModel
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }

@@ -42,7 +42,7 @@ class ExamController extends Controller
             'starts_on'   => 'nullable|date',
             'ends_on'     => 'nullable|date|after_or_equal:starts_on',
         ]);
-
+        $exam = [];
         DB::transaction(function () use ($request) {
             $exam = Exam::create([
                 'school_id'   => current_school_id(),

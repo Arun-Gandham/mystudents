@@ -189,7 +189,7 @@ return [
             [
                 'label' => 'Receipts / Payments',
                 'icon'  => 'bi bi-receipt',
-                'route' => '#',
+                'route' => 'tenant.fees.fee-receipts.all',
                 'permissions' => [],
                 'roles' => [],
             ],

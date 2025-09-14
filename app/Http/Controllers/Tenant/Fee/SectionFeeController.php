@@ -47,6 +47,6 @@ class SectionFeeController extends Controller
 
         SectionFee::create($data);
 
-        return redirect()->route('tenant.fees.section-fees.index')->with('success','Section Fee assigned');
+        return redirect()->to(tenant_route('tenant.fees.section-fees.index'))->with('success','Section Fee assigned');
     }
 }

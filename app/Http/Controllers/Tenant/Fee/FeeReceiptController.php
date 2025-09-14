@@ -16,6 +16,16 @@ class FeeReceiptController extends Controller
     {
         $this->middleware('auth:tenant');
     }
+    public function index($school_sub, $studentId)
+    {
+        $student = Student::findOrFail($studentId);
+
+        $receipts = StudentFeeReceipt::where('student_id', $studentId)
+            ->orderByDesc('paid_on')
+            ->paginate(10); // 10 per page
+
+        return view('tenant.pages.fees.receipts.index', compact('student', 'receipts'));
+    }
     public function create($school_sub,$studentId)
     {
         $student = Student::findOrFail($studentId);
@@ -71,5 +81,42 @@ class FeeReceiptController extends Controller
     {
         $receipt = StudentFeeReceipt::with(['payments.item'])->findOrFail($receiptId);
         return view('tenant.pages.fees.receipts.show', compact('receipt'));
+    }
+    public function edit($school_sub, $studentId, $receiptId)
+    {
+        $student = Student::findOrFail($studentId);
+        $receipt = StudentFeeReceipt::with(['payments.item'])->findOrFail($receiptId);
+
+        return view('tenant.pages.fees.receipts.edit', compact('student', 'receipt'));
+    }
+
+    public function allReceipts()
+    {
+        $receipts = StudentFeeReceipt::with(['student'])
+            ->orderByDesc('paid_on')
+            ->paginate(20); // 20 per page
+
+        return view('tenant.pages.fees.receipts.all', compact('receipts'));
+    }
+
+    public function update(Request $request, $school_sub, $studentId, $receiptId)
+    {
+        $receipt = StudentFeeReceipt::findOrFail($receiptId);
+
+        $data = $request->validate([
+            'total_amount'   => 'required|numeric|min:1',
+            'paid_on'        => 'required|date',
+            'method'         => 'nullable|string',
+            'reference_no'   => 'nullable|string',
+            'payer_name'     => 'nullable|string|max:150',
+            'payer_phone'    => 'nullable|string|max:20',
+            'payer_relation' => 'nullable|string|max:50',
+            'note'           => 'nullable|string',
+        ]);
+
+        $receipt->update($data);
+
+        return redirect()->to(tenant_route('tenant.fees.fee-receipts.index', ['student' => $studentId]))
+                        ->with('success', 'Receipt updated successfully.');
     }
 }

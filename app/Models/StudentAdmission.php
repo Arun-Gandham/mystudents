@@ -12,18 +12,9 @@ class StudentAdmission extends BaseUuidModel
 
     protected $table = 'student_admissions';
     protected $fillable = [
-        'school_id',
-        'academic_id',
-        'student_id',
-        'application_no',
-        'status',
-        'applied_on',
-        'offered_on',
-        'admitted_on',
-        'offered_grade_id',
-        'offered_section_id',
-        'previous_school',
-        'remarks',
+        'school_id','academic_id','student_id','source_application_id',
+        'application_no','status','applied_on','offered_on','admitted_on',
+        'offered_grade_id','offered_section_id','previous_school','remarks'
     ];
     protected $casts = [
         'applied_on'  => 'date',
@@ -49,4 +40,8 @@ class StudentAdmission extends BaseUuidModel
 
     public function offeredGrade()   { return $this->belongsTo(Grade::class, 'offered_grade_id'); }
     public function offeredSection() { return $this->belongsTo(Section::class, 'offered_section_id'); }
+    public function sourceApplication()
+    {
+        return $this->belongsTo(StudentJoinApplication::class, 'source_application_id');
+    }
 }

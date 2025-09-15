@@ -43,7 +43,7 @@ class ApplicationsAdmissionsSeeder extends Seeder
             'school_id'            => $school->id,
             'academic_id'          => $academic->id,
             'application_no'       => 'APP001',
-            'child_full_name'      => 'Alice Johnson',
+            'full_name'      => 'Alice Johnson',
             'child_dob'            => '2015-06-01',
             'child_gender'         => 'Female',
             'previous_school'      => 'Little Angels',

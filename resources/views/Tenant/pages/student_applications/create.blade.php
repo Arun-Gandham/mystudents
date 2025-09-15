@@ -1,16 +1,11 @@
 @extends('tenant.layouts.layout1')
 @section('title','New Application')
-
 @section('content')
-<div class="container-fluid py-4">
-  <h4>Create New Application</h4>
-  @include('components.alert-errors')
+<div class="container-fluid">
+  <h2>New Application</h2>
   <form method="POST" action="{{ tenant_route('tenant.applications.store') }}">
-    @csrf
-    @include('tenant.pages.student_applications.partials.form')
-    <div class="mt-3 text-end">
-      <button class="btn btn-primary">Save</button>
-    </div>
+    <x-alert-errors />
+    @include('tenant.pages.student_applications._form')
   </form>
 </div>
 @endsection

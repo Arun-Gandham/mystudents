@@ -2,7 +2,7 @@
 @section('title','Enter Results')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Enter / Update Results for Exam: {{ $exam->name }}</h2>
 
     <form method="POST" action="{{ tenant_route('tenant.exams.results.update',['exam' => $exam]) }}">

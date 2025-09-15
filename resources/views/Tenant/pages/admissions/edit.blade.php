@@ -1,14 +1,12 @@
 @extends('tenant.layouts.layout1')
 @section('title','Edit Admission')
-
 @section('content')
-<div class="container-fluid py-3">
-  <h4>Edit Admission</h4>
-  @include('components.alert-errors')
-
-  <form method="POST" action="{{ tenant_route('tenant.admissions.update',['admission'=>$admission->id]) }}">
+<div class="container-fluid">
+  <h2>Edit Admission</h2>
+  <form method="POST" action="{{ tenant_route('tenant.admissions.update',$admission->id) }}">
     @csrf @method('PUT')
-    @include('tenant.pages.admissions.form')
+    <x-alert-errors />
+    @include('tenant.pages.admissions._form')
   </form>
 </div>
 @endsection

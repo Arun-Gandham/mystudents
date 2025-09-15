@@ -3,7 +3,7 @@
 @section('title', 'Edit Profile')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Edit Profile</h2>
 
     @if ($errors->any())
@@ -19,7 +19,7 @@
     <form method="POST" action="{{ tenant_route('tenant.profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
+        <x-alert-errors />
         <!-- Profile Image Upload with Preview -->
         <div class="mb-3 text-center">
             <label class="form-label d-block">Profile Photo</label>

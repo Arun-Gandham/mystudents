@@ -150,19 +150,37 @@ return new class extends Migration {
         Schema::create('students', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('school_id');
-            $table->string('full_name')->nullable();
+
+            // Identity
+            $table->string('admission_no')->nullable(); 
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
+
+            // Personal
             $table->date('dob')->nullable();
-            $table->string('admission_no')->nullable();
             $table->string('gender')->nullable();
-            $table->enum('status', ['accepted','rejected','no_response','withdrawn'])->default('accepted');
-            $table->uuid('source_application_id')->nullable();
+
+            // Govt / Demographics
+            $table->string('aadhaar_no', 12)->nullable()->unique();
+            $table->string('religion')->nullable();
+            $table->string('caste')->nullable();
+            $table->string('category')->nullable();     
+            $table->string('blood_group')->nullable();
+
+            // Contact
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('photo')->nullable(); 
+
             $table->softDeletes();
             $table->timestampsTz();
 
             $table->foreign('school_id', 'fk_students_school')
-                  ->references('id')->on('schools')->cascadeOnDelete();
+                ->references('id')->on('schools')->cascadeOnDelete();
             $table->unique(['school_id','admission_no'], 'student_school_adm_uq');
         });
+
 
         // SCHOOL DETAILS (1-1)
         Schema::create('school_details', function (Blueprint $table) {

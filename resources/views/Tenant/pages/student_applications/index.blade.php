@@ -1,71 +1,41 @@
 @extends('tenant.layouts.layout1')
-@section('title','Student Applications')
+@section('title','Applications')
 
 @section('content')
-<div class="container-fluid py-3">
+<div class="container-fluid">
+  <h2>Student Applications</h2>
 
-  <h4>Student Applications</h4>
+  <a href="{{ tenant_route('tenant.applications.create') }}" class="btn btn-primary mb-3">New Application</a>
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <form method="GET" class="d-flex gap-2">
-      <input type="text" name="search" class="form-control"
-             value="{{ request('search') }}" placeholder="Search...">
-
-      <select name="status" class="form-select">
-        <option value="">All Status</option>
-        @foreach(['lead','submitted','reviewing','offered','accepted','rejected','no_response','withdrawn'] as $st)
-          <option value="{{ $st }}" {{ request('status')==$st?'selected':'' }}>
-            {{ ucfirst($st) }}
-          </option>
-        @endforeach
-      </select>
-
-      <button class="btn btn-primary">Filter</button>
-
-      {{-- Reset button --}}
-      <a href="{{ tenant_route('tenant.applications.index') }}" class="btn btn-secondary">Reset</a>
-    </form>
-
-    <a href="{{ tenant_route('tenant.applications.create') }}" class="btn btn-success">+ New</a>
-  </div>
-
-  <table class="table table-bordered table-striped">
+  <table class="table table-bordered">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Application No</th>
-        <th>Child</th>
+        <th>App No</th>
+        <th>Name</th>
         <th>Guardian</th>
         <th>Status</th>
-        <th>Applied</th>
+        <th>Preferred Grade</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      @forelse($applications as $app)
+      @foreach($applications as $app)
       <tr>
-        <td>{{ $loop->iteration }}</td>
         <td>{{ $app->application_no }}</td>
-        <td>{{ $app->child_full_name }}</td>
-        <td>{{ $app->guardian_full_name }}<br><small>{{ $app->guardian_phone }}</small></td>
-        <td><span class="badge bg-info">{{ ucfirst($app->status) }}</span></td>
-        <td>{{ $app->created_at->format('d M Y') }}</td>
+        <td>{{ $app->first_name }} {{ $app->last_name }}</td>
+        <td>{{ $app->guardian_name }}</td>
+        <td>{{ ucfirst($app->status) }}</td>
+        <td>{{ $app->preferredGrade->name ?? '-' }}</td>
         <td>
           <a href="{{ tenant_route('tenant.applications.show',['application' => $app->id]) }}" class="btn btn-sm btn-info">View</a>
           <a href="{{ tenant_route('tenant.applications.edit',['application' => $app->id]) }}" class="btn btn-sm btn-warning">Edit</a>
-          <form action="{{ tenant_route('tenant.applications.destroy',['application' => $app->id]) }}" method="POST" class="d-inline">
+          <form action="{{ tenant_route('tenant.applications.destroy',['application' => $app->id]) }}" method="POST" style="display:inline-block">
             @csrf @method('DELETE')
-            <button onclick="return confirm('Delete this?')" class="btn btn-sm btn-danger">Delete</button>
+            <button class="btn btn-sm btn-danger" onclick="return confirm('Delete application?')">Delete</button>
           </form>
-          <a href="{{ tenant_route('tenant.admissions.fromApp.create',['application'=>$app->id]) }}" 
-            class="btn btn-sm btn-success">
-            Admit
-          </a>
         </td>
       </tr>
-      @empty
-      <tr><td colspan="7" class="text-center">No applications found.</td></tr>
-      @endforelse
+      @endforeach
     </tbody>
   </table>
 

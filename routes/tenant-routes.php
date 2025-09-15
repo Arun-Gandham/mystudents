@@ -28,6 +28,9 @@ use App\Http\Controllers\Tenant\Fee\FeeHeadController;
 use App\Http\Controllers\Tenant\Fee\SectionFeeController;
 use App\Http\Controllers\Tenant\Fee\StudentFeeItemController;
 use App\Http\Controllers\Tenant\Fee\FeeReceiptController;
+use App\Http\Controllers\Tenant\Student\StudentGuardianController;
+use App\Http\Controllers\Tenant\Student\StudentAddressController;
+use App\Http\Controllers\Tenant\Student\StudentDocumentController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -172,56 +175,153 @@ Route::domain('{school_sub}.'.$root)
                     ->name('update');
             });
 
-            Route::prefix('applications')->name('applications.')->group(function () {
-                Route::get('/', [StudentApplicationController::class, 'index'])->name('index');          // list
-                Route::get('/create', [StudentApplicationController::class, 'create'])->name('create'); // add form
-                Route::post('/', [StudentApplicationController::class, 'store'])->name('store');        // save new
+            
+// ========================
+// 1. Student Applications
+// ========================
+Route::prefix('applications')->name('applications.')->group(function () {
+    Route::get('/', [StudentApplicationController::class, 'index'])->name('index');
+    Route::get('/create', [StudentApplicationController::class, 'create'])->name('create');
+    Route::post('/', [StudentApplicationController::class, 'store'])->name('store');
 
-                Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');     // view one
-                Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit'); // edit form
-                Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
-                Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
+    Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');
+    Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit');
+    Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');
+    Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy');
 
-                Route::post('{application}/logs', [StudentApplicationController::class, 'addLog'])
-                    ->name('addLog');
-                // Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
-                //     ->name('admit.form');
-                // Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
-                //     ->name('admit.store');
-            });
+    Route::post('/{application}/logs', [StudentApplicationController::class, 'addLog'])->name('addLog');
 
-            Route::prefix('admissions')->name('admissions.')->middleware('auth:tenant')->group(function () {
-                Route::get('/', [StudentAdmissionController::class,'index'])->name('index');
-                Route::get('/create', [StudentAdmissionController::class,'create'])->name('create');
-                Route::post('/', [StudentAdmissionController::class,'store'])->name('store');
+    // Move application → admission
+    Route::get('/{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])->name('admit.form');
+    Route::post('/{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])->name('admit.store');
+});
 
-                Route::get('/{admission}/edit', [StudentAdmissionController::class,'edit'])->name('edit');
-                Route::put('/{admission}', [StudentAdmissionController::class,'update'])->name('update');
-                Route::delete('/{admission}', [StudentAdmissionController::class,'destroy'])->name('destroy');
+// ========================
+// 2. Student Admissions
+// ========================
+Route::prefix('admissions')->name('admissions.')->group(function () {
+    Route::get('/', [StudentAdmissionController::class, 'index'])->name('index');
+    Route::get('/create', [StudentAdmissionController::class, 'create'])->name('create');
+    Route::post('/', [StudentAdmissionController::class, 'store'])->name('store');
 
-                // from application
-                Route::get('/from-application/{application}', [StudentAdmissionController::class,'createFromApplication'])->name('fromApp.create');
-                Route::post('/from-application/{application}', [StudentAdmissionController::class,'storeFromApplication'])->name('fromApp.store');
-            });
+    Route::get('/{admission}/edit', [StudentAdmissionController::class, 'edit'])->name('edit');
+    Route::put('/{admission}', [StudentAdmissionController::class, 'update'])->name('update');
+    Route::delete('/{admission}', [StudentAdmissionController::class, 'destroy'])->name('destroy');
+});
 
-            Route::prefix('students')->name('students.')->group(function () {
-                // List + filters + ajax pagination
-                Route::get('/', [StudentController::class, 'index'])->name('index');
+// ========================
+// 3. Students
+// ========================
+Route::prefix('students')->name('students.')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('index');
+    Route::get('/create', [StudentController::class, 'create'])->name('create');
+    Route::post('/', [StudentController::class, 'store'])->name('store');
 
-                // Create new student admission directly
-                Route::get('/create', [StudentController::class, 'create'])->name('create');
-                Route::post('/', [StudentController::class, 'store'])->name('store');
+    Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+    Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
 
-                // View a student profile
-                Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+    // -------------------------
+    // Student Guardians
+    // -------------------------
+    Route::prefix('{student}/guardians')->name('guardians.')->group(function () {
+        Route::get('/', [StudentGuardianController::class, 'index'])->name('index');
+        Route::get('/create', [StudentGuardianController::class, 'create'])->name('create');
+        Route::post('/', [StudentGuardianController::class, 'store'])->name('store');
+        Route::get('/{guardian}/edit', [StudentGuardianController::class, 'edit'])->name('edit');
+        Route::put('/{guardian}', [StudentGuardianController::class, 'update'])->name('update');
+        Route::delete('/{guardian}', [StudentGuardianController::class, 'destroy'])->name('destroy');
+    });
 
-                // Edit existing student
-                Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
-                Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+    // -------------------------
+    // Student Addresses
+    // -------------------------
+    Route::prefix('{student}/addresses')->name('addresses.')->group(function () {
+        Route::get('/', [StudentAddressController::class, 'index'])->name('index');
+        Route::get('/create', [StudentAddressController::class, 'create'])->name('create');
+        Route::post('/', [StudentAddressController::class, 'store'])->name('store');
+        Route::get('/{address}/edit', [StudentAddressController::class, 'edit'])->name('edit');
+        Route::put('/{address}', [StudentAddressController::class, 'update'])->name('update');
+        Route::delete('/{address}', [StudentAddressController::class, 'destroy'])->name('destroy');
+    });
 
-                // Delete student
-                Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
-            });
+    // -------------------------
+    // Student Documents
+    // -------------------------
+    Route::prefix('{student}/documents')->name('documents.')->group(function () {
+        Route::get('/', [StudentDocumentController::class, 'index'])->name('index');
+        Route::get('/create', [StudentDocumentController::class, 'create'])->name('create');
+        Route::post('/', [StudentDocumentController::class, 'store'])->name('store');
+        Route::get('/{document}/edit', [StudentDocumentController::class, 'edit'])->name('edit');
+        Route::put('/{document}', [StudentDocumentController::class, 'update'])->name('update');
+        Route::delete('/{document}', [StudentDocumentController::class, 'destroy'])->name('destroy');
+    });
+});
+
+// ========================
+// 4. Student Attendance
+// ========================
+Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
+    Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
+    Route::get('/create', [StudentAttendanceController::class, 'create'])->name('create');
+    Route::post('/store', [StudentAttendanceController::class, 'store'])->name('store');
+    Route::get('/{sheet}/edit', [StudentAttendanceController::class, 'edit'])->name('edit');
+    Route::put('/{sheet}', [StudentAttendanceController::class, 'update'])->name('update');
+    Route::get('/{sheet}/view', [StudentAttendanceController::class, 'view'])->name('view');
+    Route::post('/copy-morning', [StudentAttendanceController::class, 'copyMorning'])->name('copyMorning');
+});
+
+            // Route::prefix('applications')->name('applications.')->group(function () {
+            //     Route::get('/', [StudentApplicationController::class, 'index'])->name('index');          // list
+            //     Route::get('/create', [StudentApplicationController::class, 'create'])->name('create'); // add form
+            //     Route::post('/', [StudentApplicationController::class, 'store'])->name('store');        // save new
+
+            //     Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');     // view one
+            //     Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit'); // edit form
+            //     Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
+            //     Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
+
+            //     Route::post('{application}/logs', [StudentApplicationController::class, 'addLog'])
+            //         ->name('addLog');
+            //     // Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
+            //     //     ->name('admit.form');
+            //     // Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
+            //     //     ->name('admit.store');
+            // });
+
+            // Route::prefix('admissions')->name('admissions.')->middleware('auth:tenant')->group(function () {
+            //     Route::get('/', [StudentAdmissionController::class,'index'])->name('index');
+            //     Route::get('/create', [StudentAdmissionController::class,'create'])->name('create');
+            //     Route::post('/', [StudentAdmissionController::class,'store'])->name('store');
+
+            //     Route::get('/{admission}/edit', [StudentAdmissionController::class,'edit'])->name('edit');
+            //     Route::put('/{admission}', [StudentAdmissionController::class,'update'])->name('update');
+            //     Route::delete('/{admission}', [StudentAdmissionController::class,'destroy'])->name('destroy');
+
+            //     // from application
+            //     Route::get('/from-application/{application}', [StudentAdmissionController::class,'createFromApplication'])->name('fromApp.create');
+            //     Route::post('/from-application/{application}', [StudentAdmissionController::class,'storeFromApplication'])->name('fromApp.store');
+            // });
+
+            // Route::prefix('students')->name('students.')->group(function () {
+            //     // List + filters + ajax pagination
+            //     Route::get('/', [StudentController::class, 'index'])->name('index');
+
+            //     // Create new student admission directly
+            //     Route::get('/create', [StudentController::class, 'create'])->name('create');
+            //     Route::post('/', [StudentController::class, 'store'])->name('store');
+
+            //     // View a student profile
+            //     Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+
+            //     // Edit existing student
+            //     Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+            //     Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+
+            //     // Delete student
+            //     Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
+            // });
 
             // routes/tenant.php
             Route::prefix('staff-attendance')->name('staffAttendance.')->group(function () {

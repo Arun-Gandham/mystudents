@@ -1,18 +1,13 @@
 @extends('tenant.layouts.layout1')
 @section('title','New Admission')
-
 @section('content')
-<div class="container-fluid py-3">
-  <h4>{{ $admission && $admission->application_no 
-        ? 'Admission — '.$admission->application_no 
-        : 'New Admission' }}</h4>
-  @include('components.alert-errors')
-
-  <form method="POST" action="{{ $application 
-      ? tenant_route('tenant.admissions.fromApp.store',['application'=>$application->id]) 
+<div class="container-fluid">
+  <h2>New Admission</h2>
+  <form method="POST" action="{{ isset($application) 
+      ? tenant_route('tenant.applications.admit.store',['application' => $application->id]) 
       : tenant_route('tenant.admissions.store') }}">
-      @csrf
-    @include('tenant.pages.admissions.form')
+      <x-alert-errors />
+    @include('tenant.pages.admissions._form')
   </form>
 </div>
 @endsection

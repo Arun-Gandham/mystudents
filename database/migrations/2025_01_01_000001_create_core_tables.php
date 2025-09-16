@@ -203,6 +203,14 @@ return new class extends Migration {
             $table->integer('established_year')->nullable();
             $table->string('affiliation_no')->nullable();
             $table->text('note')->nullable();
+
+            // Application settings (branding/preferences)
+            $table->string('theme')->nullable();
+            $table->string('primary_color', 20)->nullable();
+            $table->string('secondary_color', 20)->nullable();
+            $table->string('timezone', 64)->nullable();
+            $table->string('locale', 10)->nullable();
+            $table->string('date_format', 20)->nullable();
             $table->softDeletes();
             $table->timestampsTz();
             

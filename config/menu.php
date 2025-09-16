@@ -199,7 +199,7 @@ return [
     [
         'label' => 'System Settings',
         'icon'  => 'bi bi-gear',
-        'route' => '#',
+        'route' => 'tenant.settings.system.edit',
         'permissions' => [],
         'roles' => [],
     ],

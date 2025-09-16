@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\School;
 use App\Models\User;
+use App\Models\SchoolDetail;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,10 +22,41 @@ class SchoolsSeeder extends Seeder
         ];
 
         foreach ($schools as $s) {
-            School::firstOrCreate(['domain' => $s['domain']], [
+            $school = School::firstOrCreate(['domain' => $s['domain']], [
                 'name' => $s['name'],
                 'is_active' => true,
             ]);
+
+            // Ensure details row exists with sensible defaults matching schema
+            SchoolDetail::updateOrCreate(
+                ['school_id' => $school->id],
+                [
+                    'phone'            => null,
+                    'alt_phone'        => null,
+                    'landline'         => null,
+                    'email'            => null,
+                    'website'          => null,
+                    'logo_url'         => null,
+                    'favicon_url'      => null,
+                    'address_line1'    => null,
+                    'address_line2'    => null,
+                    'city'             => null,
+                    'state'            => null,
+                    'postal_code'      => null,
+                    'country_code'     => null,
+                    'principal_id'     => null,
+                    'established_year' => null,
+                    'affiliation_no'   => null,
+                    'note'             => null,
+                    // App settings
+                    'theme'            => 'system',
+                    'primary_color'    => '#4f46e5',
+                    'secondary_color'  => '#0ea5e9',
+                    'timezone'         => 'UTC',
+                    'locale'           => 'en',
+                    'date_format'      => 'd M Y',
+                ]
+            );
         }
 
         // Super admin user in "arun" school

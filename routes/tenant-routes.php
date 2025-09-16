@@ -31,6 +31,7 @@ use App\Http\Controllers\Tenant\Fee\FeeReceiptController;
 use App\Http\Controllers\Tenant\Student\StudentGuardianController;
 use App\Http\Controllers\Tenant\Student\StudentAddressController;
 use App\Http\Controllers\Tenant\Student\StudentDocumentController;
+use App\Http\Controllers\Tenant\SystemSettingsController;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
@@ -50,6 +51,12 @@ Route::domain('{school_sub}.'.$root)
         Route::middleware(['auth:tenant', 'user.school.guard'])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['permission:fees:collect'])->name('dashboard');
             Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+            // System Settings
+            Route::prefix('settings/system')->name('settings.system.')->group(function () {
+                Route::get('/', [SystemSettingsController::class, 'edit'])->name('edit');
+                Route::put('/', [SystemSettingsController::class, 'update'])->name('update');
+            });
 
             // Roles & Permissions
             Route::prefix('roles')->name('roles.')->group(function () {

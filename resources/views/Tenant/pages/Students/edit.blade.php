@@ -1,4 +1,4 @@
-@extends('tenant.layouts.layout1')
+@extends('Tenant.layouts.layout1')
 @section('title','Edit Student')
 
 @section('content')
@@ -8,7 +8,7 @@
     @csrf
     @method('PUT')
     <x-alert-errors />
-    @include('tenant.pages.students._form')
+    @include('Tenant.pages.Students._form')
   </form>
 </div>
 @endsection

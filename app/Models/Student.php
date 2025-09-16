@@ -23,7 +23,16 @@ class Student extends BaseUuidModel
     public function guardians() { return $this->hasMany(StudentGuardian::class); }
     public function attendanceEntries() { return $this->hasMany(StudentAttendanceEntry::class, 'student_id'); }
     public function feeItems() { return $this->hasMany(StudentFeeItem::class); }
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'grade_id');
+    }
 
+    // Each student belongs to a section
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 
     public function addresses()
     {

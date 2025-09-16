@@ -1,4 +1,4 @@
-@extends('tenant.layouts.layout1')
+@extends('Tenant.layouts.layout1')
 @section('title','Add Student')
 
 @section('content')
@@ -7,7 +7,7 @@
   <form method="POST" action="{{ tenant_route('tenant.students.store') }}" enctype="multipart/form-data">
     @csrf
     <x-alert-errors />
-    @include('tenant.pages.students._form')
+    @include('Tenant.pages.Students._form')
   </form>
 </div>
 @endsection

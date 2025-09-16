@@ -13,6 +13,7 @@ use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\StudentAdmission;
 
 class StudentController extends Controller
 {
@@ -35,14 +36,14 @@ class StudentController extends Controller
         }
 
         $students = $query->orderBy('first_name')->paginate(10);
-        return view('tenant.pages.students.index', compact('students'));
+        return view('Tenant.pages.Students.index', compact('students'));
     }
 
     public function create()
     {
         $grades = Grade::where('school_id', current_school_id())->get();
         $sections = collect(); // empty for new student
-        return view('tenant.pages.students.create', compact('grades','sections'));
+        return view('Tenant.pages.Students.create', compact('grades','sections'));
     }
 
     public function store(Request $request)
@@ -96,6 +97,18 @@ class StudentController extends Controller
             'joined_on'  => now(),
         ]);
 
+        StudentAdmission::create([
+            'school_id'     => current_school_id(),
+            'academic_id'   => current_academic_id(),
+            'student_id'    => $student->id,
+            'application_no'=> 'APP-' . strtoupper(Str::random(6)),
+            'status'        => 'admitted',
+            'admitted_on'   => now(),
+            'offered_grade_id'   => $enrollmentData['grade_id'],
+            'offered_section_id' => $enrollmentData['section_id'],
+            'remarks'       => 'Auto-created on student admission',
+        ]);
+
         // ✅ Guardians
         foreach ($request->guardians ?? [] as $g) {
             StudentGuardian::create([
@@ -135,7 +148,7 @@ class StudentController extends Controller
         return $student;
     });
 
-    return redirect()->to(tenant_route('tenant.students.show',['student' => $student->id]))
+    return redirect()->to(tenant_route('tenant.students.show',['id' => $student->id]))
         ->with('success','Student added successfully');
         } catch (\Throwable $e) {
         return redirect()->back()
@@ -153,7 +166,7 @@ class StudentController extends Controller
         $grades = Grade::where('school_id', current_school_id())->get();
         $sections = Section::where('grade_id', optional($student->enrollments->first())->grade_id)->get();
 
-        return view('tenant.pages.students.edit', compact('student','grades','sections'));
+        return view('Tenant.pages.Students.edit', compact('student','grades','sections'));
     }
 
     public function update(Request $request, $school_sub, Student $student)
@@ -267,7 +280,7 @@ class StudentController extends Controller
         }
     });
 
-    return redirect()->to(tenant_route('tenant.students.show',['student' => $student->id]))
+    return redirect()->to(tenant_route('tenant.students.show',['id' => $student->id]))
         ->with('success','Student updated successfully');
 }
 
@@ -278,16 +291,101 @@ class StudentController extends Controller
         return back()->with('success','Student deleted successfully');
     }
 
-    public function show($school_sub, Student $student)
-{
-    $student->load([
-        'enrollments.grade',
-        'enrollments.section',
-        'guardians',
-        'addresses',
-        'documents'
-    ]);
+    public function show($school_sub, $id)
+    {
+        $student = Student::with(['enrollments.grade','enrollments.section','guardians','addresses'])
+            ->withCount(['guardians','documents','attendanceEntries'])
+            ->findOrFail($id);
+        $currentEnrollment = $student->enrollments
+            ->where('academic_id', current_academic_id())
+            ->first();
+        $primaryGuardian = $student->guardians->firstWhere('is_primary', true);
+        $currentAddress = $student->addresses
+            ->sortBy(function($a){ return $a->address_type === 'current' ? 0 : 1; })
+            ->first();
+        return view('Tenant.pages.Students.show', compact('student','currentEnrollment','primaryGuardian','currentAddress'));
+    }
 
-    return view('tenant.pages.students.show', compact('student'));
-}
+    public function overview($school_sub, $id)
+    {
+        $student = Student::findOrFail($id);
+        $attendanceSummary = $student->attendanceEntries()
+            ->whereHas('sheet', function($q){
+                $q->where('academic_id', current_academic_id());
+            })
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total','status');
+
+        return view('Tenant.pages.Students.tabs.overview', compact('student','attendanceSummary'));
+    }
+
+    public function attendance($school_sub, $id)
+    {
+        $student = Student::findOrFail($id);
+        $recentAttendance = $student->attendanceEntries()
+            ->with(['sheet'])
+            ->whereHas('sheet', function($q){
+                $q->where('academic_id', current_academic_id());
+            })
+            ->latest('created_at')
+            ->limit(30)
+            ->get();
+        return view('Tenant.pages.Students.tabs.attendance', compact('student','recentAttendance'));
+    }
+
+    public function performance($school_sub, $id)
+    {
+        $student = Student::findOrFail($id);
+        $subjectMarks = \App\Models\ExamResult::where('student_id', $student->id)
+            ->with('subject')
+            ->get()
+            ->groupBy(function($r){ return $r->subject?->name ?? 'Unknown'; })
+            ->map(function($g){ return round($g->avg('marks_obtained'),2); });
+
+        return view('Tenant.pages.Students.tabs.performance', compact('student','subjectMarks'));
+    }
+
+    public function behavior($school_sub, $id)
+    {
+        $student = Student::findOrFail($id);
+        return view('Tenant.pages.Students.tabs.behavior', compact('student'));
+    }
+
+    public function documents($school_sub, $id)
+    {
+        $student = Student::findOrFail($id);
+        $documents = $student->documents()->latest('created_at')->get();
+        return view('Tenant.pages.Students.tabs.documents', compact('student','documents'));
+    }
+
+    public function timetable($school_sub, $id)
+    {
+        $student = Student::with(['enrollments.section'])->findOrFail($id);
+        $currentEnrollment = $student->enrollments()
+            ->where('academic_id', current_academic_id())
+            ->with('section')
+            ->first();
+
+        $timetables = collect();
+        if ($currentEnrollment && $currentEnrollment->section_id) {
+            $timetables = \App\Models\SectionDayTimetable::where('school_id', current_school_id())
+                ->where('academic_id', current_academic_id())
+                ->where('section_id', $currentEnrollment->section_id)
+                ->where('is_active', true)
+                ->with(['periods.subject','periods.teacher'])
+                ->orderByRaw("FIELD(day, 'Mon','Tue','Wed','Thu','Fri','Sat','Sun')")
+                ->get()
+                ->groupBy('day');
+        }
+
+        return view('Tenant.pages.Students.tabs.timetable', compact('student','currentEnrollment','timetables'));
+    }
+
+    public function guardians($school_sub, $id)
+    {
+        $student = Student::with('guardians')->findOrFail($id);
+        return view('Tenant.pages.Students.tabs.guardians', compact('student'));
+    }
+
 }

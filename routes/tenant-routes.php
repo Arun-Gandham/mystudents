@@ -217,7 +217,17 @@ Route::prefix('students')->name('students.')->group(function () {
     Route::get('/create', [StudentController::class, 'create'])->name('create');
     Route::post('/', [StudentController::class, 'store'])->name('store');
 
-    Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+    Route::get('/{id}', [StudentController::class, 'show'])->name('show');
+    Route::get('/{id}/overview', [StudentController::class, 'overview'])->name('overview');
+    Route::get('/{id}/attendance', [StudentController::class, 'attendance'])->name('attendance');
+    Route::get('/{id}/performance', [StudentController::class, 'performance'])->name('performance');
+    Route::get('/{id}/behavior', [StudentController::class, 'behavior'])->name('behavior');
+    Route::get('/{id}/documents', [StudentController::class, 'documents'])->name('documents');
+    Route::get('/{id}/timetable', [StudentController::class, 'timetable'])->name('timetable');
+    Route::get('/{id}/guardians', [StudentController::class, 'guardians'])->name('guardians');
+
+
+
     Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
     Route::put('/{student}', [StudentController::class, 'update'])->name('update');
     Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');

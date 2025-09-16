@@ -1,4 +1,4 @@
-@extends('tenant.layouts.layout1')
+@extends('Tenant.layouts.layout1')
 @section('title','Students')
 
 @section('content')
@@ -23,7 +23,7 @@
         <td>{{ $student->enrollments->first()->grade->name ?? '-' }}</td>
         <td>{{ $student->enrollments->first()->section->name ?? '-' }}</td>
         <td>
-          <a href="{{ tenant_route('tenant.students.show',['student' =>$student->id]) }}" class="btn btn-sm btn-info">View</a>
+          <a href="{{ tenant_route('tenant.students.show',['id' =>$student->id]) }}" class="btn btn-sm btn-info">View</a>
           <a href="{{ tenant_route('tenant.students.edit',['student' =>$student->id]) }}" class="btn btn-sm btn-warning">Edit</a>
           <form action="{{ tenant_route('tenant.students.destroy',['student' =>$student->id]) }}" method="POST" style="display:inline-block">
             @csrf @method('DELETE')

@@ -232,7 +232,7 @@
 
 <hr>
 <button class="btn btn-success mt-3">{{ isset($student) ? 'Update' : 'Save' }}</button>
-<a href="{{ isset($student) ? tenant_route('tenant.students.show',['student' => $student->id]) : tenant_route('tenant.students.index') }}" class="btn btn-secondary mt-3">Cancel</a>
+<a href="{{ isset($student) ? tenant_route('tenant.students.show',['id' => $student->id]) : tenant_route('tenant.students.index') }}" class="btn btn-secondary mt-3">Cancel</a>
 
 {{-- =======================
   Scripts

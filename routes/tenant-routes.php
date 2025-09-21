@@ -1,42 +1,42 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Tenant\TenantLoginController;
-use App\Http\Controllers\Tenant\DashboardController;
-use App\Http\Controllers\Tenant\HomepageController;
-use App\Http\Controllers\Tenant\RolesPermissionsController;
 use App\Http\Controllers\Tenant\AcademicYearController;
-use App\Http\Controllers\Tenant\RoleController;
-use App\Http\Controllers\Tenant\GradeController;
-use App\Http\Controllers\Tenant\SectionController;
-use App\Http\Controllers\Tenant\TimetableController;
-use App\Http\Controllers\Tenant\PeriodController;
-use App\Http\Controllers\Tenant\SchoolHolidayController;
 use App\Http\Controllers\Tenant\CalendarController;
-use App\Http\Controllers\Tenant\SubjectController;
-use App\Http\Controllers\Tenant\StaffController;
-use App\Http\Controllers\Tenant\SearchController;
-use App\Http\Controllers\Tenant\ProfileController;
-use App\Http\Controllers\Tenant\Student\StudentApplicationController;
-use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
-use App\Http\Controllers\Tenant\Student\StudentController;
-use App\Http\Controllers\Tenant\Student\StudentAttendanceController;
-use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
+use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\Exam\ExamController;
 use App\Http\Controllers\Tenant\Exam\ExamResultController;
 use App\Http\Controllers\Tenant\Fee\FeeHeadController;
+use App\Http\Controllers\Tenant\Fee\FeeReceiptController;
 use App\Http\Controllers\Tenant\Fee\SectionFeeController;
 use App\Http\Controllers\Tenant\Fee\StudentFeeItemController;
-use App\Http\Controllers\Tenant\Fee\FeeReceiptController;
-use App\Http\Controllers\Tenant\Student\StudentGuardianController;
+use App\Http\Controllers\Tenant\GradeController;
+use App\Http\Controllers\Tenant\HomepageController;
+use App\Http\Controllers\Tenant\PeriodController;
+use App\Http\Controllers\Tenant\ProfileController;
+use App\Http\Controllers\Tenant\RoleController;
+use App\Http\Controllers\Tenant\RolesPermissionsController;
+use App\Http\Controllers\Tenant\SchoolHolidayController;
+use App\Http\Controllers\Tenant\SearchController;
+use App\Http\Controllers\Tenant\SectionController;
+use App\Http\Controllers\Tenant\StaffController;
+use App\Http\Controllers\Tenant\Staff\StaffAttendanceController;
 use App\Http\Controllers\Tenant\Student\StudentAddressController;
+use App\Http\Controllers\Tenant\Student\StudentAdmissionController;
+use App\Http\Controllers\Tenant\Student\StudentApplicationController;
+use App\Http\Controllers\Tenant\Student\StudentAttendanceController;
+use App\Http\Controllers\Tenant\Student\StudentController;
 use App\Http\Controllers\Tenant\Student\StudentDocumentController;
+use App\Http\Controllers\Tenant\Student\StudentGuardianController;
+use App\Http\Controllers\Tenant\SubjectController;
 use App\Http\Controllers\Tenant\SystemSettingsController;
+use App\Http\Controllers\Tenant\TenantLoginController;
+use App\Http\Controllers\Tenant\TimetableController;
+use Illuminate\Support\Facades\Route;
 
 $root = config('app.tenant_root_domain', 'pocketschool.test');
 
 /* ---------- Tenant (wildcard subdomains) ---------- */
-Route::domain('{school_sub}.'.$root)
+Route::domain('{school_sub}.' . $root)
     ->middleware(['web', 'resolve.school'])
     ->name('tenant.')
     ->group(function () {
@@ -70,9 +70,9 @@ Route::domain('{school_sub}.'.$root)
 
             Route::prefix('permissions')->name('permissions.')->group(function () {
                 Route::get('manage-permissions', [RolesPermissionsController::class, 'index'])
-                ->name('index');
+                    ->name('index');
                 Route::post('manage-permissions', [RolesPermissionsController::class, 'update'])
-                ->name('update');
+                    ->name('update');
             });
 
             // Acadamics
@@ -99,7 +99,7 @@ Route::domain('{school_sub}.'.$root)
             });
 
             Route::prefix('sections')->name('sections.')->group(function () {
-            // Sections CRUD
+                // Sections CRUD
                 Route::get('', [SectionController::class, 'index'])->name('index');
                 Route::get('/create', [SectionController::class, 'create'])->name('create');
                 Route::post('', [SectionController::class, 'store'])->name('store');
@@ -107,7 +107,7 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{id}', [SectionController::class, 'update'])->name('update');
                 Route::delete('/{id}', [SectionController::class, 'destroy'])->name('destroy');
 
-                Route::get('by-grade', [SectionController::class,'byGrade'])->name('byGrade');
+                Route::get('by-grade', [SectionController::class, 'byGrade'])->name('byGrade');
             });
 
             // setperiods
@@ -128,7 +128,7 @@ Route::domain('{school_sub}.'.$root)
                 Route::post('{timetable}/periods', [PeriodController::class, 'store'])->name('periods.store');
                 Route::delete('{timetable}/periods/{period}', [PeriodController::class, 'destroy'])->name('periods.destroy');
 
-                //copy 
+                //copy
                 // Copy form + save
                 Route::get('copy/form', [TimetableController::class, 'copyForm'])->name('copyForm');
                 Route::post('copy/save', [TimetableController::class, 'copySave'])->name('copySave');
@@ -137,10 +137,10 @@ Route::domain('{school_sub}.'.$root)
             });
 
             Route::prefix('school-holidays')->name('school_holidays.')->group(function () {
-                Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');          // ✅ Blade Calendar View
-                Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');        // JSON
+                Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');      // ✅ Blade Calendar View
+                Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');             // JSON
                 Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
-                Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');  // JSON
+                Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');       // JSON
                 Route::post('/store', [SchoolHolidayController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [SchoolHolidayController::class, 'edit'])->name('edit');
                 Route::put('/{id}/update', [SchoolHolidayController::class, 'update'])->name('update');
@@ -149,7 +149,7 @@ Route::domain('{school_sub}.'.$root)
 
             // calender
             Route::prefix('calendar')->name('calendar.')->group(function () {
-                Route::get('/', [CalendarController::class, 'index'])->name('index');          // ✅ Blade Calendar View
+                Route::get('/', [CalendarController::class, 'index'])->name('index'); // ✅ Blade Calendar View
             });
 
             // subjects
@@ -161,7 +161,6 @@ Route::domain('{school_sub}.'.$root)
                 Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
                 Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
             });
-
 
             Route::prefix('staff')->name('staff.')->group(function () {
                 Route::get('/', [StaffController::class, 'index'])->name('index');
@@ -182,174 +181,106 @@ Route::domain('{school_sub}.'.$root)
                     ->name('update');
             });
 
-            
-// ========================
-// 1. Student Applications
-// ========================
-Route::prefix('applications')->name('applications.')->group(function () {
-    Route::get('/', [StudentApplicationController::class, 'index'])->name('index');
-    Route::get('/create', [StudentApplicationController::class, 'create'])->name('create');
-    Route::post('/', [StudentApplicationController::class, 'store'])->name('store');
+            // ========================
+            // 1. Student Applications
+            // ========================
+            Route::prefix('applications')->name('applications.')->group(function () {
+                Route::get('/', [StudentApplicationController::class, 'index'])->name('index');
+                Route::get('/create', [StudentApplicationController::class, 'create'])->name('create');
+                Route::post('/', [StudentApplicationController::class, 'store'])->name('store');
 
-    Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');
-    Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit');
-    Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');
-    Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy');
+                Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');
+                Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit');
+                Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');
+                Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy');
 
-    Route::post('/{application}/logs', [StudentApplicationController::class, 'addLog'])->name('addLog');
+                Route::post('/{application}/logs', [StudentApplicationController::class, 'addLog'])->name('addLog');
 
-    // Move application → admission
-    Route::get('/{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])->name('admit.form');
-    Route::post('/{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])->name('admit.store');
-});
+                // Move application → admission
+                Route::get('/{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])->name('admit.form');
+                Route::post('/{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])->name('admit.store');
+            });
 
-// ========================
-// 2. Student Admissions
-// ========================
-Route::prefix('admissions')->name('admissions.')->group(function () {
-    Route::get('/', [StudentAdmissionController::class, 'index'])->name('index');
-    Route::get('/create', [StudentAdmissionController::class, 'create'])->name('create');
-    Route::post('/', [StudentAdmissionController::class, 'store'])->name('store');
+            // ========================
+            // 2. Student Admissions
+            // ========================
+            Route::prefix('admissions')->name('admissions.')->group(function () {
+                Route::get('/', [StudentAdmissionController::class, 'index'])->name('index');
+                Route::get('/create', [StudentAdmissionController::class, 'create'])->name('create');
+                Route::post('/', [StudentAdmissionController::class, 'store'])->name('store');
 
-    Route::get('/{admission}/edit', [StudentAdmissionController::class, 'edit'])->name('edit');
-    Route::put('/{admission}', [StudentAdmissionController::class, 'update'])->name('update');
-    Route::delete('/{admission}', [StudentAdmissionController::class, 'destroy'])->name('destroy');
-});
+                Route::get('/{admission}/edit', [StudentAdmissionController::class, 'edit'])->name('edit');
+                Route::put('/{admission}', [StudentAdmissionController::class, 'update'])->name('update');
+                Route::delete('/{admission}', [StudentAdmissionController::class, 'destroy'])->name('destroy');
+            });
 
-// ========================
-// 3. Students
-// ========================
-Route::prefix('students')->name('students.')->group(function () {
-    Route::get('/', [StudentController::class, 'index'])->name('index');
-    Route::get('/create', [StudentController::class, 'create'])->name('create');
-    Route::post('/', [StudentController::class, 'store'])->name('store');
+            // ========================
+            // 3. Students
+            // ========================
+            Route::prefix('students')->name('students.')->group(function () {
+                Route::get('/', [StudentController::class, 'index'])->name('index');
+                Route::get('/create', [StudentController::class, 'create'])->name('create');
+                Route::post('/', [StudentController::class, 'store'])->name('store');
 
-    Route::get('/{id}', [StudentController::class, 'show'])->name('show');
-    Route::get('/{id}/overview', [StudentController::class, 'overview'])->name('overview');
-    Route::get('/{id}/attendance', [StudentController::class, 'attendance'])->name('attendance');
-    Route::get('/{id}/performance', [StudentController::class, 'performance'])->name('performance');
-    Route::get('/{id}/behavior', [StudentController::class, 'behavior'])->name('behavior');
-    Route::get('/{id}/documents', [StudentController::class, 'documents'])->name('documents');
-    Route::get('/{id}/timetable', [StudentController::class, 'timetable'])->name('timetable');
-    Route::get('/{id}/guardians', [StudentController::class, 'guardians'])->name('guardians');
+                Route::get('/{id}', [StudentController::class, 'show'])->name('show');
+                Route::get('/{id}/overview', [StudentController::class, 'overview'])->name('overview');
+                Route::get('/{id}/attendance', [StudentController::class, 'attendance'])->name('attendance');
+                Route::get('/{id}/performance', [StudentController::class, 'performance'])->name('performance');
+                Route::get('/{id}/behavior', [StudentController::class, 'behavior'])->name('behavior');
+                Route::get('/{id}/documents', [StudentController::class, 'documents'])->name('documents');
+                Route::get('/{id}/timetable', [StudentController::class, 'timetable'])->name('timetable');
+                Route::get('/{id}/guardians', [StudentController::class, 'guardians'])->name('guardians');
 
+                Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+                Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+                Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
 
+                // -------------------------
+                // Student Guardians
+                // -------------------------
+                Route::prefix('{student}/guardians')->name('guardians.')->group(function () {
+                    Route::get('/', [StudentGuardianController::class, 'index'])->name('index');
+                    Route::get('/create', [StudentGuardianController::class, 'create'])->name('create');
+                    Route::post('/', [StudentGuardianController::class, 'store'])->name('store');
+                    Route::get('/{guardian}/edit', [StudentGuardianController::class, 'edit'])->name('edit');
+                    Route::put('/{guardian}', [StudentGuardianController::class, 'update'])->name('update');
+                    Route::delete('/{guardian}', [StudentGuardianController::class, 'destroy'])->name('destroy');
+                });
 
-    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
-    Route::put('/{student}', [StudentController::class, 'update'])->name('update');
-    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
+                // -------------------------
+                // Student Addresses
+                // -------------------------
+                Route::prefix('{student}/addresses')->name('addresses.')->group(function () {
+                    Route::get('/', [StudentAddressController::class, 'index'])->name('index');
+                    Route::get('/create', [StudentAddressController::class, 'create'])->name('create');
+                    Route::post('/', [StudentAddressController::class, 'store'])->name('store');
+                    Route::get('/{address}/edit', [StudentAddressController::class, 'edit'])->name('edit');
+                    Route::put('/{address}', [StudentAddressController::class, 'update'])->name('update');
+                    Route::delete('/{address}', [StudentAddressController::class, 'destroy'])->name('destroy');
+                });
 
-    // -------------------------
-    // Student Guardians
-    // -------------------------
-    Route::prefix('{student}/guardians')->name('guardians.')->group(function () {
-        Route::get('/', [StudentGuardianController::class, 'index'])->name('index');
-        Route::get('/create', [StudentGuardianController::class, 'create'])->name('create');
-        Route::post('/', [StudentGuardianController::class, 'store'])->name('store');
-        Route::get('/{guardian}/edit', [StudentGuardianController::class, 'edit'])->name('edit');
-        Route::put('/{guardian}', [StudentGuardianController::class, 'update'])->name('update');
-        Route::delete('/{guardian}', [StudentGuardianController::class, 'destroy'])->name('destroy');
-    });
-
-    // -------------------------
-    // Student Addresses
-    // -------------------------
-    Route::prefix('{student}/addresses')->name('addresses.')->group(function () {
-        Route::get('/', [StudentAddressController::class, 'index'])->name('index');
-        Route::get('/create', [StudentAddressController::class, 'create'])->name('create');
-        Route::post('/', [StudentAddressController::class, 'store'])->name('store');
-        Route::get('/{address}/edit', [StudentAddressController::class, 'edit'])->name('edit');
-        Route::put('/{address}', [StudentAddressController::class, 'update'])->name('update');
-        Route::delete('/{address}', [StudentAddressController::class, 'destroy'])->name('destroy');
-    });
-
-    // -------------------------
-    // Student Documents
-    // -------------------------
-    Route::prefix('{student}/documents')->name('documents.')->group(function () {
-        Route::get('/', [StudentDocumentController::class, 'index'])->name('index');
-        Route::get('/create', [StudentDocumentController::class, 'create'])->name('create');
-        Route::post('/', [StudentDocumentController::class, 'store'])->name('store');
-        Route::get('/{document}/edit', [StudentDocumentController::class, 'edit'])->name('edit');
-        Route::put('/{document}', [StudentDocumentController::class, 'update'])->name('update');
-        Route::delete('/{document}', [StudentDocumentController::class, 'destroy'])->name('destroy');
-    });
-});
-
-// ========================
-// 4. Student Attendance
-// ========================
-Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
-    Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
-    Route::get('/create', [StudentAttendanceController::class, 'create'])->name('create');
-    Route::post('/store', [StudentAttendanceController::class, 'store'])->name('store');
-    Route::get('/{sheet}/edit', [StudentAttendanceController::class, 'edit'])->name('edit');
-    Route::put('/{sheet}', [StudentAttendanceController::class, 'update'])->name('update');
-    Route::get('/{sheet}/view', [StudentAttendanceController::class, 'view'])->name('view');
-    Route::post('/copy-morning', [StudentAttendanceController::class, 'copyMorning'])->name('copyMorning');
-});
-
-            // Route::prefix('applications')->name('applications.')->group(function () {
-            //     Route::get('/', [StudentApplicationController::class, 'index'])->name('index');          // list
-            //     Route::get('/create', [StudentApplicationController::class, 'create'])->name('create'); // add form
-            //     Route::post('/', [StudentApplicationController::class, 'store'])->name('store');        // save new
-
-            //     Route::get('/{application}', [StudentApplicationController::class, 'show'])->name('show');     // view one
-            //     Route::get('/{application}/edit', [StudentApplicationController::class, 'edit'])->name('edit'); // edit form
-            //     Route::put('/{application}', [StudentApplicationController::class, 'update'])->name('update');  // update
-            //     Route::delete('/{application}', [StudentApplicationController::class, 'destroy'])->name('destroy'); // delete
-
-            //     Route::post('{application}/logs', [StudentApplicationController::class, 'addLog'])
-            //         ->name('addLog');
-            //     // Route::get('{application}/admit', [StudentAdmissionController::class, 'createFromApplication'])
-            //     //     ->name('admit.form');
-            //     // Route::post('{application}/admit', [StudentAdmissionController::class, 'storeFromApplication'])
-            //     //     ->name('admit.store');
-            // });
-
-            // Route::prefix('admissions')->name('admissions.')->middleware('auth:tenant')->group(function () {
-            //     Route::get('/', [StudentAdmissionController::class,'index'])->name('index');
-            //     Route::get('/create', [StudentAdmissionController::class,'create'])->name('create');
-            //     Route::post('/', [StudentAdmissionController::class,'store'])->name('store');
-
-            //     Route::get('/{admission}/edit', [StudentAdmissionController::class,'edit'])->name('edit');
-            //     Route::put('/{admission}', [StudentAdmissionController::class,'update'])->name('update');
-            //     Route::delete('/{admission}', [StudentAdmissionController::class,'destroy'])->name('destroy');
-
-            //     // from application
-            //     Route::get('/from-application/{application}', [StudentAdmissionController::class,'createFromApplication'])->name('fromApp.create');
-            //     Route::post('/from-application/{application}', [StudentAdmissionController::class,'storeFromApplication'])->name('fromApp.store');
-            // });
-
-            // Route::prefix('students')->name('students.')->group(function () {
-            //     // List + filters + ajax pagination
-            //     Route::get('/', [StudentController::class, 'index'])->name('index');
-
-            //     // Create new student admission directly
-            //     Route::get('/create', [StudentController::class, 'create'])->name('create');
-            //     Route::post('/', [StudentController::class, 'store'])->name('store');
-
-            //     // View a student profile
-            //     Route::get('/{student}', [StudentController::class, 'show'])->name('show');
-
-            //     // Edit existing student
-            //     Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
-            //     Route::put('/{student}', [StudentController::class, 'update'])->name('update');
-
-            //     // Delete student
-            //     Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
-            // });
-
+                // -------------------------
+                // Student Documents
+                // -------------------------
+                Route::prefix('{student}/documents')->name('documents.')->group(function () {
+                    Route::get('/', [StudentDocumentController::class, 'index'])->name('index');
+                    Route::get('/create', [StudentDocumentController::class, 'create'])->name('create');
+                    Route::post('/', [StudentDocumentController::class, 'store'])->name('store');
+                    Route::get('/{document}/edit', [StudentDocumentController::class, 'edit'])->name('edit');
+                    Route::put('/{document}', [StudentDocumentController::class, 'update'])->name('update');
+                    Route::delete('/{document}', [StudentDocumentController::class, 'destroy'])->name('destroy');
+                });
+            });
             // routes/tenant.php
             Route::prefix('staff-attendance')->name('staffAttendance.')->group(function () {
                 Route::get('create', [StaffAttendanceController::class, 'create'])->name('create');
                 Route::post('store', [StaffAttendanceController::class, 'store'])->name('store');
                 Route::get('/{attendance}/edit', [StaffAttendanceController::class, 'edit'])->name('edit'); // edit attendance
-                Route::put('/{attendance}', [StaffAttendanceController::class, 'update'])->name('update'); // update attendance
-                
+                Route::put('/{attendance}', [StaffAttendanceController::class, 'update'])->name('update');  // update attendance
+
                 Route::get('/list', [StaffAttendanceController::class, 'list'])->name('list');
             });
-            
+
             // Student atttdance
             Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
                 Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
@@ -407,7 +338,7 @@ Route::prefix('attendance/student')->name('studentAttendance.')->group(function 
                     Route::post('', [SectionFeeController::class, 'store'])->name('store');
                 });
                 // bulk assign fees
-                Route::post('sections/{sectionId}/academics/{academicId}/assign', [StudentFeeItemController::class,'bulkAssign'])
+                Route::post('sections/{sectionId}/academics/{academicId}/assign', [StudentFeeItemController::class, 'bulkAssign'])
                     ->name('fees.bulkAssign');
                 Route::prefix('student-fee-items')->name('student-fee-items.')->group(function () {
                     // List all fee items for a student
@@ -427,13 +358,12 @@ Route::prefix('attendance/student')->name('studentAttendance.')->group(function 
 
                 // receipts
                 Route::get('receipts', [FeeReceiptController::class, 'allReceipts'])->name('fee-receipts.all');
-                Route::get('students/{student}/receipts', [FeeReceiptController::class,'index'])->name('fee-receipts.index');
-                Route::get('students/{student}/receipts/create', [FeeReceiptController::class,'create'])->name('fee-receipts.create');
-                Route::post('students/{student}/receipts', [FeeReceiptController::class,'store'])->name('fee-receipts.store');
-                Route::get('students/{student}/receipts/{receipt}', [FeeReceiptController::class,'show'])->name('fee-receipts.show');
-                Route::get('students/{student}/receipts/{receipt}/edit', [FeeReceiptController::class,'edit'])->name('fee-receipts.edit');
-                Route::put('students/{student}/receipts/{receipt}', [FeeReceiptController::class,'update'])->name('fee-receipts.update');
+                Route::get('students/{student}/receipts', [FeeReceiptController::class, 'index'])->name('fee-receipts.index');
+                Route::get('students/{student}/receipts/create', [FeeReceiptController::class, 'create'])->name('fee-receipts.create');
+                Route::post('students/{student}/receipts', [FeeReceiptController::class, 'store'])->name('fee-receipts.store');
+                Route::get('students/{student}/receipts/{receipt}', [FeeReceiptController::class, 'show'])->name('fee-receipts.show');
+                Route::get('students/{student}/receipts/{receipt}/edit', [FeeReceiptController::class, 'edit'])->name('fee-receipts.edit');
+                Route::put('students/{student}/receipts/{receipt}', [FeeReceiptController::class, 'update'])->name('fee-receipts.update');
             });
+        });
     });
-});
-    

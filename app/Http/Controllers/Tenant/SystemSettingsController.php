@@ -18,8 +18,9 @@ class SystemSettingsController extends Controller
 
     public function edit()
     {
-        $school = School::with('details')->findOrFail(current_school_id());
-        return view('Tenant.pages.Settings.system', compact('school'));
+        // Use a distinct variable name to avoid shadowing the shared $school from middleware
+        $settingsSchool = School::with('details')->findOrFail(current_school_id());
+        return view('Tenant.pages.Settings.system', compact('settingsSchool'));
     }
 
     public function update(Request $request)
@@ -101,14 +102,22 @@ class SystemSettingsController extends Controller
 
         $details->save();
 
-        // Clear cached school object so favicon/logo update reflects
+        // Refresh cached school branding to avoid stale sidebar/favicon
         $domain = $school->domain;
         if ($domain) {
-            Cache::forget("tenant:domain:$domain");
+            $cacheKey = "tenant:domain:$domain";
+            Cache::forget($cacheKey);
+            Cache::put($cacheKey, [
+                'id'          => $school->id,
+                'name'        => $school->name,
+                'domain'      => $school->domain,
+                'is_active'   => $school->is_active,
+                'logo_url'    => $details->logo_url,
+                'favicon_url' => $details->favicon_url,
+            ], now()->addMinutes(10));
         }
 
         return redirect()->to(tenant_route('tenant.settings.system.edit'))
             ->with('success','Settings updated successfully');
     }
 }
-

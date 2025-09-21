@@ -7,7 +7,7 @@
   <div class="sidebar-inner">
     <a class="navbar-brand d-flex align-items-center gap-2 justify-content-center" href="{{ tenant_route('tenant.dashboard') }}">
         @if(!empty($school->logo_url))
-          <img src="{{ asset('storage/'.$school->logo_url) }}" alt="{{ $school->name }} Logo" class="img-fluid w-50">
+          <img src="{{ asset('storage/'.$school->logo_url) }}?v={{ time() }}" alt="{{ $school->name }} Logo" class="img-fluid w-50">
         @else
           <img src="{{ asset('images/default-logo.png') }}" alt="Default Logo" class="img-fluid w-50">
         @endif

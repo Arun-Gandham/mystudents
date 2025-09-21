@@ -4,7 +4,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="{{ !empty($school?->favicon_url) ? asset('storage/'.$school->favicon_url) : asset('images/default-favicon.png') }}">
+  <link rel="icon" href="{{ !empty($school?->favicon_url)
+      ? asset('storage/'.$school->favicon_url) . '?v=' . time()
+      : asset('images/default-favicon.png') }}">
   <title>@yield('title' ?? 'School') - {{ $school->name ?? "School"}}</title>
   <meta name="description" content="{{ $pageDescription ?? 'Description' }}">
 

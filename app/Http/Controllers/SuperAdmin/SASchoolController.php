@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Staff;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use App\Support\FileHelper;
@@ -329,6 +330,18 @@ class SASchoolController extends Controller
         ]);
 
         $details->save();
+
+        // Refresh tenant school cache so branding updates reflect immediately
+        $cacheKey = 'tenant:domain:' . $school->domain;
+        Cache::forget($cacheKey);
+        Cache::put($cacheKey, [
+            'id'          => $school->id,
+            'name'        => $school->name,
+            'domain'      => $school->domain,
+            'is_active'   => $school->is_active,
+            'logo_url'    => $details->logo_url,
+            'favicon_url' => $details->favicon_url,
+        ], now()->addMinutes(10));
 
         return redirect()->route('superadmin.school.settings', $school->id)
             ->with('success', 'School settings updated successfully!');

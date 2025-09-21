@@ -16,59 +16,59 @@
             <h5 class="card-title">School Profile</h5>
             <div class="mb-3">
               <label class="form-label">School Name</label>
-              <input type="text" name="name" class="form-control" value="{{ old('name', $school->name) }}" required>
+              <input type="text" name="name" class="form-control" value="{{ old('name', $settingsSchool->name) }}" required>
             </div>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Phone</label>
-                <input type="text" name="phone" class="form-control" value="{{ old('phone', optional($school->details)->phone) }}">
+                <input type="text" name="phone" class="form-control" value="{{ old('phone', optional($settingsSchool->details)->phone) }}">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Alternate Phone</label>
-                <input type="text" name="alt_phone" class="form-control" value="{{ old('alt_phone', optional($school->details)->alt_phone) }}">
+                <input type="text" name="alt_phone" class="form-control" value="{{ old('alt_phone', optional($settingsSchool->details)->alt_phone) }}">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email', optional($school->details)->email) }}">
+                <input type="email" name="email" class="form-control" value="{{ old('email', optional($settingsSchool->details)->email) }}">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Website</label>
-                <input type="text" name="website" class="form-control" value="{{ old('website', optional($school->details)->website) }}">
+                <input type="text" name="website" class="form-control" value="{{ old('website', optional($settingsSchool->details)->website) }}">
               </div>
             </div>
 
             <div class="row g-3 mt-1">
               <div class="col-md-12">
                 <label class="form-label">Address Line 1</label>
-                <input type="text" name="address_line1" class="form-control" value="{{ old('address_line1', optional($school->details)->address_line1) }}">
+                <input type="text" name="address_line1" class="form-control" value="{{ old('address_line1', optional($settingsSchool->details)->address_line1) }}">
               </div>
               <div class="col-md-12">
                 <label class="form-label">Address Line 2</label>
-                <input type="text" name="address_line2" class="form-control" value="{{ old('address_line2', optional($school->details)->address_line2) }}">
+                <input type="text" name="address_line2" class="form-control" value="{{ old('address_line2', optional($settingsSchool->details)->address_line2) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">City</label>
-                <input type="text" name="city" class="form-control" value="{{ old('city', optional($school->details)->city) }}">
+                <input type="text" name="city" class="form-control" value="{{ old('city', optional($settingsSchool->details)->city) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">State</label>
-                <input type="text" name="state" class="form-control" value="{{ old('state', optional($school->details)->state) }}">
+                <input type="text" name="state" class="form-control" value="{{ old('state', optional($settingsSchool->details)->state) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Postal Code</label>
-                <input type="text" name="postal_code" class="form-control" value="{{ old('postal_code', optional($school->details)->postal_code) }}">
+                <input type="text" name="postal_code" class="form-control" value="{{ old('postal_code', optional($settingsSchool->details)->postal_code) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Country Code</label>
-                <input type="text" name="country_code" class="form-control" value="{{ old('country_code', optional($school->details)->country_code) }}">
+                <input type="text" name="country_code" class="form-control" value="{{ old('country_code', optional($settingsSchool->details)->country_code) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Established Year</label>
-                <input type="number" name="established_year" class="form-control" value="{{ old('established_year', optional($school->details)->established_year) }}">
+                <input type="number" name="established_year" class="form-control" value="{{ old('established_year', optional($settingsSchool->details)->established_year) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Affiliation No</label>
-                <input type="text" name="affiliation_no" class="form-control" value="{{ old('affiliation_no', optional($school->details)->affiliation_no) }}">
+                <input type="text" name="affiliation_no" class="form-control" value="{{ old('affiliation_no', optional($settingsSchool->details)->affiliation_no) }}">
               </div>
             </div>
           </div>
@@ -83,14 +83,14 @@
               <label class="form-label">Logo</label>
               <input type="file" name="logo" class="form-control" accept="image/*" onchange="previewImg(event,'logoPreview')">
               <div class="mt-2">
-                <img id="logoPreview" src="{{ optional($school->details)->logo_url ? asset('storage/'.optional($school->details)->logo_url) : asset('images/default-logo.png') }}" height="58" class="border rounded">
+                <img id="logoPreview" src="{{ optional($settingsSchool->details)->logo_url ? asset('storage/'.optional($settingsSchool->details)->logo_url) : asset('images/default-logo.png') }}" height="58" class="border rounded">
               </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Favicon</label>
               <input type="file" name="favicon" class="form-control" accept="image/*" onchange="previewImg(event,'faviconPreview')">
               <div class="mt-2">
-                <img id="faviconPreview" src="{{ optional($school->details)->favicon_url ? asset('storage/'.optional($school->details)->favicon_url) : '' }}" height="32" class="border rounded">
+                <img id="faviconPreview" src="{{ optional($settingsSchool->details)->favicon_url ? asset('storage/'.optional($settingsSchool->details)->favicon_url) : '' }}" height="32" class="border rounded">
               </div>
             </div>
 
@@ -99,7 +99,7 @@
               <div class="col-md-4">
                 <label class="form-label">Theme</label>
                 <select name="theme" class="form-select">
-                  @php $theme = old('theme', optional($school->details)->theme); @endphp
+                  @php $theme = old('theme', optional($settingsSchool->details)->theme); @endphp
                   <option value="">System</option>
                   <option value="light" {{ $theme==='light'?'selected':'' }}>Light</option>
                   <option value="dark" {{ $theme==='dark'?'selected':'' }}>Dark</option>
@@ -107,29 +107,29 @@
               </div>
               <div class="col-md-4">
                 <label class="form-label">Primary Color</label>
-                <input type="text" name="primary_color" class="form-control" placeholder="#4f46e5" value="{{ old('primary_color', optional($school->details)->primary_color) }}">
+                <input type="text" name="primary_color" class="form-control" placeholder="#4f46e5" value="{{ old('primary_color', optional($settingsSchool->details)->primary_color) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Secondary Color</label>
-                <input type="text" name="secondary_color" class="form-control" placeholder="#0ea5e9" value="{{ old('secondary_color', optional($school->details)->secondary_color) }}">
+                <input type="text" name="secondary_color" class="form-control" placeholder="#0ea5e9" value="{{ old('secondary_color', optional($settingsSchool->details)->secondary_color) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Timezone</label>
-                <input type="text" name="timezone" class="form-control" placeholder="Asia/Kolkata" value="{{ old('timezone', optional($school->details)->timezone) }}">
+                <input type="text" name="timezone" class="form-control" placeholder="Asia/Kolkata" value="{{ old('timezone', optional($settingsSchool->details)->timezone) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Locale</label>
-                <input type="text" name="locale" class="form-control" placeholder="en" value="{{ old('locale', optional($school->details)->locale) }}">
+                <input type="text" name="locale" class="form-control" placeholder="en" value="{{ old('locale', optional($settingsSchool->details)->locale) }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Date Format</label>
-                <input type="text" name="date_format" class="form-control" placeholder="d M Y" value="{{ old('date_format', optional($school->details)->date_format) }}">
+                <input type="text" name="date_format" class="form-control" placeholder="d M Y" value="{{ old('date_format', optional($settingsSchool->details)->date_format) }}">
               </div>
             </div>
 
             <div class="mt-3">
               <label class="form-label">Notes</label>
-              <textarea name="note" class="form-control" rows="3">{{ old('note', optional($school->details)->note) }}</textarea>
+              <textarea name="note" class="form-control" rows="3">{{ old('note', optional($settingsSchool->details)->note) }}</textarea>
             </div>
           </div>
         </div>
@@ -153,4 +153,3 @@ function previewImg(e, id){
 }
 </script>
 @endpush
-

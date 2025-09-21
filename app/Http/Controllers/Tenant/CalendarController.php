@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\tenant;
+namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

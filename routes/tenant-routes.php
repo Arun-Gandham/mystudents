@@ -75,15 +75,13 @@ Route::domain('{school_sub}.' . $root)
                     ->name('update');
             });
 
-            // Acadamics
+            // Academics
             Route::prefix('academic_years')->name('academic_years.')->group(function () {
                 Route::get('/', [AcademicYearController::class, 'index'])->name('index');
                 Route::get('/create', [AcademicYearController::class, 'create'])->name('create');
                 Route::post('/', [AcademicYearController::class, 'store'])->name('store');
-                Route::get('/{academic_year}', [AcademicYearController::class, 'show'])->name('show');
                 Route::get('/{academic_year_id}/edit', [AcademicYearController::class, 'edit'])->name('edit');
                 Route::put('/{academic_year}', [AcademicYearController::class, 'update'])->name('update');
-                Route::delete('/{academic_year}', [AcademicYearController::class, 'destroy'])->name('destroy');
                 Route::patch('/{academic_year}/toggle', [AcademicYearController::class, 'toggle'])
                     ->name('toggle');
             });
@@ -119,12 +117,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::get('/{id}/edit', [TimetableController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [TimetableController::class, 'update'])->name('update');
                 Route::delete('/{id}', [TimetableController::class, 'destroy'])->name('destroy');
-                Route::post('{timetable}/periods', [TimetableController::class, 'storePeriod'])
-                    ->name('periods.store');
-                Route::delete('{timetable}/periods/{period}', [TimetableController::class, 'destroyPeriod'])
-                    ->name('periods.destroy');
-
-                //periods
+                // Periods
                 Route::post('{timetable}/periods', [PeriodController::class, 'store'])->name('periods.store');
                 Route::delete('{timetable}/periods/{period}', [PeriodController::class, 'destroy'])->name('periods.destroy');
 
@@ -141,35 +134,35 @@ Route::domain('{school_sub}.' . $root)
                 Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');             // JSON
                 Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
                 Route::get('/create', [SchoolHolidayController::class, 'create'])->name('create');       // JSON
-                Route::post('/store', [SchoolHolidayController::class, 'store'])->name('store');
+                Route::post('', [SchoolHolidayController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [SchoolHolidayController::class, 'edit'])->name('edit');
-                Route::put('/{id}/update', [SchoolHolidayController::class, 'update'])->name('update');
-                Route::delete('/{id}/delete', [SchoolHolidayController::class, 'destroy'])->name('destroy');
+                Route::put('/{id}', [SchoolHolidayController::class, 'update'])->name('update');
+                Route::delete('/{id}', [SchoolHolidayController::class, 'destroy'])->name('destroy');
             });
 
-            // calender
+            // calendar
             Route::prefix('calendar')->name('calendar.')->group(function () {
                 Route::get('/', [CalendarController::class, 'index'])->name('index'); // ✅ Blade Calendar View
             });
 
-            // subjects
+            // Subjects
             Route::prefix('subjects')->name('subjects.')->group(function () {
                 Route::get('/', [SubjectController::class, 'index'])->name('index');
                 Route::get('/create', [SubjectController::class, 'create'])->name('create');
-                Route::post('/store', [SubjectController::class, 'store'])->name('store');
+                Route::post('', [SubjectController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [SubjectController::class, 'edit'])->name('edit');
-                Route::put('/{id}/update', [SubjectController::class, 'update'])->name('update');
-                Route::delete('/{id}/delete', [SubjectController::class, 'destroy'])->name('destroy');
+                Route::put('/{id}', [SubjectController::class, 'update'])->name('update');
+                Route::delete('/{id}', [SubjectController::class, 'destroy'])->name('destroy');
             });
 
             Route::prefix('staff')->name('staff.')->group(function () {
                 Route::get('/', [StaffController::class, 'index'])->name('index');
                 Route::get('/create', [StaffController::class, 'create'])->name('create');
-                Route::post('/store', [StaffController::class, 'store'])->name('store');
+                Route::post('', [StaffController::class, 'store'])->name('store');
                 Route::get('/{id}', [StaffController::class, 'show'])->name('show');
                 Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('edit');
-                Route::put('/{id}/update', [StaffController::class, 'update'])->name('update');
-                Route::delete('/{id}/delete', [StaffController::class, 'destroy'])->name('destroy');
+                Route::put('/{id}', [StaffController::class, 'update'])->name('update');
+                Route::delete('/{id}', [StaffController::class, 'destroy'])->name('destroy');
             });
 
             Route::prefix('profile')->name('profile.')->group(function () {
@@ -266,13 +259,12 @@ Route::domain('{school_sub}.' . $root)
                     Route::get('/', [StudentDocumentController::class, 'index'])->name('index');
                     Route::get('/create', [StudentDocumentController::class, 'create'])->name('create');
                     Route::post('/', [StudentDocumentController::class, 'store'])->name('store');
-                    Route::get('/{document}/edit', [StudentDocumentController::class, 'edit'])->name('edit');
-                    Route::put('/{document}', [StudentDocumentController::class, 'update'])->name('update');
                     Route::delete('/{document}', [StudentDocumentController::class, 'destroy'])->name('destroy');
                 });
             });
-            // routes/tenant.php
+            // Staff attendance
             Route::prefix('staff-attendance')->name('staffAttendance.')->group(function () {
+                Route::get('', [StaffAttendanceController::class, 'index'])->name('index');
                 Route::get('create', [StaffAttendanceController::class, 'create'])->name('create');
                 Route::post('store', [StaffAttendanceController::class, 'store'])->name('store');
                 Route::get('/{attendance}/edit', [StaffAttendanceController::class, 'edit'])->name('edit'); // edit attendance
@@ -280,8 +272,8 @@ Route::domain('{school_sub}.' . $root)
 
                 Route::get('/list', [StaffAttendanceController::class, 'list'])->name('list');
             });
-
-            // Student atttdance
+            
+            // Student attendance
             Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
                 Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
                 Route::get('/create', [StudentAttendanceController::class, 'create'])->name('create');
@@ -320,7 +312,7 @@ Route::domain('{school_sub}.' . $root)
                     Route::get('/create', [FeeHeadController::class, 'create'])
                         ->name('create');
 
-                    Route::post('fee-heads', [FeeHeadController::class, 'store'])
+                    Route::post('', [FeeHeadController::class, 'store'])
                         ->name('store');
 
                     Route::get('/{feeHead}/edit', [FeeHeadController::class, 'edit'])

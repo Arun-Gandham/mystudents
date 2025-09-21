@@ -59,7 +59,7 @@ Route::domain('{school_sub}.' . $root)
             });
 
             // Roles & Permissions
-            Route::prefix('roles')->name('roles.')->group(function () {
+            Route::prefix('roles')->middleware(['module.enabled:roles_permissions'])->name('roles.')->group(function () {
                 Route::get('/', [RoleController::class, 'index'])->name('index');
                 Route::get('/create', [RoleController::class, 'create'])->name('create');
                 Route::post('/', [RoleController::class, 'store'])->name('store');
@@ -68,7 +68,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::delete('/{role_id}', [RoleController::class, 'destroy'])->name('destroy');
             });
 
-            Route::prefix('permissions')->name('permissions.')->group(function () {
+            Route::prefix('permissions')->middleware(['module.enabled:roles_permissions'])->name('permissions.')->group(function () {
                 Route::get('manage-permissions', [RolesPermissionsController::class, 'index'])
                     ->name('index');
                 Route::post('manage-permissions', [RolesPermissionsController::class, 'update'])
@@ -76,7 +76,7 @@ Route::domain('{school_sub}.' . $root)
             });
 
             // Academics
-            Route::prefix('academic_years')->name('academic_years.')->group(function () {
+            Route::prefix('academic_years')->middleware(['module.enabled:academics'])->name('academic_years.')->group(function () {
                 Route::get('/', [AcademicYearController::class, 'index'])->name('index');
                 Route::get('/create', [AcademicYearController::class, 'create'])->name('create');
                 Route::post('/', [AcademicYearController::class, 'store'])->name('store');
@@ -87,7 +87,7 @@ Route::domain('{school_sub}.' . $root)
             });
 
             // Grades CRUD
-            Route::prefix('grades')->name('grades.')->group(function () {
+            Route::prefix('grades')->middleware(['module.enabled:grades'])->name('grades.')->group(function () {
                 Route::get('', [GradeController::class, 'index'])->name('index');
                 Route::get('/create', [GradeController::class, 'create'])->name('create');
                 Route::post('', [GradeController::class, 'store'])->name('store');
@@ -96,7 +96,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::delete('/{id}', [GradeController::class, 'destroy'])->name('destroy');
             });
 
-            Route::prefix('sections')->name('sections.')->group(function () {
+            Route::prefix('sections')->middleware(['module.enabled:sections'])->name('sections.')->group(function () {
                 // Sections CRUD
                 Route::get('', [SectionController::class, 'index'])->name('index');
                 Route::get('/create', [SectionController::class, 'create'])->name('create');
@@ -109,7 +109,7 @@ Route::domain('{school_sub}.' . $root)
             });
 
             // setperiods
-            Route::prefix('timetables')->name('timetables.')->group(function () {
+            Route::prefix('timetables')->middleware(['module.enabled:timetables'])->name('timetables.')->group(function () {
                 Route::get('', [TimetableController::class, 'index'])->name('index');
                 Route::get('/create', [TimetableController::class, 'create'])->name('create');
                 Route::post('', [TimetableController::class, 'store'])->name('store');
@@ -129,7 +129,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::get('api/{timetable}/periods', [PeriodController::class, 'apiList'])->name('periods.api');
             });
 
-            Route::prefix('school-holidays')->name('school_holidays.')->group(function () {
+            Route::prefix('school-holidays')->middleware(['module.enabled:holidays'])->name('school_holidays.')->group(function () {
                 Route::get('/', [SchoolHolidayController::class, 'listByAcademic'])->name('index');      // ✅ Blade Calendar View
                 Route::get('/list', [SchoolHolidayController::class, 'list'])->name('list');             // JSON
                 Route::get('/calendar', [SchoolHolidayController::class, 'calendar'])->name('calendar'); // JSON for FullCalendar
@@ -141,12 +141,12 @@ Route::domain('{school_sub}.' . $root)
             });
 
             // calendar
-            Route::prefix('calendar')->name('calendar.')->group(function () {
+            Route::prefix('calendar')->middleware(['module.enabled:calendar'])->name('calendar.')->group(function () {
                 Route::get('/', [CalendarController::class, 'index'])->name('index'); // ✅ Blade Calendar View
             });
 
             // Subjects
-            Route::prefix('subjects')->name('subjects.')->group(function () {
+            Route::prefix('subjects')->middleware(['module.enabled:subjects'])->name('subjects.')->group(function () {
                 Route::get('/', [SubjectController::class, 'index'])->name('index');
                 Route::get('/create', [SubjectController::class, 'create'])->name('create');
                 Route::post('', [SubjectController::class, 'store'])->name('store');
@@ -155,7 +155,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::delete('/{id}', [SubjectController::class, 'destroy'])->name('destroy');
             });
 
-            Route::prefix('staff')->name('staff.')->group(function () {
+            Route::prefix('staff')->middleware(['module.enabled:staff'])->name('staff.')->group(function () {
                 Route::get('/', [StaffController::class, 'index'])->name('index');
                 Route::get('/create', [StaffController::class, 'create'])->name('create');
                 Route::post('', [StaffController::class, 'store'])->name('store');
@@ -177,7 +177,7 @@ Route::domain('{school_sub}.' . $root)
             // ========================
             // 1. Student Applications
             // ========================
-            Route::prefix('applications')->name('applications.')->group(function () {
+            Route::prefix('applications')->middleware(['module.enabled:applications'])->name('applications.')->group(function () {
                 Route::get('/', [StudentApplicationController::class, 'index'])->name('index');
                 Route::get('/create', [StudentApplicationController::class, 'create'])->name('create');
                 Route::post('/', [StudentApplicationController::class, 'store'])->name('store');
@@ -197,7 +197,7 @@ Route::domain('{school_sub}.' . $root)
             // ========================
             // 2. Student Admissions
             // ========================
-            Route::prefix('admissions')->name('admissions.')->group(function () {
+            Route::prefix('admissions')->middleware(['module.enabled:admissions'])->name('admissions.')->group(function () {
                 Route::get('/', [StudentAdmissionController::class, 'index'])->name('index');
                 Route::get('/create', [StudentAdmissionController::class, 'create'])->name('create');
                 Route::post('/', [StudentAdmissionController::class, 'store'])->name('store');
@@ -210,7 +210,7 @@ Route::domain('{school_sub}.' . $root)
             // ========================
             // 3. Students
             // ========================
-            Route::prefix('students')->name('students.')->group(function () {
+            Route::prefix('students')->middleware(['module.enabled:students'])->name('students.')->group(function () {
                 Route::get('/', [StudentController::class, 'index'])->name('index');
                 Route::get('/create', [StudentController::class, 'create'])->name('create');
                 Route::post('/', [StudentController::class, 'store'])->name('store');
@@ -263,7 +263,7 @@ Route::domain('{school_sub}.' . $root)
                 });
             });
             // Staff attendance
-            Route::prefix('staff-attendance')->name('staffAttendance.')->group(function () {
+            Route::prefix('staff-attendance')->middleware(['module.enabled:attendance_staff'])->name('staffAttendance.')->group(function () {
                 Route::get('', [StaffAttendanceController::class, 'index'])->name('index');
                 Route::get('create', [StaffAttendanceController::class, 'create'])->name('create');
                 Route::post('store', [StaffAttendanceController::class, 'store'])->name('store');
@@ -272,9 +272,9 @@ Route::domain('{school_sub}.' . $root)
 
                 Route::get('/list', [StaffAttendanceController::class, 'list'])->name('list');
             });
-            
+
             // Student attendance
-            Route::prefix('attendance/student')->name('studentAttendance.')->group(function () {
+            Route::prefix('attendance/student')->middleware(['module.enabled:attendance_student'])->name('studentAttendance.')->group(function () {
                 Route::get('/', [StudentAttendanceController::class, 'index'])->name('index');
                 Route::get('/create', [StudentAttendanceController::class, 'create'])->name('create');
                 Route::post('/store', [StudentAttendanceController::class, 'store'])->name('store');
@@ -284,7 +284,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::post('/copy-morning', [StudentAttendanceController::class, 'copyMorning'])->name('copyMorning');
             });
 
-            Route::prefix('exams')->name('exams.')->group(function () {
+            Route::prefix('exams')->middleware(['module.enabled:exams'])->name('exams.')->group(function () {
                 // Exams CRUD
                 Route::get('/', [ExamController::class, 'index'])->name('index');
                 Route::get('/create', [ExamController::class, 'create'])->name('create');
@@ -304,7 +304,7 @@ Route::domain('{school_sub}.' . $root)
                 Route::put('{exam}/toggle-publish', [ExamController::class, 'togglePublish'])->name('toggle-publish');
             });
 
-            Route::prefix('fees')->name('fees.')->group(function () {
+            Route::prefix('fees')->middleware(['module.enabled:fees'])->name('fees.')->group(function () {
                 Route::prefix('fee-heads')->name('fee-heads.')->group(function () {
                     Route::get('', [FeeHeadController::class, 'index'])
                         ->name('index');

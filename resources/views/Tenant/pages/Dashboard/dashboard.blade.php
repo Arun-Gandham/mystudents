@@ -4,9 +4,11 @@
 
 @section('content')
 <div class="container-fluid">
+    @php $mods = $school->enabled_modules ?? []; if (!is_array($mods)) { $mods = []; } @endphp
     <div class="row">
 
         {{-- Students --}}
+        @if(empty($mods) || in_array('students', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -17,8 +19,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Staff --}}
+        @if(empty($mods) || in_array('staff', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -29,8 +33,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Next Holiday --}}
+        @if(empty($mods) || in_array('holidays', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -44,8 +50,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Fees Collection --}}
+        @if(empty($mods) || in_array('fees', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -57,11 +65,13 @@
                 </div>
             </div>
         </div>
+        @endif
 
     </div>
 
     <div class="row mt-3">
         {{-- Academics --}}
+        @if(empty($mods) || in_array('academics', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -72,8 +82,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Applications --}}
+        @if(empty($mods) || in_array('applications', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -89,8 +101,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Admissions --}}
+        @if(empty($mods) || in_array('admissions', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -101,8 +115,10 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Upcoming Exams --}}
+        @if(empty($mods) || in_array('exams', $mods, true))
         <div class="col-md-3">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -123,6 +139,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     {{-- Example Graph (Students Attendance Days Wise) --}}
@@ -160,4 +177,3 @@ if (ctx) {
 }
 </script>
 @endpush
-

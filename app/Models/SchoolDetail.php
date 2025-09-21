@@ -11,5 +11,6 @@ class SchoolDetail extends BaseUuidModel
     protected $table = 'school_details';
     protected $casts = [
         'established_year' => 'integer',
+        'enabled_modules' => 'array',
     ];
 }

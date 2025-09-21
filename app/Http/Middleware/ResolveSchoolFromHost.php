@@ -36,7 +36,7 @@ class ResolveSchoolFromHost
         $schoolData = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($subdomain) {
            $s = School::query()
                 ->select('id','name','domain','is_active')
-                ->with(['details:id,school_id,logo_url,favicon_url']) // eager load details but only branding fields
+                ->with(['details:id,school_id,logo_url,favicon_url,enabled_modules']) // branding + modules
                 ->where('domain', $subdomain)
                 ->where('is_active', true)
                 ->first();
@@ -52,6 +52,7 @@ class ResolveSchoolFromHost
                 'is_active' => $s->is_active,
                 'logo_url'  => optional($s->details)->logo_url,
                 'favicon_url' => optional($s->details)->favicon_url,
+                'enabled_modules' => optional($s->details)->enabled_modules,
             ];
         });
 
@@ -64,6 +65,8 @@ class ResolveSchoolFromHost
         $request->attributes->set('school', $schoolObj);
         app()->instance('tenant.school', $schoolObj);
         view()->share('school', $schoolObj);
+        // Persist enabled modules in session to avoid repeated lookups
+        session(['tenant_enabled_modules' => $schoolObj->enabled_modules ?? []]);
         $academicCacheKey = "tenant:academic:{$schoolObj->id}";
 
         $academicData = Cache::remember($academicCacheKey, now()->addMinutes(10), function () use ($schoolObj) {

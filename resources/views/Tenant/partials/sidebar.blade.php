@@ -33,8 +33,9 @@
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ms-4">
                   @foreach ($menu['children'] as $child)
                     <li>
-                      <a href="{{ !empty($child['route']) && $child['route'] !== '#' ? tenant_route($child['route']) : '#' }}"
-                         class="nav-link {{ request()->routeIs($child['route']) ? 'active' : '' }}">
+                      @php $childRoute = $child['route'] ?? ''; @endphp
+                      <a href="{{ !empty($childRoute) && $childRoute !== '#' ? tenant_route($childRoute) : '#' }}"
+                         class="nav-link {{ !empty($childRoute) && request()->routeIs($childRoute) ? 'active' : '' }}">
                         <i class="{{ $child['icon'] ?? 'bi bi-circle' }} me-2"></i>
                         {{ $child['label'] ?? 'Unnamed' }}
                       </a>
@@ -46,8 +47,9 @@
           @else
             {{-- Single --}}
             <li class="nav-item">
-              <a href="{{ !empty($menu['route']) && $menu['route'] !== '#' ? tenant_route($menu['route']) : '#' }}"
-                 class="nav-link {{ request()->routeIs($menu['route']) ? 'active' : '' }}">
+              @php $menuRoute = $menu['route'] ?? ''; @endphp
+              <a href="{{ !empty($menuRoute) && $menuRoute !== '#' ? tenant_route($menuRoute) : '#' }}"
+                 class="nav-link {{ !empty($menuRoute) && request()->routeIs($menuRoute) ? 'active' : '' }}">
                 <i class="{{ $menu['icon'] ?? 'bi bi-circle' }} me-2"></i>
                 {{ $menu['label'] ?? 'Unnamed' }}
               </a>

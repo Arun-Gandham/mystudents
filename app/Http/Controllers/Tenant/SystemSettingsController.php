@@ -58,6 +58,10 @@ class SystemSettingsController extends Controller
             'timezone'         => ['nullable','string','max:64'],
             'locale'           => ['nullable','string','max:10'],
             'date_format'      => ['nullable','string','max:20'],
+
+            // Modules
+            'enabled_modules'  => ['nullable','array'],
+            'enabled_modules.*'=> ['string','in:'.implode(',', array_keys(config('modules.list')))],
         ]);
 
         // Update school basic
@@ -98,11 +102,12 @@ class SystemSettingsController extends Controller
             'timezone'         => $data['timezone'] ?? null,
             'locale'           => $data['locale'] ?? null,
             'date_format'      => $data['date_format'] ?? null,
+            'enabled_modules'  => $data['enabled_modules'] ?? null,
         ]);
 
         $details->save();
 
-        // Refresh cached school branding to avoid stale sidebar/favicon
+        // Refresh cached school branding/settings to avoid stale sidebar/favicon and modules
         $domain = $school->domain;
         if ($domain) {
             $cacheKey = "tenant:domain:$domain";
@@ -114,8 +119,12 @@ class SystemSettingsController extends Controller
                 'is_active'   => $school->is_active,
                 'logo_url'    => $details->logo_url,
                 'favicon_url' => $details->favicon_url,
+                'enabled_modules' => $details->enabled_modules,
             ], now()->addMinutes(10));
         }
+
+        // Update session-enabled modules immediately
+        session(['tenant_enabled_modules' => $details->enabled_modules ?? []]);
 
         return redirect()->to(tenant_route('tenant.settings.system.edit'))
             ->with('success','Settings updated successfully');

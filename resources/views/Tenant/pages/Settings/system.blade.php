@@ -127,6 +127,23 @@
               </div>
             </div>
 
+            <h6 class="mt-4">Enabled Modules</h6>
+            <div class="row g-2">
+              @php
+                $allModules = config('modules.list');
+                $enabled = old('enabled_modules', optional($settingsSchool->details)->enabled_modules ?? []);
+                if (!is_array($enabled)) { $enabled = []; }
+              @endphp
+              @foreach($allModules as $key => $label)
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="enabled_modules[]" id="mod_{{ $key }}" value="{{ $key }}" {{ in_array($key, $enabled, true) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="mod_{{ $key }}">{{ $label }}</label>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+
             <div class="mt-3">
               <label class="form-label">Notes</label>
               <textarea name="note" class="form-control" rows="3">{{ old('note', optional($settingsSchool->details)->note) }}</textarea>

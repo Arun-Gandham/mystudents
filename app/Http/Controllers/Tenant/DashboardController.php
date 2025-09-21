@@ -26,72 +26,89 @@ class DashboardController extends Controller
 
         $data = [];
 
-        // ============================
         // Students
-        // ============================
-        if ($user->can('dashboard:students')) {
-            $data['students'] = Cache::remember("dashboard:students:$schoolId", 600, function () use ($schoolId) {
-                $total = Student::where('school_id', $schoolId)->count();
+        $data['students'] = Cache::remember("dashboard:students:$schoolId", 600, function () use ($schoolId) {
+            $total = Student::count();
 
-                $presentToday = StudentAttendanceEntry::whereHas('sheet', function ($q) use ($schoolId) {
-                        $q->where('school_id', $schoolId)
-                          ->whereDate('attendance_date', Carbon::today());
-                    })
-                    ->where('status', 'present')
-                    ->count();
+            $presentToday = StudentAttendanceEntry::whereHas('sheet', function ($q) {
+                    $q->whereDate('attendance_date', Carbon::today());
+                })
+                ->where('status', 'present')
+                ->count();
 
-                return compact('total', 'presentToday');
-            });
-        }
+            return compact('total', 'presentToday');
+        });
 
-        // ============================
         // Staff
-        // ============================
-        if ($user->can('dashboard:staff')) {
-            $data['staff'] = Cache::remember("dashboard:staff:$schoolId", 600, function () use ($schoolId) {
-                $total = Staff::where('school_id', $schoolId)->count();
+        $data['staff'] = Cache::remember("dashboard:staff:$schoolId", 600, function () use ($schoolId) {
+            $total = Staff::count();
 
-                $presentToday = StaffAttendance::where('school_id', $schoolId)
-                    ->whereDate('attendance_date', Carbon::today())
-                    ->where('status', 'present')
-                    ->count();
+            $presentToday = StaffAttendance::whereDate('attendance_date', Carbon::today())
+                ->where('status', 'present')
+                ->count();
 
-                return compact('total', 'presentToday');
-            });
-        }
+            return compact('total', 'presentToday');
+        });
 
-        // ============================
         // Next Holiday
-        // ============================
-        if ($user->can('dashboard:holidays')) {
-            $data['holiday'] = Cache::remember("dashboard:holiday:$schoolId", 600, function () use ($schoolId) {
-                return SchoolHoliday::where('school_id', $schoolId)
-                    ->whereDate('date', '>=', Carbon::today())
-                    ->orderBy('date', 'asc')
-                    ->first();
-            });
-        }
+        $data['holiday'] = Cache::remember("dashboard:holiday:$schoolId", 600, function () use ($schoolId) {
+            return SchoolHoliday::whereDate('date', '>=', Carbon::today())
+                ->orderBy('date', 'asc')
+                ->first();
+        });
 
-
-        // ============================
         // Fees Collection (Current Month)
-        // ============================
-        if ($user->can('dashboard:fees')) {
-            $data['fees'] = Cache::remember("dashboard:fees:$schoolId", 600, function () use ($schoolId) {
-                $monthStart = Carbon::now()->startOfMonth();
-                $monthEnd   = Carbon::now()->endOfMonth();
+        $data['fees'] = Cache::remember("dashboard:fees:$schoolId", 600, function () use ($schoolId) {
+            $monthStart = Carbon::now()->startOfMonth();
+            $monthEnd   = Carbon::now()->endOfMonth();
 
-                $collected = StudentFeeReceipt::where('school_id', $schoolId)
-                    ->whereBetween('paid_on', [$monthStart, $monthEnd])
-                    ->sum('total_amount');
+            $collected = StudentFeeReceipt::whereBetween('paid_on', [$monthStart, $monthEnd])
+                ->sum('total_amount');
 
-                // Optional: you can compute target dynamically per school or hardcode
-                $target = 1500000; // example
+            $receiptsCount = StudentFeeReceipt::whereBetween('paid_on', [$monthStart, $monthEnd])
+                ->count();
 
-                return compact('collected', 'target');
-            });
-        }
+            $target = 1500000; // placeholder target
 
-        return view('tenant.pages.dashboard.dashboard', compact('data'));
+            return compact('collected', 'target', 'receiptsCount');
+        });
+
+        // Academics snapshot
+        $data['academics'] = Cache::remember("dashboard:academics:$schoolId", 600, function () use ($schoolId) {
+            $currentYear = \App\Models\Academic::where('is_current', true)->first();
+            $grades = \App\Models\Grade::count();
+            $sections = \App\Models\Section::count();
+            return [
+                'currentYear' => $currentYear,
+                'grades' => $grades,
+                'sections' => $sections,
+            ];
+        });
+
+        // Applications & Admissions
+        $data['applications'] = Cache::remember("dashboard:applications:$schoolId", 600, function () use ($schoolId) {
+            $total = \App\Models\StudentJoinApplication::count();
+            $byStatus = \App\Models\StudentJoinApplication::selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status');
+            return [ 'total' => $total, 'byStatus' => $byStatus ];
+        });
+
+        $data['admissions'] = Cache::remember("dashboard:admissions:$schoolId", 600, function () use ($schoolId) {
+            $total = \App\Models\StudentAdmission::count();
+            $today = \App\Models\StudentAdmission::whereDate('admitted_on', Carbon::today())
+                ->count();
+            return compact('total', 'today');
+        });
+
+        // Upcoming exams (next 5)
+        $data['exams'] = Cache::remember("dashboard:exams:$schoolId", 600, function () use ($schoolId) {
+            return \App\Models\Exam::whereDate('starts_on', '>=', Carbon::today())
+                ->orderBy('starts_on', 'asc')
+                ->limit(5)
+                ->get(['id','name','starts_on','ends_on','is_published']);
+        });
+
+        return view('Tenant.pages.Dashboard.dashboard', compact('data'));
     }
 }

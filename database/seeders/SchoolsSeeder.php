@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\SchoolDetail;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Arr;
 
 class SchoolsSeeder extends Seeder
 {
@@ -55,6 +56,8 @@ class SchoolsSeeder extends Seeder
                     'timezone'         => 'UTC',
                     'locale'           => 'en',
                     'date_format'      => 'd M Y',
+                    // Modules: enable all by default so tenants see everything initially
+                    'enabled_modules'  => array_keys(config('modules.list')),
                 ]
             );
         }
